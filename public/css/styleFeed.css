@@ -1,0 +1,193 @@
+@import url("http://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+:root {
+    --color-white:white;
+    --color-light:rgb(252, 30%, 95%);
+    --color-gray: rgb(128, 128, 128);
+    --color-primary: blue;
+    --color-secondary: white;
+    --color-success: green;
+    --color-danger: red;
+    --color-dark:rgb(252, 30%, 17%);
+    --color-black: black;
+
+    --border-radius: 2em;
+    --card-border-radius: 1rem;
+    --btn-padding: 0.6rem 2rem;
+    --search-padding: 0.6rem 1rem;
+    --card-padding: 1rem;
+    --sticky-top-left: 5.4rem;
+    --sticky-top-right: -18rem;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    border: none;
+}
+body{
+    font-family: "Poppins", sans-serif;
+    color: var(--color-dark);
+    background:rgb(242, 241, 241);
+    overflow-x: hidden ;
+}
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+.profile-photo {
+    width: 2.7rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    overflow: hidden;
+}
+img{
+    display: block;
+    width: 100%;
+}
+.btn{
+    display: inline-block;
+    padding: var(--btn-padding);
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 300ms ease;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.btn:hover {
+    opacity: 0.8;
+}
+.btn-primary{
+    background: var(--color-primary);
+    color: white;
+}
+.text-bold {
+    font-weight: 500;
+}
+.text-muted {
+    color: var(--color-gray);
+}
+/*==================================================NAVBAR=====================*/
+nav {
+    width: 100%;
+    background: white;
+    padding: 0.7rem 0;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+}
+nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav .search-bar{
+    background:rgb(242, 241, 241) ;
+    border-radius: var(--border-radius) ;
+    padding: var(--search-padding);
+}
+nav .search-bar input[type="search"] {
+    background: rgb(242, 241, 241);
+    width: 30vw;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    color: var(--color-dark);
+}
+nav .search-bar input[type="search"]::placeholder {
+    color: var(--color-gray);
+}
+nav .create {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+/*======================================================= MAIN =============================================== */
+main {
+    position: relative;
+    top: 5.4rem;
+}
+main .container {
+    display: flex;
+    grid-template-columns: 18vw 1fr ;
+    column-gap: 2rem;
+    position: relative;
+}
+/*======================================================= LEFT ============================================= */
+main .container .left{
+    height: max-content;
+    position: sticky;
+    top: var(--sticky-top-left);
+}
+main .container .left .profile {
+    padding: var(--card-padding);
+    background: var(--color-white);
+    border-radius: var(--card-border-radius);
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+    width: 100%;
+}
+/*=========================== SIDEBAR =======================*/
+.left .sidebar{
+    margin-top: 1rem;
+    background: var(--color-white);
+    border-radius: var(--card-border-radius);
+}
+.left .sidebar .menu-item {
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    cursor: pointer;
+    transition: all 300ms ease;
+    position: relative;
+}
+.left .sidebar .menu-item:hover {
+    background: rgb(242, 241, 241);
+}
+.left .sidebar i{
+    font-size: 1rem;
+    color: gray;
+    margin-left: 1rem;
+    position: relative;
+}
+.left .sidebar h3 {
+    margin-left: 1.5rem;
+    font-size: 1rem;
+}
+.left .sidebar .active {
+    background:  rgb(242, 241, 241);
+}
+.left .sidebar .active i,
+.left .sidebar .active h3 {
+    color: rgb(72, 72, 237);
+}
+.left .sidebar .active::before{
+    content: "";
+    display: block;
+    width: 0.3rem;
+    height: 100%;
+    position: absolute;
+    background:  rgb(72, 72, 237);
+}
+.left .sidebar .menu-item:first-child.active {
+    border-top-left-radius: var(--card-border-radius);
+    overflow: hidden;
+}
+.left .sidebar .menu-item:last-child.active {
+    border-bottom-left-radius: var(--card-border-radius);
+    overflow: hidden;
+}
+.left .btn {
+    margin-top: 1rem;
+    width: 80%;
+    text-align: centre;
+    padding: 1rem 0;
+}

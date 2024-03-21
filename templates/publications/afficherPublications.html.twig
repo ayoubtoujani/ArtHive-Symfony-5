@@ -1,0 +1,82 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}
+    Publication | ArtHive
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Styles pour la liste des événements */
+
+       
+
+        .publication-container {
+            display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Répartir les événements sur la ligne */
+    margin-top: 20px;
+    padding: 20px;
+        }
+
+        .publication-item {
+            flex-basis: calc(33.33% - 20px); /* Limiter chaque événement à un tiers de la largeur de la ligne */
+            margin-bottom: 20px; /* Espacement entre les événements */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .publication-item:hover {
+            box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
+            scale: 1.1;
+            transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .publication-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1877f2;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+
+        .publication-date {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+
+        .publication-lieu {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .publication-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px 8px 0 0;
+        }
+
+       
+
+      
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Découvrir des publication</h1>
+            <div class="publication-container">
+                {% for publication in publications %}
+                    <div class="publication-item">
+                        <img class="publication-image" src="{{ asset('images/' ~ publication.urlFile) }}" alt="Image de la publication">
+                      
+                    </div>
+                {% endfor %}
+            </div>
+{% endblock %}
