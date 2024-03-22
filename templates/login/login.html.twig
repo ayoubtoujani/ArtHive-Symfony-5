@@ -1,0 +1,20 @@
+{# templates/login/login.html.twig #}
+
+<form method="post">
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    {% if success %}
+        <p>{{ success }}</p>
+    {% endif %}
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="_email" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="_password" required>
+
+    <button type="submit">Sign in</button>
+</form>

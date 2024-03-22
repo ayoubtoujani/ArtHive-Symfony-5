@@ -1,6 +1,3 @@
-app_blog:
-    path: /blog
-    controller: App\Controller\BlogController::index
-app_feed:
-    path: /feed
-    controller: App\Controller\BlogController::feed
+app_login:
+    path: /login
+    controller: App\Controller\LoginController::login
