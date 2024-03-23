@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 use App\Entity\Users;
-
+use SessionIdInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 
 
@@ -14,7 +16,7 @@ class LoginController extends AbstractController
 {
 
     #[Route('/login', name: 'app_login', methods:['POST'])]
-    public function login(Request $request): Response
+    public function login(Request $request, SessionInterface $session): Response
     {
         $error = '';
         $success = '';
@@ -27,6 +29,8 @@ class LoginController extends AbstractController
 
         if ($user && $user->getMdpUser() === $password) {
             $success= 'Login successful';
+            $session->set('user', $user);
+            return $this->redirectToRoute('app_test');
 
         } else {
             $error = 'Invalid email or password';
@@ -49,6 +53,21 @@ class LoginController extends AbstractController
     public function logout()
     {
         // This code will not be executed
+    }
+
+    #[Route('/test', name: 'app_test')]
+    public function home(SessionInterface $session): Response
+    {
+        $user = $session->get('user');
+        if($user instanceof Users){
+            $nom = $user->getNomUser();
+        }else{
+            $nom = 'unknown';
+        }
+        return $this->render('login/test.html.twig', [
+            'user' => $user,
+            'nom' => $nom
+        ]);
     }
 
 }

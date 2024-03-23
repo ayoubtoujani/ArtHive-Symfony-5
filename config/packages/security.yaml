@@ -1,0 +1,18 @@
+security:
+    providers:
+        # Configuration du fournisseur d'utilisateurs pour l'authentification par email
+        email_provider:
+            entity:
+                class: 'App\Entity\Users'
+                property: 'email'
+
+    firewalls:
+        main:
+            # Utilisation de la stratégie de connexion basée sur un formulaire
+            form_login:
+                login_path: app_login
+                check_path: app_login
+            # Autoriser l'accès aux pages de connexion, d'inscription et à certaines ressources publiques
+            pattern: ^/(login|register|css|images|js)/
+            # Autoriser les utilisateurs anonymes à accéder à certaines pages
+            anonymous: true
