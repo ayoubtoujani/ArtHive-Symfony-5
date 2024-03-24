@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Form\LoginFormType;
+use App\Form\RegisterFormType;
+
 
 
 
@@ -22,11 +24,14 @@ class LoginController extends AbstractController
         $error = '';
         $success = ''; 
 
-        $form = $this->createForm(LoginFormType::class);
-        $form->handleRequest($request);
+        $loginForm = $this->createForm(LoginFormType::class);
+        $loginForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
+        $registerForm = $this->createForm(RegisterFormType::class);
+        $registerForm->handleRequest($request);
+
+        if ($loginForm->isSubmitted() && $loginForm->isValid()) {
+            $user = $loginForm->getData();
 
             $email = $user->getEmail();
             $password = $user->getMdpUser();
@@ -43,13 +48,33 @@ class LoginController extends AbstractController
                 $error = 'Invalid email or password';
             }
         }
+
+        if ($registerForm->isSubmitted() && $registerForm->isValid()) {
+            $user = $registerForm->getData();
+
+            $user->setPhoto('default.jpg');
+            $user->setRole('ROLE_USER');
+            $user->setBio('This is a bio');
+
+            // Additional validation or processing if needed before persisting
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $success = 'Registration successful';
+            $session->set('user', $user);
+
+            return $this->redirectToRoute('app_test');
+        }
         
         return $this->render('login/login.html.twig', [
-            'form' => $form->createView(),
+            'loginForm' => $loginForm->createView(),
+            'registerForm' => $registerForm->createView(),
             'error' => $error,
             'success' => $success,
         ]);
     }
+
 
     #[Route('/login_check', name: 'app_login_check')]
     public function loginCheck()
