@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Commentaires
  *
@@ -34,26 +35,53 @@ class Commentaires
      *
      * @ORM\Column(name="d_ajout_commentaire", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
+
     private $dAjoutCommentaire = 'CURRENT_TIMESTAMP';
-
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="id_user", type="integer", nullable=true)
-     */
-    private $idUser;
+ * @ORM\ManyToOne(targetEntity=Publications::class)
+ * @ORM\JoinColumn(name="id_publication", referencedColumnName="id_publication")
+ */
+private $publication;
 
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="id_publication", type="integer", nullable=true)
+/**
+     * @ORM\ManyToOne(targetEntity=Users::class)
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=true)
      */
-    private $idPublication;
+    private $user;
+
+public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+    public function setUser(?Users $users): self
+    {
+        $this->user = $users;
+        return $this;
+    }
+    public function getPublication(): ?Publications
+    {
+        return $this->publication;
+    }
+    public function setPublication(?Publications $publications): self
+    {
+        $this->publication = $publications;
+        return $this;
+    }
+   
 
     public function getIdCommentaire(): ?int
     {
         return $this->idCommentaire;
     }
+
+    public function setIdCommentaire(int $idCommentaire): static
+    {
+        $this->idCommentaire = $idCommentaire;
+
+        return $this;
+    }
+
+
 
     public function getContenuCommentaire(): ?string
     {
@@ -78,30 +106,5 @@ class Commentaires
 
         return $this;
     }
-
-    public function getIdUser(): ?int
-    {
-        return $this->idUser;
-    }
-
-    public function setIdUser(?int $idUser): static
-    {
-        $this->idUser = $idUser;
-
-        return $this;
-    }
-
-    public function getIdPublication(): ?int
-    {
-        return $this->idPublication;
-    }
-
-    public function setIdPublication(?int $idPublication): static
-    {
-        $this->idPublication = $idPublication;
-
-        return $this;
-    }
-
 
 }

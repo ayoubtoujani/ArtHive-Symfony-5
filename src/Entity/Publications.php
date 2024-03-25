@@ -2,60 +2,65 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\PublicationRepository;
-
-
+use App\Entity\Users; // Import the Users entity class
 /**
- * Publications
- *
  * @ORM\Table(name="publications", indexes={@ORM\Index(name="id_user", columns={"id_user"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=PublicationRepository::class)
  */
-#[ORM\Entity(repositoryClass: PublicationRepository::class)]
 class Publications
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_publication", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue
+     * @ORM\Column(name="id_publication", type="integer")
      */
     private $idPublication;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="contenu_publication", type="text", length=16777215, nullable=false)
+     * @ORM\Column(name="contenu_publication", type="text", length=16777215)
      */
     private $contenuPublication;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="d_creation_publication", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="d_creation_publication", type="datetime")
      */
-    private $dCreationPublication = 'CURRENT_TIMESTAMP';
+    private $dCreationPublication;
 
     /**
-     * @var int|null
-     *
-     * @ORM\Column(name="id_user", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity=Users::class)
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=true)
      */
-    private $idUser;
+    private $user;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="url_file", type="text", length=0, nullable=true)
      */
     private $urlFile;
 
+    // Getter and setter methods for other properties...
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function getIdPublication(): ?int
     {
         return $this->idPublication;
+    }
+
+    public function setIdPublication(int $idPublication): self
+    {
+        $this->idPublication = $idPublication;
+        return $this;
     }
 
     public function getContenuPublication(): ?string
@@ -63,10 +68,9 @@ class Publications
         return $this->contenuPublication;
     }
 
-    public function setContenuPublication(string $contenuPublication): static
+    public function setContenuPublication(string $contenuPublication): self
     {
         $this->contenuPublication = $contenuPublication;
-
         return $this;
     }
 
@@ -75,36 +79,22 @@ class Publications
         return $this->dCreationPublication;
     }
 
-    public function setDCreationPublication(\DateTimeInterface $dCreationPublication): static
+    public function setDCreationPublication(\DateTimeInterface $dCreationPublication): self
     {
         $this->dCreationPublication = $dCreationPublication;
-
         return $this;
     }
 
-    public function getIdUser(): ?int
-    {
-        return $this->idUser;
-    }
 
-    public function setIdUser(?int $idUser): static
-    {
-        $this->idUser = $idUser;
-
-        return $this;
-    }
 
     public function getUrlFile(): ?string
     {
         return $this->urlFile;
     }
 
-    public function setUrlFile(?string $urlFile): static
+    public function setUrlFile(?string $urlFile): self
     {
         $this->urlFile = $urlFile;
-
         return $this;
     }
-
-
 }

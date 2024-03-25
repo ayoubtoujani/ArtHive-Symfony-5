@@ -14,6 +14,25 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PublicationRepository extends ServiceEntityRepository
 {
+    //  
+  /*  public function findAllPublicationsWithUser()
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p', 'u.nomUser', 'u.prenomUser', 'u.photo', 'p.urlFile', 'p.contenuPublication', 'p.dCreationPublication', 'p.idPublication')
+            ->leftJoin('p.user', 'u') // Perform a join with the User entity
+            ->getQuery()
+            ->getResult();
+    }
+    */
+
+    public function searchPublicationsByTerm($searchTerm)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.contenuPublication LIKE :term')
+            ->setParameter('term', '%' . $searchTerm . '%')
+            ->getQuery()
+            ->getResult();
+    }
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Publications::class);
@@ -21,3 +40,7 @@ class PublicationRepository extends ServiceEntityRepository
 
     // Add custom queries or methods here if needed
 }
+
+
+    
+    

@@ -1,66 +1,62 @@
 {% extends 'feed.html.twig' %}
 
 {% block title %}
-     ArtHive | Publications
+     ArtHive | My Publications
         
 {% endblock %}
-
-{% block search_bar %}
-    <form action="{{ path('app_posts_search') }}" method="GET" class="search-bar">
-        <input type="search" name="q" placeholder="Rechercher des Publications">
-        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-    </form>
-{% endblock %}
-
 
 {% block stylesheets %}
     {{ parent() }}
-   <style>
+    <style>
         /* Styles for the publication list */
-.publication-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust the minimum and maximum width of each item */
-    grid-auto-rows: auto; /* Automatically adjust row height based on content */
-    grid-gap: 20px; /* Ajustez l'espacement entre les produits */
-    margin-top: 20px;
-    padding: 20px;
-}
 
-       .publication-item {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    position: relative;
-}
+        .publication-container {
+          display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between; /* Ajustez l'espacement entre les produits */
+                margin-top: 20px;
+                padding: 20px;
+                width: 100%; 
+        }
+
+        .publication-item {
+           flex-basis: calc(33.33% - 25px); 
+            margin-bottom: 40px; 
+            margin-right: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            position: relative; 
+        }
 
         .publication-item:hover {
-    box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
-    scale: 1.1;
-    transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
+            box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
+            scale: 1.1;
+            transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
 
-        
-.publication-title {
-    font-size: 10px;
-    font-weight: bold;
-    color: #1877f2;
-    margin-bottom: 5px;
-    padding: 10px;
-}
+        .publication-title {
+            font-size: 10px;
+            font-weight: bold;
+            color: #1877f2;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
 
         .publication-date {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-    padding: 10px;
-}
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
 
-.publication-image {
-    width: 100%;
-    border-radius: 8px 8px 0 0;
-}
+        .publication-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px 8px 0 0;
+        }
 
         h1 {
             color: #4848ed; /* Text color in blue */
@@ -160,17 +156,31 @@
 
 {% block content %}
 
-    <h1>Publications</h1>
+    <h1>My Publications</h1>
+    
     <div class="publication-container">
         {% for publication in publications %}
+        
             <div class="publication-item">
+            
                 <div style="position: relative;">
+             <div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Actions
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+<a id="updatePost" class="dropdown-item" href="{{ path('update_post') }}" >Update</a>
+        <a class="dropdown-item" href="{{ path('delete_publication', {'id': publication.getIdPublication()}) }}">Delete</a>
+    </div>
+</div>
                     <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
-                   <div
                     <p class="publication-title">{{ publication.getContenuPublication() }}</p>
-                    <div class="icon-container">
+                  <div class="icon-container">
                        <i class="fa-solid fa-search-plus zoom-icon" style="color: #3642dd;"></i>
+                    
                      </div>  
+                    <div style="position: absolute; bottom: 10px; right: 10px;">
+                    
                     </div>
                 </div>
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
@@ -184,9 +194,9 @@
                    <div style="display: flex; align-items: center;">
                         <!-- Heart icon toggling -->
                         <div class="heart-container">
-    <img class="heart-icon" src="{{ asset('images/emptyHeart.png') }}" style="width: 30px; height: 30px;" alt="Heart Icon" data-publication-id="{{ publication.idPublication }}">
-    <p class="likes-label">3</p>
-</div>
+                            <img class="heart-icon" src="{{ asset('images/emptyHeart.png') }}" style="width: 30px; height: 30px;" alt="Heart Icon">
+                            <p class="likes-label">3</p>
+                        </div>
     
                         <div style="display: flex; align-items: center; margin-left: 10px;">
     <img class="comment-icon" src="{{ asset('images/5338282.png') }}" style="width: 30px; height: 30px;" alt="Comment Icon" id="comment-icon">
@@ -199,7 +209,6 @@
             </div>
         {% endfor %}
     </div>
-
     <!-- Modal popup -->
     <div id="myModal" class="modal">
         <span class="close">&times;</span>
@@ -207,29 +216,21 @@
             <img id="modal-img" class="modal-image">
         </div>
     </div>
-     <div id="addPostModal" class="modal">
-        <span class="close">&times;</span>
-        <div class="modal-content">
-           {% include 'publications/addPost.html.twig' %}
-        </div>
+     <div id="updatePostModal" class="modal">
+    <div class="modal-content">
+          
     </div>
-
-
+</div>
   <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const heartIcons = document.querySelectorAll('.heart-icon'); // Select heart icons correctly
     const zoomIcons = document.querySelectorAll('.zoom-icon');
     const modal = document.getElementById('myModal');
     const modalImg = document.getElementById("modal-img");
     const closeModal = document.getElementsByClassName("close")[0];
-    const createPostButton = document.getElementById("create-post-button"); // Select the create post button
-    const addPostModal = document.getElementById("addPostModal"); // Select the add post modal
-    const commentIcons = document.querySelectorAll('.comment-icon');
-commentIcons.forEach(icon =>{ 
-                icon.addEventListener('click', function() {
-                    window.location.href = "{{ path('app_comments') }}"; // Use the route name defined in your Symfony routes
-                });
-            });
+    const heartIcons = document.querySelectorAll('.heart-icon'); // Select heart icons correctly
+    const updatePostButton = document.getElementById("updatePost"); // Select the create post button
+    const updatePostModal = document.getElementById("updatePostModal"); // Select the add post modal
+
     zoomIcons.forEach(icon => {
         icon.addEventListener('click', function() {
             const publicationItem = this.closest('.publication-item');
@@ -240,51 +241,19 @@ commentIcons.forEach(icon =>{
         });
     });
       
-       function openCreatePostModal() {
-        const addPostModal = document.getElementById('addPostModal');
-        addPostModal.style.display = "block";
-    }
-     if (createPostButton) {
-        createPostButton.addEventListener('click', openCreatePostModal);
-    }
+      
 
-  heartIcons.forEach(icon => {
+    heartIcons.forEach(icon => {
         icon.addEventListener('click', function() {
             const currentSrc = this.src;
-            const publicationId = this.dataset.publicationId; // Get publication ID from data attribute
             if (currentSrc.includes('emptyHeart.png')) {
                 this.src = "{{ asset('images/fullheart.png') }}";
-                // Send request to server to like the publication
-                fetch(`/like/${publicationId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    credentials: 'same-origin',
-                })
-                .catch(error => {
-                    console.error('Error liking publication:', error);
-                    // Optionally, display an error message to the user
-                });
             } else {
                 this.src = "{{ asset('images/emptyHeart.png') }}";
-                // Send request to server to remove like from the publication
-                fetch(`/unlike/${publicationId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    credentials: 'same-origin',
-                })
-                .catch(error => {
-                    console.error('Error unliking publication:', error);
-                    // Optionally, display an error message to the user
-                });
             }
         });
     });
+
     // Close the modal when clicked outside the image or on the close button
     window.onclick = function(event) {
         if (event.target === modal) {
@@ -295,13 +264,34 @@ commentIcons.forEach(icon =>{
     closeModal.onclick = function() {
         modal.style.display = "none";
     }
+ function openUpdatePostModal() {
+    const updatePostModal = document.getElementById("updatePostModal"); // Select the add post modal
+        updatePostModal.style.display = "block";
+    }
+    
+     if (updatePostButton) {
+        updatePostButton.addEventListener('click', openUpdatePostModal);
+    }
 
     
-const addPostCloseBtn = addPostModal.querySelector('.close');
-    addPostCloseBtn.addEventListener('click', function() {
-        addPostModal.style.display = "none";
-    });   
+
+   
 });
 
-  </script>    
+
+ document.addEventListener("DOMContentLoaded", function() {
+            const commentIcon = document.getElementById('comment-icon');
+            if (commentIcon) {
+                commentIcon.addEventListener('click', function() {
+                    window.location.href = "{{ path('app_comments') }}"; // Use the route name defined in your Symfony routes
+                });
+            }
+        });
+ 
+
+        
+
+  </script>
+
+     
 {% endblock %}

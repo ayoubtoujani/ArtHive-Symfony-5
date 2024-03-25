@@ -23,19 +23,17 @@ class Reactions
     private $idReaction;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_user", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Users::class)
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=true)
      */
-    private $idUser;
+    private $user;
+
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_publication", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Publications::class)
+     * @ORM\JoinColumn(name="id_publication", referencedColumnName="id_publication")
      */
-    private $idPublication;
-
+    private $publication;
     /**
      * @var \DateTime
      *
@@ -48,27 +46,32 @@ class Reactions
         return $this->idReaction;
     }
 
-    public function getIdUser(): ?int
+    public function setIdReaction(int $idReaction): self
     {
-        return $this->idUser;
-    }
-
-    public function setIdUser(int $idUser): static
-    {
-        $this->idUser = $idUser;
+        $this->idReaction = $idReaction;
 
         return $this;
     }
-
-    public function getIdPublication(): ?int
+ 
+    public function getPublication(): ?Publications
     {
-        return $this->idPublication;
+        return $this->publication;
     }
 
-    public function setIdPublication(int $idPublication): static
+    public function setPublication(?Publications $publications): self
     {
-        $this->idPublication = $idPublication;
+        $this->publication = $publications;
+        return $this;
+    }
 
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $users): self
+    {
+        $this->user = $users;
         return $this;
     }
 

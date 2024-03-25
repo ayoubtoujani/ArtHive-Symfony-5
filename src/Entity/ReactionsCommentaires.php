@@ -23,25 +23,23 @@ class ReactionsCommentaires
     private $idReactionCommentaire;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_user", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Users::class)
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=true)
      */
-    private $idUser;
+    private $user;
+
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_publication", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Publications::class)
+     * @ORM\JoinColumn(name="id_publication", referencedColumnName="id_publication")
      */
-    private $idPublication;
+    private $publication;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_commentaire", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity=Commentaires::class)
+     * @ORM\JoinColumn(name="id_commentaire", referencedColumnName="id_commentaire")
      */
-    private $idCommentaire;
+    private $commentaire;
 
     /**
      * @var \DateTime
@@ -55,38 +53,45 @@ class ReactionsCommentaires
         return $this->idReactionCommentaire;
     }
 
-    public function getIdUser(): ?int
+    public function setIdReactionCommentaire(int $idReactionCommentaire): static
     {
-        return $this->idUser;
-    }
-
-    public function setIdUser(int $idUser): static
-    {
-        $this->idUser = $idUser;
+        $this->idReactionCommentaire = $idReactionCommentaire;
 
         return $this;
     }
 
-    public function getIdPublication(): ?int
+    public function getUser(): ?Users
     {
-        return $this->idPublication;
+        return $this->user;
     }
 
-    public function setIdPublication(int $idPublication): static
+    public function setUser(?Users $user): static
     {
-        $this->idPublication = $idPublication;
+        $this->user = $user;
+
+        return $this;
+    }
+   
+    public function getPublication(): ?Publications
+    {
+        return $this->publication;
+    }
+
+    public function setPublication(?Publications $publication): static
+    {
+        $this->publication = $publication;
 
         return $this;
     }
 
-    public function getIdCommentaire(): ?int
+    public function getCommentaire(): ?Commentaires
     {
-        return $this->idCommentaire;
+        return $this->commentaire;
     }
 
-    public function setIdCommentaire(int $idCommentaire): static
+    public function setCommentaire(?Commentaires $commentaire): static
     {
-        $this->idCommentaire = $idCommentaire;
+        $this->commentaire = $commentaire;
 
         return $this;
     }
