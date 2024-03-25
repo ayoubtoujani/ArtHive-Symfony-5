@@ -23,7 +23,7 @@ body{
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
-    width: 768px;
+    width: 1024px;
     max-width: 100%;
     min-height: 480px;
 }
@@ -208,11 +208,9 @@ body{
 .container.active .toggle-right{
     transform: translateX(200%);
 }
-#comments form .form-group .form-control {
-    width: 100%; 
-}
 
-.content {
-    width: 100%; /* Adjust width as needed */
-    /* Add any other necessary styles */
+.form-control{
+    background-color: #EEEEEE;
+    width: 204px !important;
+    height: 40px !important;
 }

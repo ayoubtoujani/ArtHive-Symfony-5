@@ -22,3 +22,6 @@ services:
     # Register the Twig extension as a service
     App\Twig\AppExtension:
         tags: ['twig.extension']  # This tag registers the class as a Twig extension
+    App\Services\CountryApi:
+        arguments:
+            $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'

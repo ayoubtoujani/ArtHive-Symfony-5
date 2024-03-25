@@ -169,7 +169,7 @@
         Actions
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-<a id="updatePost" class="dropdown-item" href="{{ path('update_post') }}" >Update</a>
+<a id="updatePost" class="dropdown-item" href="{{ path('update_post', {'id': publication.getIdPublication()}) }}" >Update</a>
         <a class="dropdown-item" href="{{ path('delete_publication', {'id': publication.getIdPublication()}) }}">Delete</a>
     </div>
 </div>
@@ -218,7 +218,7 @@
     </div>
      <div id="updatePostModal" class="modal">
     <div class="modal-content">
-          
+
     </div>
 </div>
   <script>
@@ -287,11 +287,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             }
         });
- 
-
-        
+  
 
   </script>
-
-     
+    
 {% endblock %}

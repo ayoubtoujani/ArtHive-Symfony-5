@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Entity\Publications;
 use App\Form\AddPostType;
+use App\Form\UpdatePostType;
 use App\Repository\PublicationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
+
 
 class PublicationsController extends AbstractController
 {
@@ -106,7 +108,7 @@ class PublicationsController extends AbstractController
             $publications = $publicationRepository->findBy(['user' => $user]);
             return $this->render('publications/myPublications.html.twig', [
                 'publications' => $publications,
-                'user' => $user,
+                'user' => $user,   
             ]);
         }
 }
@@ -129,27 +131,33 @@ public function deletePublication($id, PublicationRepository $publicationReposit
     return $this->redirectToRoute('my_publications');
 
 }
-#[Route('/update-post', name: 'update_post', methods: ['GET', 'POST'])]
-public function updatePost(Request $request, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository): Response
+#[Route('/update-post/{id}', name: 'update_post', methods: ['GET', 'POST'])]
+public function updatePost($id , Request $request, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository): Response
 {
-    // Retrieve the publication ID from the request parameters
-    $publicationId = $request->request->get('publication_id');
-
-    // Fetch the publication entity based on the retrieved ID
-    $publication = $publicationRepository->find($publicationId);
+    $publication = $publicationRepository->find($id);
 
     if (!$publication) {
-        // Handle case where publication is not found
-        // You can redirect or display an error message
+        // Publication not found, handle this case (e.g., redirect or error message)
         return $this->redirectToRoute('my_publications');
     }
 
-    // Render the updatePost.html.twig template with the publication entity
+    $form = $this->createForm(UpdatePostType::class, $publication);
+
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Publication updated successfully.');
+
+        return $this->redirectToRoute('my_publications');
+    }
+
     return $this->render('publications/updatePost.html.twig', [
+        'form' => $form->createView(),
         'publication' => $publication,
     ]);
 }
-
 #[Route('/publications/search', name: 'app_posts_search')]
      public function search(Request $request,PublicationRepository $publicationRepository): Response
     {

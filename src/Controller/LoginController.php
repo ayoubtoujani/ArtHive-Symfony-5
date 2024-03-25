@@ -8,6 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Form\LoginFormType;
+use App\Form\RegisterFormType;
+use Symfony\Component\Form\FormError;
+
 
 
 
@@ -15,34 +20,66 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class LoginController extends AbstractController
 {
 
-    #[Route('/login', name: 'app_login', methods:['POST','Get'])]
+    #[Route('/login', name: 'app_login', methods:['POST','GET'])]
     public function login(Request $request, SessionInterface $session): Response
     {
         $error = '';
-        $success = '';
+        $success = ''; 
 
-        $email = $request->request->get('_email');
-        $password = $request->request->get('_password');
+        $state= $request->get('state');
+        $loginForm = $this->createForm(LoginFormType::class);
+        $loginForm->handleRequest($request);
 
-        $userRepository = $this->getDoctrine()->getRepository(Users::class);
-        $user = $userRepository->findOneBy(['email' => $email]);
+        $registerForm = $this->createForm(RegisterFormType::class);
+        $registerForm->handleRequest($request);
 
-        if ($user && $user->getMdpUser() === $password) {
-            $success= 'Login successful';
-            $session->set('user', $user);
-            return $this->redirectToRoute('afficher_publications');
+        if ($loginForm->isSubmitted() && $loginForm->isValid()) {
+            $user = $loginForm->getData();
+            
+            $email = $user->getEmail();
+            $password = $user->getMdpUser();
 
-        } else {
-            $error = 'Invalid email or password';
 
+            $userRepository = $this->getDoctrine()->getRepository(Users::class);
+            $foundUser = $userRepository->findOneBy(['email' => $email]);
+
+            if ($foundUser && $foundUser->getMdpUser() === $password) {
+                $success = 'Login successful';
+                $session->set('user', $foundUser);
+                return $this->redirectToRoute('afficher_publications');
+            } else {
+                $error = 'Invalid email or password';
+            }
         }
 
-        return $this->render('login/login.html.twig', [
-            'error'         => $error,
-            'success'       => $success,
-        ]);
+        if ($registerForm->isSubmitted() && $registerForm->isValid()) {
+            $user = $registerForm->getData();
+                
+            $user->setPhoto('default.jpg');
+            $user->setRole('ROLE_USER');
+            $user->setBio('This is a bio');
 
+            // Additional validation or processing if needed before persisting
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $success = 'Registration successful';
+            $session->set('user', $user);
+
+            return $this->redirectToRoute('afficher_publications');
+        }
+        
+        return $this->render('login/login.html.twig', [
+            'loginForm' => $loginForm->createView(),
+            'registerForm' => $registerForm->createView(),
+            'state' => $state,
+            'error' => $error,
+            'success' => $success,
+        ]);
     }
+
+
     #[Route('/login_check', name: 'app_login_check')]
     public function loginCheck()
     {
