@@ -8,8 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
+use Symfony\Component\Form\FormError;
 
 
 
@@ -24,6 +26,7 @@ class LoginController extends AbstractController
         $error = '';
         $success = ''; 
 
+        $state= $request->get('state');
         $loginForm = $this->createForm(LoginFormType::class);
         $loginForm->handleRequest($request);
 
@@ -32,7 +35,7 @@ class LoginController extends AbstractController
 
         if ($loginForm->isSubmitted() && $loginForm->isValid()) {
             $user = $loginForm->getData();
-
+            
             $email = $user->getEmail();
             $password = $user->getMdpUser();
 
@@ -51,7 +54,7 @@ class LoginController extends AbstractController
 
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
             $user = $registerForm->getData();
-
+                
             $user->setPhoto('default.jpg');
             $user->setRole('ROLE_USER');
             $user->setBio('This is a bio');
@@ -70,6 +73,7 @@ class LoginController extends AbstractController
         return $this->render('login/login.html.twig', [
             'loginForm' => $loginForm->createView(),
             'registerForm' => $registerForm->createView(),
+            'state' => $state,
             'error' => $error,
             'success' => $success,
         ]);

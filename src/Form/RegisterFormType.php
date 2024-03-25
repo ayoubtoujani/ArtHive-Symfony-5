@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Users;
 use DateTime;
+use App\Services\CountryApi;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,17 +13,27 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
+use App\Validator\Constraints\UniqueEmail;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class RegisterFormType extends AbstractType
 {
+    private $countryApi;
+
+    public function __construct(CountryApi $countryApi)
+    {
+        $this->countryApi = $countryApi;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -35,6 +46,7 @@ class RegisterFormType extends AbstractType
                 ]),
             ],
         ])
+
         ->add('prenomUser', TextType::class, [
             'constraints' => [
                 new NotBlank(['message' => 'Please enter your surname.']),
@@ -44,21 +56,32 @@ class RegisterFormType extends AbstractType
                 ]),
             ],
         ])
+
         ->add('email', EmailType::class, [
             'constraints' => [
                 new NotBlank(['message' => 'Please enter your email.']),
                 new Email(['message' => 'The email "{{ value }}" is not a valid email.']),
+                new UniqueEmail(),
             ],
         ])
-        ->add('mdpUser', PasswordType::class, [
-            'constraints' => [
-                new NotBlank(['message' => 'Please enter your password.']),
-                new Length([
-                    'min' => 8,
-                    'minMessage' => 'Your password should be at least {{ limit }} characters.',
-                ]),
+
+        ->add('mdpUser', RepeatedType::class, [
+            'type' => PasswordType::class,
+            'invalid_message' => 'The password fields must match.',
+            'required' => true,
+            'first_options' => [
+                'label' => 'Password',
+                'constraints' => [
+                    new NotBlank(['message' => 'Please enter your password.']),
+                    new Length([
+                        'min' => 8,
+                        'minMessage' => 'Your password should be at least {{ limit }} characters.',
+                    ]),
+                ],
             ],
+            'second_options' => ['label' => 'Repeat Password'],
         ])
+
         ->add('dNaissanceUser', DateType::class, [
             'widget' => 'single_text',
             'constraints' => [
@@ -66,7 +89,14 @@ class RegisterFormType extends AbstractType
                 new Callback([$this, 'validateAge']),
             ],
         ])
-        ->add('ville')
+
+        ->add('ville', ChoiceType::class, [
+            'choices' => $this->getCountryChoices(),
+            'constraints' => [
+                new NotBlank(['message' => 'Please select your country.']),
+            ],
+        ])
+
         ->add('numTelUser', TelType::class, [
             'constraints' => [
                 new NotBlank(['message' => 'Please enter your phone number.']),
@@ -92,5 +122,17 @@ class RegisterFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Users::class,
         ]);
+    }
+
+    private function getCountryChoices(): array
+    {
+        $countries =  $this->countryApi->getCountries();
+
+        $choices = ['Countries' => ''];
+        foreach ($countries as $country) {
+            $choices[$country] = $country;
+        }
+        asort($choices);
+        return $choices;
     }
 }

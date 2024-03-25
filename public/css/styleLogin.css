@@ -25,7 +25,7 @@ body{
     overflow: hidden;
     width: 1024px;
     max-width: 100%;
-    min-height: 680px;
+    min-height: 480px;
 }
 
 .container p{
@@ -207,4 +207,10 @@ body{
 
 .container.active .toggle-right{
     transform: translateX(200%);
+}
+
+.form-control{
+    background-color: #EEEEEE;
+    width: 204px !important;
+    height: 40px !important;
 }

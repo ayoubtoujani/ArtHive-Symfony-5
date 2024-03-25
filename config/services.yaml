@@ -19,6 +19,8 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
+    App\Services\CountryApi:
+        arguments:
+            $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
