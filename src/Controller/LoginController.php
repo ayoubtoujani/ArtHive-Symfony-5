@@ -67,7 +67,7 @@ class LoginController extends AbstractController
             $success = 'Registration successful';
             $session->set('user', $user);
 
-            return $this->redirectToRoute('afficher_publications');
+            return $this->redirectToRoute('app_login');
         }
         
         return $this->render('login/login.html.twig', [

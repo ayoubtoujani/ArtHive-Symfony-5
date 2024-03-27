@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Reactions;
 
 
 class PublicationsController extends AbstractController
@@ -96,7 +97,6 @@ class PublicationsController extends AbstractController
         $fileName = str_replace(' ', '_', $fileName);
         return $fileName;
     }
-
     #[Route('/my', name: 'my_publications')]
     public function myPub(Request $request,PublicationRepository $publicationRepository, SessionInterface $session): Response
     {
@@ -175,5 +175,49 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
             'searchTerm' => $searchTerm,
             'form' => $this->createForm(AddPostType::class)->createView(),
         ]);
+    }
+   
+    #[Route('/add-like/{id}', name: 'add_like')]
+    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session): RedirectResponse
+    {
+        // Retrieve the user from the session
+        $user = $session->get('user');
+        
+        // Check if a user is logged in
+        if ($user instanceof Users) {
+            $publication = $publicationRepository->find($id);
+            
+            if (!$publication) {
+                // Handle the case where the publication is not found
+                return $this->redirectToRoute('afficher_publications');
+            }
+            
+            $existingReaction = $entityManager->getRepository(Reactions::class)->findOneBy([
+                // Find the reaction by the user ID and the publication
+                'idUser' => $user->getIdUser(),
+                'publication' => $publication
+            ]);
+
+            
+            
+            if ($existingReaction->getUser()->getIdUser() === $user->getIdUser()) {
+                // Create a new reaction
+                $reaction = new Reactions();
+                // Set the user entity directly from the session
+                $reaction->setUser($user);
+                $reaction->setPublication($publication); // Set the publication entity
+                $reaction->setDAjoutReaction(new \DateTime()); // Set the date of adding the reaction
+                // Save the reaction to the database
+                $entityManager->persist($reaction);
+                $entityManager->flush();
+            }
+    
+            // Redirect back to the publications page
+            return $this->redirectToRoute('afficher_publications');
+        } else {
+            // Handle the case where the user is not logged in
+            // You might want to redirect the user to the login page or display an error message
+            return $this->redirectToRoute('app_login');
+        }
     }
 }

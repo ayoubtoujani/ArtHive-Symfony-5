@@ -17,30 +17,33 @@
     {{ parent() }}
    <style>
         /* Styles for the publication list */
-.publication-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust the minimum and maximum width of each item */
-    grid-auto-rows: auto; /* Automatically adjust row height based on content */
-    grid-gap: 20px; /* Ajustez l'espacement entre les produits */
-    margin-top: 20px;
-    padding: 20px;
-}
+ .publication-container {
+          display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between; /* Ajustez l'espacement entre les produits */
+                margin-top: 20px;
+                padding: 20px;
+                width: 110%; 
+        }
 
-       .publication-item {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    position: relative;
-}
+        .publication-item {
+           flex-basis: calc(33.33% - 25px); 
+            margin-bottom: 40px; 
+            margin-right: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            position: relative; 
+        }
 
         .publication-item:hover {
     box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
-    scale: 1.1;
+    transform: translateY(1px); /* Move the publication item down by 2px */
+    scale: 1.04; /* Slightly increase the size of the publication item */
     transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
-
         
 .publication-title {
     font-size: 10px;
@@ -57,10 +60,11 @@
     padding: 10px;
 }
 
-.publication-image {
-    width: 100%;
-    border-radius: 8px 8px 0 0;
-}
+ .publication-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px 8px 0 0;
+        }
 
         h1 {
             color: #4848ed; /* Text color in blue */
@@ -138,10 +142,10 @@
         .publication-title {
                 display: none;
                 position: absolute;
-                top: 80%; /* Positionne le rectangle de description au milieu verticalement */
+                top: 88%; /* Positionne le rectangle de description au milieu verticalement */
                 left: 50%; /* Positionne le rectangle de description au milieu horizontalement */
                 transform: translate(-50%, -50%); /* Centre le rectangle de description */
-                width: 90%; /* Largeur ajustée pour le rectangle de description */
+                width: 100%; /* Largeur ajustée pour le rectangle de description */
                 background-color: rgba(255, 255, 255, 0.8); /* Fond blanc avec opacité */
                 padding: 10px; /* Espacement autour du texte de description */
                 box-sizing: border-box; /* Inclut le padding dans la largeur et la hauteur */
@@ -155,50 +159,121 @@
             align-items: center; /* Alignement vertical centré */
             justify-content: center; /* Alignement horizontal centré */
         }
+        .bookmarkBtn {
+  width: 130px;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: .3s;
+  overflow: hidden;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.062);
+}
+
+.IconContainer {
+  width: 30px;
+  height: 30px;
+  background-color: rgb(103, 74, 228);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+  transition-duration: .3s;
+}
+
+.icon {
+  border-radius: 1px;
+}
+
+.text {
+  height: 100%;
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(26, 26, 26);
+  z-index: 1;
+  transition-duration: .3s;
+  font-size: 1.04em;
+  font-weight: 600;
+}
+
+.bookmarkBtn:hover .IconContainer {
+  width: 120px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.bookmarkBtn:hover .text {
+  transform: translate(10px);
+  width: 0;
+  font-size: 0;
+  transition-duration: .3s;
+}
+
+.bookmarkBtn:active {
+  transform: scale(0.95);
+  transition-duration: .3s;
+}
     </style>
 {% endblock %}
 
 {% block content %}
 
-    <h1>Publications</h1>
-    <div class="publication-container">
-        {% for publication in publications %}
-            <div class="publication-item">
-                <div style="position: relative;">
-                    <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
-                   <div
-                    <p class="publication-title">{{ publication.getContenuPublication() }}</p>
-                    <div class="icon-container">
-                       <i class="fa-solid fa-search-plus zoom-icon" style="color: #3642dd;"></i>
-                     </div>  
-                    </div>
-                </div>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
-                    <div style="display: flex; align-items: center;">
-                        <img class="profile-image" src="{{ asset('images/' ~ publication.getUser().getPhoto()) }}" style="width: 45px; height: 45px;" alt="Profile Image">
-                        <div style="margin-left: 10px;">
-                    <p class="username-label">{{ publication.getUser().getNomUser() }} {{ publication.getUser().getPrenomUser() }}</p>
-                     <p class="publication-date">{{ publication.getDCreationPublication()|time_diff }}</p>
-                        </div>
-                    </div>
-                   <div style="display: flex; align-items: center;">
-                        <!-- Heart icon toggling -->
-                        <div class="heart-container">
-    <img class="heart-icon" src="{{ asset('images/emptyHeart.png') }}" style="width: 30px; height: 30px;" alt="Heart Icon" data-publication-id="{{ publication.idPublication }}">
-    <p class="likes-label">3</p>
-</div>
-    
-                        <div style="display: flex; align-items: center; margin-left: 10px;">
-    <img class="comment-icon" src="{{ asset('images/5338282.png') }}" style="width: 30px; height: 30px;" alt="Comment Icon" id="comment-icon">
-    <p class="comments-label">2</p>
-</div>
-
-                        <!-- Add more like/comment icons as needed -->
+    <h1>“Life is art. Art is life. I never separate it.” – Ai Weiwei
+</h1>
+   <div class="publication-container">
+    {% for publication in publications %}
+        <div class="publication-item" >
+            <!-- Publication Image and Title -->
+            <div style="position: relative;">
+                <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
+                <div>
+                    <p class="publication-title"style = "font-size:13px;">{{ publication.getContenuPublication() }}</p>
+                                        <div class="icon-container">
+                        <i class="fa-solid fa-search-plus zoom-icon" style="color: #3642dd;"></i>
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+            <!-- User Information -->
+            <div style="display: flex; align-items: center; ">
+                 <img class="profile-image" src="{{ asset('images/' ~ publication.getUser().getPhoto()) }}" style="width: 55px; height: 55px; margin-left: 10px; border-radius: 50%;">
+                 <div style="margin-left: 10px;">
+                  <p class="username-label">
+                   <a href="#" style="font-weight: bold; text-decoration: none; color: inherit;">{{ publication.getUser().getNomUser() }} {{ publication.getUser().getPrenomUser() }}</a>
+                     </p>
+                     <p class="publication-date">{{ publication.getDCreationPublication()|time_diff }}</p>
+                </div>
+            </div>
+           <!-- Like and Comment Buttons -->
+<div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+    <!-- Like Button -->
+   <a href="{{ path('add_like', {'id': publication.getIdPublication()}) }}" class="btn btn-primary" data-publication-id="{{ publication.getIdPublication() }}" style="margin-right: 10px; width: 110px; height: 35px; display: flex; align-items: center; justify-content: center;">
+    <img src="https://cdn-icons-png.flaticon.com/512/10027/10027265.png" alt="Like Icon" style="width: 25px; height: 25px;">
+</a>
+    <!-- Comment Button -->
+    <button class="bookmarkBtn like-btn" data-publication-id="{{ publication.getIdPublication() }}" style="margin-left: 10px; width: 130px; height: 40px;">
+        <span class="IconContainer">
+            <svg fill="white" viewBox="0 0 512 512" height="1em">
+                <!-- Comment SVG path -->
+                <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c-4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"></path>
+            </svg>
+        </span>
+        <p class="text">Comment</p>
+    </button>
+</div>
+
+
+        </div>
+    {% endfor %}
+</div>
+
 
     <!-- Modal popup -->
     <div id="myModal" class="modal">
@@ -213,23 +288,31 @@
            {% include 'publications/addPost.html.twig' %}
         </div>
     </div>
-
-
   <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const heartIcons = document.querySelectorAll('.heart-icon'); // Select heart icons correctly
     const zoomIcons = document.querySelectorAll('.zoom-icon');
     const modal = document.getElementById('myModal');
     const modalImg = document.getElementById("modal-img");
     const closeModal = document.getElementsByClassName("close")[0];
-    const createPostButton = document.getElementById("create-post-button"); // Select the create post button
+     const createPostButton = document.getElementById("create-post-button"); // Select the create post button
     const addPostModal = document.getElementById("addPostModal"); // Select the add post modal
-    const commentIcons = document.querySelectorAll('.comment-icon');
-commentIcons.forEach(icon =>{ 
-                icon.addEventListener('click', function() {
-                    window.location.href = "{{ path('app_comments') }}"; // Use the route name defined in your Symfony routes
-                });
-            });
+   const commentIcons = document.querySelectorAll('.bookmarkBtn');
+       const likeButtons = document.querySelectorAll('.btn-primary');
+   likeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        console.log('Like button clicked');
+        const publicationId = button.dataset.publicationId;
+        console.log('Publication ID:', publicationId);
+        window.location.href = "/add-like/" + publicationId;
+    });
+});
+commentIcons.forEach(icon => {
+    icon.addEventListener('click', function() {
+        const publicationId = icon.dataset.publicationId;
+        window.location.href = "/showComments/" + publicationId;
+    });
+});
+
     zoomIcons.forEach(icon => {
         icon.addEventListener('click', function() {
             const publicationItem = this.closest('.publication-item');
@@ -248,43 +331,6 @@ commentIcons.forEach(icon =>{
         createPostButton.addEventListener('click', openCreatePostModal);
     }
 
-  heartIcons.forEach(icon => {
-        icon.addEventListener('click', function() {
-            const currentSrc = this.src;
-            const publicationId = this.dataset.publicationId; // Get publication ID from data attribute
-            if (currentSrc.includes('emptyHeart.png')) {
-                this.src = "{{ asset('images/fullheart.png') }}";
-                // Send request to server to like the publication
-                fetch(`/like/${publicationId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    credentials: 'same-origin',
-                })
-                .catch(error => {
-                    console.error('Error liking publication:', error);
-                    // Optionally, display an error message to the user
-                });
-            } else {
-                this.src = "{{ asset('images/emptyHeart.png') }}";
-                // Send request to server to remove like from the publication
-                fetch(`/unlike/${publicationId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                    },
-                    credentials: 'same-origin',
-                })
-                .catch(error => {
-                    console.error('Error unliking publication:', error);
-                    // Optionally, display an error message to the user
-                });
-            }
-        });
-    });
     // Close the modal when clicked outside the image or on the close button
     window.onclick = function(event) {
         if (event.target === modal) {

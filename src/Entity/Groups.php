@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Users; // Import the Users entity class
 
 /**
  * Groups
@@ -28,6 +29,12 @@ class Groups
      * @ORM\Column(name="nom_group", type="text", length=0, nullable=false)
      */
     private $nomGroup;
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="text", length=0, nullable=false)
+     */
+    private $image;
 
     /**
      * @var string
@@ -37,14 +44,10 @@ class Groups
     private $descriptionGroup;
 
     /**
-     * @var \Users
-     *
-     * @ORM\ManyToOne(targetEntity="Users")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
-     * })
+     * @ORM\ManyToOne(targetEntity=Users::class)
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=true)
      */
-    private $idUser;
+    private $user;
 
     public function getIdGroup(): ?int
     {
@@ -75,14 +78,26 @@ class Groups
         return $this;
     }
 
-    public function getIdUser(): ?Users
+    public function getUser(): ?Users
     {
-        return $this->idUser;
+        return $this->user;
     }
 
-    public function setIdUser(?Users $idUser): static
+    public function setUser(?Users $user): static
     {
-        $this->idUser = $idUser;
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -1,0 +1,302 @@
+{% extends 'feed.html.twig' %}
+
+
+{% block title %}
+    ArtHive | Comments
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        /* Add any additional styles here */
+        .post-container {
+            display: flex;
+            align-items: flex-start; /* Align items at the start (top) of the container */
+            margin-top: 2rem;
+        }
+
+        .post-image {
+            flex: 0 0 auto;
+            width: 60%;
+            max-width: 60%;
+            margin-top: 4rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow to post image */
+        }
+
+        .comment-section {
+            flex: 1; /* Take up remaining space in the container */
+            margin-left: 2rem; /* Add space between the post image and the comment section */
+            /* Add any additional styling for the comment section */
+        }
+
+        .comment {
+            margin-top: 1rem;
+            
+            /* Add any additional styling for individual comments */
+        }
+
+        .comment-textfield {
+            min-height: 3rem;
+            width: calc(100% - 40px);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add box shadow to comment text field */
+            background-color: #f0f0f0; /* Light grey background color */
+            font-size: 1rem; /* Adjust font size */
+        }
+
+        .comment-submit-button {
+            display: inline-block;
+            padding: 0.6rem 2rem;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 300ms ease;
+            font-size: 0.9rem;
+            text-align: center;
+            background-color: #007bff; /* Use the same color as the primary button */
+            color: white; /* Text color */
+            border: none; /* Remove border */
+        }
+        .seeall-submit-button {
+            display: inline-block;
+            padding: 0.6rem 2rem;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 300ms ease;
+            font-size: 0.9rem;
+            text-align: center;
+            background-color: #007bff; /* Use the same color as the primary button */
+            color: white; /* Text color */
+            border: none; /* Remove border */
+        }
+
+        .comment-submit-button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+        .comment-list {
+            margin-top: 2rem;
+        }
+        .comment-list-seeall {
+            margin-top: 2rem;
+        }
+
+
+        .comment-user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-user-name {
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .comment-date {
+            color: #888;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+        }
+         .publication-date {
+            color: #888;
+            font-size: 0.9rem;
+            margin-right: 1rem;
+        }
+
+        .comment-content {
+            margin-bottom: 1rem;
+        }
+
+        .like-toggle {
+            margin-top: 0.5rem;
+        }
+
+        .like-checkbox {
+            display: none;
+        }
+
+        .like-checkbox + label {
+            cursor: pointer;
+            color: #666;
+        }
+
+        .like-checkbox:checked + label {
+            color: #f00; /* Change color when liked */
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 100px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+         .add-page-text-field {
+            width: calc(100% - 40px);
+            height: 100px;
+            margin-bottom: 20px;
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .user-info {
+    display: flex;
+    align-items: center; /* Align items vertically */
+}
+
+.user-info img {
+    margin-right: 10px; /* Add spacing between image and text */
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column; /* Arrange details in a column */
+}
+
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<form action="{{ path('show_comments', { 'id': publication.idPublication }) }}" method="post" enctype="multipart/form-data">
+    <div class="post-container">
+        <!-- User's Information -->
+       <div class="user-info">
+    <img src="{{ asset('images/' ~ publication.getUser().getPhoto() )}}" style="width: 45px; height: 45px;" alt="User Image">
+    <div class="user-details">
+        <div class="publication-user-name">{{ publication.getUser().getNomUser() }} {{ publication.getUser().getPrenomUser() }}</div>
+        <span class="publication-date">{{ publication.getDCreationPublication()|date('F d, Y') }}</span>
+    </div>
+</div>
+
+        <!-- Post Image -->
+        <img src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Post Image" class="post-image">
+    </div>
+
+    <div class="comment-section">
+        <div class="comment">
+            <div class="comment-user-image">
+                <img src="{{ asset('images/' ~ userFromDb.getPhoto() )}}" style="width: 45px; height: 45px;" alt="User Image">
+            </div>
+            <div>
+                <div class="comment-user-name">{{ userFromDb.getNomUser() }} {{ userFromDb.getPrenomUser() }}</div>
+                {{ form_start(commentForm) }}
+                <div>
+                    {{ form_label(commentForm.contenuCommentaire, null, {'label_attr': {'for': 'contenuCommentaire'}}) }}
+                    {{ form_widget(commentForm.contenuCommentaire, {'attr': {'id': 'contenuCommentaire', 'class': 'add-page-text-field'}}) }}
+                    {{ form_errors(commentForm.contenuCommentaire) }}
+                </div>
+                <button type="submit" class="comment-submit-button">Add</button>
+                {{ form_end(commentForm) }}
+            </div>
+        </div>
+
+        <h3>List of Comments</h3>     
+        <!-- Additional comments can be dynamically added here -->
+        <div class="comment-list">
+           {% for comment in comments|slice(0, 5) %}
+            <div class="comment">
+                <div class="comment-user-image">
+                    <img src="{{ asset('images/' ~ comment.getUser().getPhoto()) }}" style="width: 45px; height: 45px;" alt="User Image">
+                </div>
+                <div>
+                    <div class="comment-user-info">
+                        <span class="comment-user-name">{{ comment.getUser().getNomUser() }}{{ comment.getUser().getPrenomUser() }}</span>
+                        <span class="comment-date">{{ comment.getDAjoutCommentaire()|date('F d, Y') }}</span>
+                        <div class="dropdown">
+                            <span class="dropbtn">...</span>
+                            <div class="dropdown-content">
+                                <a href="{{ path('delete_comment', {'id': comment.getIdCommentaire()}) }}">Delete</a>
+                                <a href="{{ path('update_comment', {'id': comment.getIdCommentaire()}) }}">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-content">
+                        {{ comment.getContenuCommentaire() }}
+                    </div>
+                    <div class="like-toggle">
+                        <input id="like-comment-{{ comment.getIdCommentaire() }}" class="like-checkbox" type="checkbox">
+                        <label for="like-comment-{{ comment.getIdCommentaire() }}">Like</label>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if comments|length > 5 %}
+            <!-- Button to toggle visibility of all comments -->
+            <button id="see-all-comments-btn" class="seeall-submit-button">See All</button>
+        {% endif %}
+        </div>
+         <div id="all-comments" class="comment-list-seeall" style="display: none;">
+        {% for comment in comments %}
+         <div class="comment">
+                <div class="comment-user-image">
+                    <img src="{{ asset('images/' ~ comment.getUser().getPhoto()) }}" style="width: 45px; height: 45px;" alt="User Image">
+                </div>
+                <div>
+                    <div class="comment-user-info">
+                        <span class="comment-user-name">{{ comment.getUser().getNomUser() }}{{ comment.getUser().getPrenomUser() }}</span>
+                        <span class="comment-date">{{ comment.getDAjoutCommentaire()|date('F d, Y') }}</span>
+                        <div class="dropdown">
+                            <span class="dropbtn">...</span>
+                            <div class="dropdown-content">
+                                <a href="{{ path('delete_comment', {'id': comment.getIdCommentaire()}) }}">Delete</a>
+                                <a href="{{ path('update_comment', {'id': comment.getIdCommentaire()}) }}">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-content">
+                        {{ comment.getContenuCommentaire() }}
+                    </div>
+                    <div class="like-toggle">
+                        <input id="like-comment-{{ comment.getIdCommentaire() }}" class="like-checkbox" type="checkbox">
+                        <label for="like-comment-{{ comment.getIdCommentaire() }}">Like</label>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+    </div>
+</form>
+
+ <script>
+        document.getElementById('see-all-comments-btn').addEventListener('click', function() {
+            var allComments = document.getElementById('all-comments');
+            if (allComments.style.display === 'none') {
+                allComments.style.display = 'block';
+                document.getElementById('see-all-comments-btn').innerText = 'Collapse';
+            } else {
+                allComments.style.display = 'none';
+                document.getElementById('see-all-comments-btn').innerText = 'See All';
+            }
+        });
+    </script>
+{% endblock %}

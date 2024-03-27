@@ -14,7 +14,9 @@ class UpdatePostType extends AbstractType
     {
         $builder
         ->add('contenuPublication', TextareaType::class, [
-            'label' => 'New Content',
+            'label' => 'Nouvelle Contenu de la publication',
+            //make this label hidden
+
             'required' => true, // adjust this as needed
         ]);
     }

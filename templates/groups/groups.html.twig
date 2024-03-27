@@ -1,0 +1,81 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}
+     ArtHive | Groups
+        
+{% endblock %}
+
+{% block search_bar %}
+   
+{% endblock %}
+
+
+{% block stylesheets %}
+   
+    <style>
+     {{ parent() }}
+  /* CSS styles for displaying groups */
+.group-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-auto-rows: auto;
+    grid-gap: 20px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.group-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    position: relative;
+}
+
+.group-item:hover {
+    box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
+    scale: 1.1;
+    transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.group-image {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+}
+
+.group-details {
+    padding: 10px;
+}
+
+.group-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1877f2;
+    margin-bottom: 5px;
+}
+
+.group-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Groups</h1>
+    <div class="group-container">
+        {% for group in groups %}
+            <div class="group-item">
+                <img class="group-image" src="{{ asset('images/' ~ group.getImage()) }}" alt="Group Image">
+                <div class="group-details">
+                    <h2 class="group-name">{{ group.getNomGroup() }}</h2>
+                    <p class="group-description">{{ group.getDescriptionGroup() }}</p>
+                    <!-- Add any additional group details here -->
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

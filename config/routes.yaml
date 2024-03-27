@@ -4,11 +4,6 @@ app_blog:
 app_feed:
     path: /feed
     controller: App\Controller\BlogController::feed
-app_like_publication:
-    path: /like/{id}
-    controller: App\Controller\LikeController::like
-    methods: ['POST']
-app_unlike_publication:
-    path: /unlike/{id}
-    controller: App\Controller\LikeController::unlike
-    methods: ['POST']
+add_like:
+    path: /add-like/{id}
+    controller: App\Controller\PublicationsController::addLike

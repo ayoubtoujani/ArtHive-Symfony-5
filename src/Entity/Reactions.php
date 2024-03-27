@@ -16,30 +16,30 @@ class Reactions
     /**
      * @var int
      *
-     * @ORM\Column(name="id_reaction", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="id_reaction", type="integer")
      */
     private $idReaction;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class)
+     * @ORM\ManyToOne(targetEntity=Users::class )
      * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user", nullable=true)
      */
     private $user;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity=Publications::class)
+     * @ORM\ManyToOne(targetEntity=Publications::class )
      * @ORM\JoinColumn(name="id_publication", referencedColumnName="id_publication")
      */
     private $publication;
+
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="d_ajout_reaction", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="d_ajout_reaction", type="datetime", nullable=false)
      */
-    private $dAjoutReaction = 'CURRENT_TIMESTAMP';
+    private $dAjoutReaction;
 
     public function getIdReaction(): ?int
     {
@@ -52,15 +52,15 @@ class Reactions
 
         return $this;
     }
- 
+
     public function getPublication(): ?Publications
     {
         return $this->publication;
     }
 
-    public function setPublication(?Publications $publications): self
+    public function setPublication(?Publications $publication): self
     {
-        $this->publication = $publications;
+        $this->publication = $publication;
         return $this;
     }
 
@@ -69,9 +69,9 @@ class Reactions
         return $this->user;
     }
 
-    public function setUser(?Users $users): self
+    public function setUser(?Users $user): self
     {
-        $this->user = $users;
+        $this->user = $user;
         return $this;
     }
 
@@ -80,12 +80,10 @@ class Reactions
         return $this->dAjoutReaction;
     }
 
-    public function setDAjoutReaction(\DateTimeInterface $dAjoutReaction): static
+    public function setDAjoutReaction(\DateTimeInterface $dAjoutReaction): self
     {
         $this->dAjoutReaction = $dAjoutReaction;
 
         return $this;
     }
-
-
 }
