@@ -14,6 +14,8 @@ use App\Repository\PublicationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\ReactionsCommentaires;
 
 class CommentsController extends AbstractController
 {
@@ -165,5 +167,58 @@ public function updateComment($id, Request $request, SessionInterface $session, 
     // If the user is not the owner of the comment, deny access
     throw new AccessDeniedException('You are not allowed to update this comment');
 }
+#[Route('/add-reaction/{id}', name: 'add_reaction')]
+public function addReaction($id, Request $request, SessionInterface $session): Response
+{
+    // Retrieve the comment entity by ID
+    $commentRepository = $this->getDoctrine()->getRepository(Commentaires::class);
+    $comment = $commentRepository->find($id);
 
+    // Check if the comment exists
+    if (!$comment) {
+        throw $this->createNotFoundException('Comment not found');
+    }
+
+    //retriev the publication entity by ID
+    $publication = $comment->getPublication();
+
+
+
+    // Retrieve the user from the session
+    $user = $session->get('user');
+
+    // Check if the user is logged in
+    if ($user instanceof Users) {
+        // Create a new instance of the ReactionsCommentaires entity
+        $reaction = new ReactionsCommentaires();
+
+        // Set the user for the reaction
+        $reaction->setUser($user);
+
+        // Set the comment for the reaction
+        $reaction->setCommentaire($comment);
+
+        // Set the publication for the reaction (if needed)
+        // $reaction->setPublication($comment->getPublication());
+
+        // Set the date of adding the reaction
+        $reaction->setDAjoutReactionCommentaire(new \DateTime('now'));
+
+        //set the publication for the reaction
+        $reaction->setPublication($publication);
+
+        // Persist the reaction to the database
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($reaction);
+        $entityManager->flush();
+
+        // Redirect or return a success response
+        // For example:
+        return $this->redirectToRoute('show_comments', ['id' => $comment->getPublication()->getIdPublication()]);
+    } else {
+        // Handle the case where the user is not logged in
+        // You might want to redirect the user to the login page or display an error message
+        return $this->redirectToRoute('app_login');
+    }
+}
 }

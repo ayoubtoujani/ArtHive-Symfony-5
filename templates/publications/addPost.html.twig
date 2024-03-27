@@ -7,10 +7,11 @@
     <style>
         /* Add your styles here */
         .add-post-container {
-            width: 100%;
+            width: 80%;
             padding: 20px;
             box-sizing: border-box;
             background-color: #f9f9f9;
+            center: 0;
         }
 
         .add-post-content {
@@ -82,9 +83,11 @@
                 </div>
                 
                 <div>
-                    <button type="submit" class="create-post-button">Ajouter</button>
-                    <button id="deleteImage" class="delete-button">Supprimer l'image</button>
-                    <a href="{{ path('afficher_publications') }}" class="cancel-button">Annuler</a>
+                    <button type="submit" class="create-post-button" style="background-color: #4848ed; color: #fff; width: 50%;">Publier</button>
+                    <button id="deleteImage" class="delete-button" style=" width: 50%;">Supprimer l'image</button>
+                    <div>
+                        <a href="{{ path('afficher_publications') }}" id="cancelButton" class="cancel-button" style="background-color: #f00; color: #fff;">Annuler</a>
+                    </div>
                 </div>
                 
                 {{ form_end(form) }}
@@ -114,6 +117,12 @@
             document.getElementById('imagePreview').src = ''; // Clear the image preview
         });
     });
+     document.getElementById('cancelButton').addEventListener('click', function(event) {
+            const confirmed = confirm("Are you sure you want to cancel adding the post?");
+            if (!confirmed) {
+                event.preventDefault(); // Prevent the default action (canceling)
+            }
+        });
 </script>
 
 </body>
