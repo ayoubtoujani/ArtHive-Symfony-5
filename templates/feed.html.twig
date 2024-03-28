@@ -45,14 +45,15 @@
             <div class="left">
                 <a class="profile">
                     <div class="profile-photo">
-                        <img src="/images/photoprofile.png" alt="">
+                      <img src="{{ asset('images/' ~ user.getPhoto() ) }}" style="width: 30px; height: 30px; alt="">
+
                     </div>
-                    <div class="handle">
-                        <h4>Siwar hmaidi</h4>
-                        <p class="text-muted">
-                            @siwar
-                        </p>
-                    </div>
+                   {% if user is not null %}
+    <div class="handle" id="nameLoggedinuser">
+        <h4>{{ user.getNomUser() }} {{ user.getPrenomUser() }}</h4>
+        <p class="text-muted">@{{ user.getNomUser() }}</p>
+    </div>
+{% endif %}
                 </a>
                 <!.................................SIDEBAR.....................................>
                 <div class="sidebar">

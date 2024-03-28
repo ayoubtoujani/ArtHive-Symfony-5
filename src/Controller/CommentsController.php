@@ -70,7 +70,8 @@ class CommentsController extends AbstractController
             'commentForm' => $form->createView(),
             'publication' => $publication,
             'comments' => $findCommentsBypublicationId,
-            'userFromDb' => $user
+            'userFromDb' => $user,
+            'user'=>$user,
         ]);
     } else {
         // Handle the case where the user is not logged in
@@ -160,6 +161,7 @@ public function updateComment($id, Request $request, SessionInterface $session, 
             'publication' => $comment->getPublication(),
             'comments' => $this->getDoctrine()->getRepository(Commentaires::class)->findBy(['publication' => $comment->getPublication()]),
             'userFromDb' => $user,
+            'user'=>$user,
 
         ]);
     }

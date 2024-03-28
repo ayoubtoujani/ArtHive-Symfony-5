@@ -132,8 +132,16 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 
 }
 #[Route('/update-post/{id}', name: 'update_post', methods: ['GET', 'POST'])]
-public function updatePost($id , Request $request, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository): Response
+public function updatePost($id , Request $request, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository,SessionInterface $session): Response
 {
+
+    //
+    $user = $session->get('user');
+    if (!$user instanceof Users) {
+        // Handle the case where the user is not logged in
+        // You might want to redirect the user to the login page or display an error message
+        return $this->redirectToRoute('app_login');
+    }
     $publication = $publicationRepository->find($id);
 
     if (!$publication) {
@@ -156,6 +164,8 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     return $this->render('publications/updatePost.html.twig', [
         'form' => $form->createView(),
         'publication' => $publication,
+        //get the user from the session
+        'user' => $user,
     ]);
 }
 #[Route('/publications/search', name: 'app_posts_search')]
@@ -220,4 +230,6 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
             return $this->redirectToRoute('app_login');
         }
     }
+
+    
 }
