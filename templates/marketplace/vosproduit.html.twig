@@ -1,0 +1,144 @@
+{# Vos Produit #}
+{% extends 'feed.html.twig' %}
+
+{% block title %}
+    ArtHive | Vos Produits
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('/styleFeed.css') }}">
+    <style>
+        h1 {
+            color: #4848ed; 
+            margin-left: 0px;
+            margin-top: 0; /* Supprimez la marge par défaut pour s'aligner avec le reste du contenu */
+            margin-bottom: 20px; /* Espacement en bas pour séparer du contenu suivant */
+            font-size: 50px; /* Taille de police plus grande */
+        }
+
+        .bouton-prod {
+                display: block;
+                width: 150px; 
+                margin-top: 10px;
+                margin-left:50px;
+                background-color: #3642dd;
+                color: white;
+                padding: 8px 10px;
+                text-decoration: none;
+                border-radius: 20px;
+                transition: background-color 0.3s ease; 
+                border: none; 
+                cursor: pointer;
+                font-size: 16px;
+        }
+
+        .bouton-prod:hover {
+            background-color: #1877f2; 
+        }
+
+
+        /* Style pour l'élément conteneur */
+        .product-container {
+            background-color: #fff; /* Couleur de fond blanche */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Ombre portée */
+            padding: 20px; /* Espacement intérieur */
+            margin-bottom: 20px; /* Espacement entre les produits */
+            display: flex; /* Utilisation de flexbox pour positionner les éléments */
+             border-radius: 10px; 
+            transition: box-shadow 0.3s ease;
+        }
+
+        .product-container:hover {
+            box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2); /* Ombre légère lors du survol */
+            transform: scale(1.05); /* Zoom de 5% lors du survol */
+            transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); /* Transition de l'effet de zoom */
+        }
+
+     
+        .product-image {
+            flex: 0 0 auto; /* Ne pas redimensionner l'image */
+            margin-right: 20px; /* Espacement à droite de l'image */
+            width: 200px; /* Largeur de l'image */
+        }
+
+        .product-info {
+            flex: 1; /* Remplir l'espace restant */
+        }
+
+        .product-name {
+            color: #4848ed;
+            font-size: 25px; /* Taille de police du nom du produit */
+            font-weight: bold; /* Police en gras */
+            margin-bottom: 10px; /* Espacement en bas du nom du produit */
+            
+        }
+
+        .product-details {
+            font-size: 18px; /* Taille de police des autres informations */
+            margin-bottom: 40px; /* Espacement en bas des autres informations */
+        }
+
+
+        product-details {
+            font-size: 18px; /* Taille de police des autres informations */
+        }
+
+        .product-details strong {
+            display: inline-block; /* Pour forcer le saut de ligne après chaque élément <strong> */
+            margin-bottom: 10px; 
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <h1>Vos produits</h1>
+    {% if produits is not empty %}
+        {% for produit in produits %}
+            <div class="product-container" style="width: 120%; margin-left:40px">
+                <div class="product-image">
+                    <img src="{{ asset('images/produit/' ~ produit.imageProduit) }}" alt="{{ produit.nomProduit }}">
+                </div>
+              <div class="product-info">
+                    <div class="product-name">{{ produit.nomProduit }}</div>
+                    <div class="product-details">
+                        <strong>Prix:</strong> {{ produit.prixProduit }}<br>
+                        <strong>Stock:</strong> {{ produit.stockProduit }}<br>
+                        <strong>Description:</strong> {{ produit.descriptionProduit }}
+
+                         <div class="boutons-container" style="display: flex;">
+                             <a href="{{ path('modifier_produit', {'id': produit.idProduit}) }}" class="bouton-prod" style="text-align: center;">Modifier</a>
+                           <form method="POST" action="{{ path('supprimer_produit', {'id': produit.idProduit}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?');">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ produit.idProduit) }}">
+                                <button type="submit" class="bouton-prod">Supprimer</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Aucun produit disponible.</p>
+    {% endif %}
+
+
+    <script>
+        // Récupérer l'élément avec l'ID "cartCount" dans le bloc "panier"
+        const cartCountElement = document.getElementById('cartCount');
+
+        // Effectuer une requête AJAX pour récupérer le nombre de produits dans le panier de la classe "achat"
+        fetch('/cartCount')
+            .then(response => response.json())
+            .then(data => {
+                // Mettre à jour le contenu de l'élément "cartCount" avec le nombre de produits
+                cartCountElement.textContent = `(${data.nombreProduits})`;
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération du nombre de produits dans le panier :', error);
+            });
+    </script>
+{% endblock %}

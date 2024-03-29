@@ -1,0 +1,179 @@
+{# templates/produit/ajouterProduit.html.twig #}
+<h1 style="text-align: center; font-size: 26px; font-weight: bold;">Ajouter un produit</h1>
+<style>
+    .bouton-prod {
+        display: block;
+        width: 150px; 
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left:100px;
+        background-color: #3642dd;
+        color: white;
+        padding: 8px 10px;
+        text-decoration: none;
+        border-radius: 20px;
+        transition: background-color 0.3s ease; 
+        border: none; 
+        cursor: pointer;
+    }
+
+    .bouton-prod:hover {
+        background-color: #1877f2; 
+    }
+
+   
+
+
+    .Categorie select {
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 8px 12px;
+        color: #1877f2;
+        font-size: 15px;
+    }
+
+    .Categorie select::-ms-expand {
+        display: block;
+        color: #333; /* Couleur de la flèche */
+        font-size: 16px; /* Taille de la flèche */
+        line-height: 1; /* Hauteur de ligne pour centrer la flèche */
+        padding-right: 5px; /* Espacement entre la flèche et le texte */
+    }
+
+    /* Style au survol */
+    .Categorie select:hover {
+        border-color: #1877f2; /* Changement de couleur de bordure au survol */
+    }
+
+    /* Style au focus */
+    .Categorie select:focus {
+        outline: none; /* Supprime la bordure de focus par défaut */
+        box-shadow: 0 0 0 2px rgba(4, 8, 236, 0.2); /* Ajoute une bordure de focus */
+    }
+
+    .cadre-image {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        width: 400px;
+        height: 400px;
+        margin-left: 80px;
+        margin-bottom: 10px;
+    }
+    .cadre-image img {
+    max-width: calc(90% - 20px); 
+    max-height: calc(100% - 20px);
+    display: block;
+    margin: auto;
+   }
+
+    .text-field,
+    .text-area {
+        border: 1px solid #ccc;
+        padding: 4px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+   
+
+       .text-area {
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        weight: 100px;
+        height: 50px; /* Ajustez la hauteur selon vos besoins */
+        resize: vertical; /* Permet le redimensionnement vertical uniquement */
+    }
+
+
+</style> 
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+    {# Affichage des champs du formulaire #}
+    
+ <div class="formulaire" style="margin-left: 70px">
+    <div class="cadre-image">
+        {{ form_row(form.imageProduit, {'label': false, 'attr': {'onchange': 'previewImage(event)'}}) }}
+        <img id="image-preview">
+     </div>
+
+
+    <div class="nomProduit">
+        {{ form_label(form.nomProduit) }}
+        {{ form_widget(form.nomProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px;'}}) }}
+    </div>
+
+   <div class="prix">
+        {{ form_label(form.prixProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
+        {{ form_widget(form.prixProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px;'}}) }}
+    </div>
+
+
+    <div class="dispo">
+        {{ form_label(form.disponibilite, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
+        {{ form_widget(form.disponibilite, {'attr': {'style': 'margin-left: 15px; border: 1px solid #ccc; padding: 5px; ' }}) }}
+    </div>
+    
+    <div class="stock">
+        {{ form_label(form.stockProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
+        {{ form_widget(form.stockProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; margin-top: 20px;' }}) }}
+    </div>
+
+
+    <div class="Categorie">
+        {{ form_label(form.categProduit, null, {'label_attr': {'style': 'margin-bottom: 10px; margin-right: 10px; margin-bottom: 20px;'}}) }}
+        {{ form_widget(form.categProduit, {'attr': {'style': 'border: 1px solid #ccc; padding: 5px; margin-bottom: 20px;'}}) }}
+     </div>
+
+
+    <div class="description">
+        {{ form_label(form.descriptionProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
+        {{ form_widget(form.descriptionProduit, {'attr': {'class': 'text-area', 'style': 'margin-bottom: 10px; border: 1px solid #ccc; padding: 5px;'}}) }}
+    </div>
+
+
+        
+      
+        
+
+    {# Bouton de soumission du formulaire #}
+    <div class="boutons-container" style="display: flex; margin-top: 20px;">
+        <button type="submit" class="bouton-prod" >Ajouter</button>
+        <button id="btnAnnuler" class="bouton-prod" style="margin-left: 100px; type="button">Annuler</button>
+    </div>
+   
+</div>
+{# Utilisation de la fonction form_end pour terminer le formulaire #}
+{{ form_end(form) }}
+
+<script>
+        function previewImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+            reader.onload = function() {
+                var img = document.getElementById('image-preview');
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+    document.addEventListener("DOMContentLoaded", function() {
+            const btnAnnuler = document.getElementById('btnAnnuler');
+            const modalAjouterProduit = document.getElementById('addProduit');
+
+            // Fermer la modal lors du clic sur le bouton "Annuler"
+            btnAnnuler.addEventListener('click', function() {
+                modalAjouterProduit.style.display = "none";
+            });
+        });
+
+
+</script>
+
+
+
