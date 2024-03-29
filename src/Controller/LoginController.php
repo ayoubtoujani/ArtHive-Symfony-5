@@ -46,7 +46,7 @@ class LoginController extends AbstractController
             if ($foundUser && $foundUser->getMdpUser() === $password) {
                 $success = 'Login successful';
                 $session->set('user', $foundUser);
-                return $this->redirectToRoute('app_test');
+                return $this->redirectToRoute('app_feed');
             } else {
                 $error = 'Invalid email or password';
             }
@@ -67,7 +67,7 @@ class LoginController extends AbstractController
             $success = 'Registration successful';
             $session->set('user', $user);
 
-            return $this->redirectToRoute('app_test');
+            return $this->redirectToRoute('app_feed');
         }
         
         return $this->render('login/login.html.twig', [
@@ -92,7 +92,7 @@ class LoginController extends AbstractController
         // This code will not be executed
     }
 
-    #[Route('/test', name: 'app_test')]
+    #[Route('/feed', name: 'app_feed')]
     public function home(SessionInterface $session): Response
     {
         $user = $session->get('user');
@@ -101,7 +101,7 @@ class LoginController extends AbstractController
         }else{
             $nom = 'unknown';
         }
-        return $this->render('login/test.html.twig', [
+        return $this->render('login/feed.html.twig', [
             'user' => $user,
             'nom' => $nom
         ]);
