@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\ReactionsCommentaires;
+use App\Form\UpdateFormType;
 
 class CommentsController extends AbstractController
 {
@@ -72,6 +73,7 @@ class CommentsController extends AbstractController
             'comments' => $findCommentsBypublicationId,
             'userFromDb' => $user,
             'user'=>$user,
+            'update' => 'add',
         ]);
     } else {
         // Handle the case where the user is not logged in
@@ -109,12 +111,9 @@ public function deleteComment($id, Request $request, SessionInterface $session, 
         // Redirect to the comments page after deleting the comment
         return $this->redirectToRoute('show_comments', ['id' => $comment->getPublication()->getIdPublication()]);
    }
+   // If the user is not the owner of the comment, deny access make an alert 
+    throw new AccessDeniedException('You are not allowed to delete this comment');
 
-    
-    // You may want to display an error message or handle this case differently
-   // throw new AccessDeniedException('You are not allowed to delete this comment');
-    // Redirect to the comments page after deleting the comment
-    // return $this->redirectToRoute('show_comments', ['id' => $comment->getPublication()->getIdPublication()]);
 }
 #[Route('/updateComment/{id}', name: 'update_comment')]
 public function updateComment($id, Request $request, SessionInterface $session, EntityManagerInterface $entityManager): Response
@@ -162,6 +161,7 @@ public function updateComment($id, Request $request, SessionInterface $session, 
             'comments' => $this->getDoctrine()->getRepository(Commentaires::class)->findBy(['publication' => $comment->getPublication()]),
             'userFromDb' => $user,
             'user'=>$user,
+            'update' => 'update',
 
         ]);
     }

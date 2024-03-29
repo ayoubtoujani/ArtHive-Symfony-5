@@ -179,10 +179,10 @@
                             <img class="profile-image" src="{{ asset('images/' ~ publication.getUser().getPhoto()) }}" style="width: 45px; height: 45px;" alt="Profile Image">
                              <p class="username-label" style ="align-items: vertically;">
                                                          {{ publication.getUser().getNomUser() }} {{ publication.getUser().getPrenomUser() }}</p>
-                                <p class="publication-date">{{ publication.getDCreationPublication()|time_diff }}</p>
+                                <p class="publication-date">{{ publication.getDCreationPublication()|time_ago }}</p>
                                <div class="contenuPublication">
                     {{ form_start(form) }}
-                    {{ form_row(form.contenuPublication, {'label': 'Contenu de la publication', 'attr': {'class': 'form-control'}}) }}
+                    {{ form_row(form.contenuPublication, {'label': 'Update Your Caption ', 'attr': {'class': 'form-control'}}) }}
                     {{ form_end(form) }}
                 </div>
                                

@@ -248,7 +248,7 @@
                   <p class="username-label">
                    <a href="#" style="font-weight: bold; text-decoration: none; color: inherit;">{{ publication.getUser().getNomUser() }} {{ publication.getUser().getPrenomUser() }}</a>
                      </p>
-                     <p class="publication-date">{{ publication.getDCreationPublication()|time_diff }}</p>
+                     <p class="publication-date">{{ publication.getDCreationPublication()|time_ago }}</p>
                 </div>
             </div>
            <!-- Like and Comment Buttons -->

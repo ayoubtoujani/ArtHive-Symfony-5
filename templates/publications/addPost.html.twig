@@ -77,10 +77,16 @@
                     {{ form_widget(form.urlFile, {'attr': {'id': 'file'}}) }}
                     {{ form_errors(form.urlFile) }}
                 </div>
-                
-                <div class="image-preview-container">
-                    <img id="imagePreview" src="" alt="Image Preview">
-                </div>
+
+                <div class="image-preview-container"
+                    {% if form.urlFile.vars.value is not empty %}
+                        style="display: block;"
+                    {% else %}
+                        style="display: none;"
+                    {% endif %}
+
+
+
                 
                 <div>
                     <button type="submit" class="create-post-button" style="background-color: #4848ed; color: #fff; width: 50%;">Publier</button>
@@ -103,27 +109,33 @@
             if (event.target && event.target.matches('input[type="file"]')) {
                 const file = event.target.files[0];
                 const reader = new FileReader();
-
                 reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
+                    const preview = document.querySelector('.image-preview-container');
+                    preview.innerHTML = ''; // Clear previous preview
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('preview-image');
+                    preview.appendChild(img);
                 };
-
                 reader.readAsDataURL(file);
             }
         });
 
         document.getElementById('deleteImage').addEventListener('click', function() {
             document.querySelector('input[type="file"]').value = ''; // Clear the file input
-            document.getElementById('imagePreview').src = ''; // Clear the image preview
+            const preview = document.querySelector('.image-preview-container');
+            preview.innerHTML = ''; // Clear the preview
         });
-    });
-     document.getElementById('cancelButton').addEventListener('click', function(event) {
+
+        document.getElementById('cancelButton').addEventListener('click', function(event) {
             const confirmed = confirm("Are you sure you want to cancel adding the post?");
             if (!confirmed) {
                 event.preventDefault(); // Prevent the default action (canceling)
             }
         });
+    });
 </script>
+
 
 </body>
 </html>

@@ -66,7 +66,7 @@ class PublicationsController extends AbstractController
 
                 // Set the user for the publication
                 $publication->setUser($userFromDb);
-
+                $publication->setUrlFile($newFilename);
                 // Save the entity to the database
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($publication);
