@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Reactions;
@@ -39,6 +38,8 @@ class PublicationsController extends AbstractController
 
                 // Check if a file has been uploaded
                 if ($urlFile) {
+
+
                     // Extracting file extension without relying on guesser
              
 
@@ -56,7 +57,8 @@ class PublicationsController extends AbstractController
                         );
                     } catch (FileException $e) {
                         // Handle file upload error
-                        // You can log or display an error message here
+
+                        throw new \Exception('Error uploading file');
                     }
                 }
             
@@ -66,8 +68,12 @@ class PublicationsController extends AbstractController
 
                 // Set the user for the publication
                 $publication->setUser($userFromDb);
+                // Set the file name for the publication
                 $publication->setUrlFile($newFilename);
+                // Set the date of creation for the publication to the current date and time
+                $publication->setDCreationPublication(new \DateTime());
                 // Save the entity to the database
+
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($publication);
                 $entityManager->flush();
@@ -86,8 +92,7 @@ class PublicationsController extends AbstractController
             ]);
         } else {
             // Handle the case where the user is not logged in
-            // You might want to redirect the user to the login page or display an error message
-            return $this->redirectToRoute('app_login');
+                return $this->redirectToRoute('app_login');
         }
     }
     private function sanitizeFileName($fileName) {
