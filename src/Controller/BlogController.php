@@ -121,4 +121,14 @@ class BlogController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
     }
+
+
+    #[Route('/start', name: 'start', methods: ['GET', 'POST'])]
+    public function start(): Response
+    {
+        return $this->render('base.html.twig', [
+            'controller_name' => 'BlogController',
+        ]);
+    }
+
 }

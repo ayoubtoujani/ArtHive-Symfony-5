@@ -57,23 +57,23 @@
                 </a>
                 <!.................................SIDEBAR.....................................>
                 <div class="sidebar">
-                    <a class="menu-item active" href="{{ path('my_publications') }}">
+                <a class="menu-item " id="home" href="{{path('afficher_publications')}}" >
+                        <span><i class="fa-solid fa-house"></i></span><h3>Home</h3>
+                    </a>
+                    <a class="menu-item " href="{{ path('my_publications') }}" id="profile">
     <span><i class="fa-solid fa-user"></i></span><h3>Profile</h3>
 </a>
-                    <a class="menu-item" id="feed-link">
-                        <span><i class="fa-solid fa-house"></i></span><h3>Fil d'actualité</h3>
-                    </a>
-                    <a class="menu-item">
+                    <a class="menu-item" id="groups" >
                         <span><i class="fa-solid fa-people-group"></i></span><h3>Groupes</h3>
                     </a>
-                    <a class="menu-item">
+                    <a class="menu-item"id = "marketplace">
                         <span><i class="fa-solid fa-shop"></i></span><h3>Marketplace</h3>
                     </a>
-                    <a class="menu-item" >
-                        <span><i class="fa-solid fa-calendar-days"></i></span><h3>Evènements</h3>
+                    <a class="menu-item" id= "events" >
+                        <span><i class="fa-solid fa-calendar-days"></i></span><h3>Events</h3>
                     </a>
-                    <a class="menu-item ">
-                        <span><i class="fa-solid fa-palette"></i></span><h3>Thème</h3>
+                    <a class="menu-item " id ="themes">
+                        <span><i class="fa-solid fa-palette"></i></span><h3>Themes</h3>
                     </a>
                 </div>
                 <!.................END OF SIDEBAR............>
@@ -90,13 +90,31 @@
  </div>
 </main>
  <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const feedLink = document.getElementById('feed-link');
-            if (feedLink) {
-                feedLink.addEventListener('click', function() {
-                    window.location.href = "{{ path('afficher_publications') }}"; // Replace with your Symfony route name
+     document.addEventListener("DOMContentLoaded", function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            function activateMenuItem(item) {
+                menuItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
                 });
+                item.classList.add('active');
+                // Enregistrer l'ID de l'élément actif dans le stockage local
+                localStorage.setItem('activeMenuItemId', item.id);
             }
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    activateMenuItem(item);
+                });
+            });
+
+            // Vérifier s'il y a un élément de menu actif enregistré dans le stockage local
+            const activeMenuItemId = localStorage.getItem('activeMenuItemId');
+            if (activeMenuItemId) {
+                const activeMenuItem = document.getElementById(activeMenuItemId);
+                if (activeMenuItem) {
+                    activateMenuItem(activeMenuItem);
+                }
+            }    
         });
     </script>
 </body>
