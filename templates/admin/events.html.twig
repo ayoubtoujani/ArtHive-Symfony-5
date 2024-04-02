@@ -1,0 +1,111 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/styleAdmin.css') }}">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div class="container">
+        <aside>
+
+            <div class="logo" style="height:15%">
+                <img src="{{ asset('images/arthive_black.png') }}">
+            </div>
+
+            <div class="sidebar">
+                <a href={{ path('app_admin_dashboard') }}>
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+
+                <a href="{{ path('app_admin_users') }}">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Utilisateurs</h3>
+                </a>
+
+                <a href= {{ path('app_admin_groups') }}>
+                    <span class="material-icons-sharp">
+                        groups
+                    </span>
+                    <h3>Groupes</h3>
+                </a>
+
+                <a href="#" class="active">
+                    <span class="material-icons-sharp">
+                        event
+                    </span>
+                    <h3>Evénements</h3>
+                </a>
+
+                <a href={{ path('app_admin_products') }}>
+                    <span class="material-icons-sharp">
+                        inventory_2
+                    </span>
+                    <h3>Produits</h3>
+                </a>
+
+                <a href={{ path('app_admin_reports') }}>
+                    <span class="material-icons-sharp">
+                        report_gmailerrorred
+                    </span>
+                    <h3>Reports</h3>
+                </a>
+
+                <a href="#">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+        <main>
+
+        </main>
+
+
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Reza</b></p>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="images/profile-1.jpg">
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Nav -->
+
+
+
+        </div>
+    </div>
+
+    <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
+</body>

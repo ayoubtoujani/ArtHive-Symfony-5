@@ -55,9 +55,9 @@ class LoginController extends AbstractController
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
             $user = $registerForm->getData();
                 
-            $user->setPhoto('default.jpg');
+            $user->setPhoto('images/user.png');
             $user->setRole('ROLE_USER');
-            $user->setBio('This is a bio');
+            $user->setBio('');
 
             // Additional validation or processing if needed before persisting
             $entityManager = $this->getDoctrine()->getManager();
