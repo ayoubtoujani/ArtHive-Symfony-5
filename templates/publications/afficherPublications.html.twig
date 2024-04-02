@@ -221,6 +221,12 @@
   transform: scale(0.95);
   transition-duration: .3s;
 }
+body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
     </style>
 {% endblock %}
 
@@ -254,11 +260,12 @@
            <!-- Like and Comment Buttons -->
 <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
     <!-- Like Button -->
-   <a href="{{ path('add_like', {'id': publication.getIdPublication()}) }}" class="btn btn-primary" data-publication-id="{{ publication.getIdPublication() }}" style="margin-right: 10px; width: 110px; height: 35px; display: flex; align-items: center; justify-content: center; display: none;">
-    <img src="https://cdn-icons-png.flaticon.com/512/10027/10027265.png" alt="Like Icon" style="width: 25px; height: 25px;" display:none>
+<a href="{{ path('add_like', {'id': publication.getIdPublication()}) }}" class="btn btn-primary heartbtn like-btn" data-publication-id="{{ publication.getIdPublication() }}" style="margin-right: 10px; width: 110px; height: 35px; display: flex; align-items: center; justify-content: center; display:none;">
+    <img src="https://cdn-icons-png.flaticon.com/512/10027/10027265.png" alt="Like Icon" style="width: 25px; height: 25px; display:none;">
 </a>
+
     <!-- Comment Button -->
-    <button class="bookmarkBtn like-btn" data-publication-id="{{ publication.getIdPublication() }}" style="margin-left: 10px; width: 130px; height: 40px;">
+    <button class="bookmarkBtn " data-publication-id="{{ publication.getIdPublication() }}" style="margin-left: 10px; width: 130px; height: 40px;">
         <span class="IconContainer">
             <svg fill="white" viewBox="0 0 512 512" height="1em">
                 <!-- Comment SVG path -->
@@ -297,6 +304,7 @@ document.addEventListener("DOMContentLoaded", function() {
      const createPostButton = document.getElementById("create-post-button"); // Select the create post button
     const addPostModal = document.getElementById("addPostModal"); // Select the add post modal
    const commentIcons = document.querySelectorAll('.bookmarkBtn');
+   
        
 commentIcons.forEach(icon => {
     icon.addEventListener('click', function() {
@@ -340,6 +348,41 @@ const addPostCloseBtn = addPostModal.querySelector('.close');
         addPostModal.style.display = "none";
     });   
 });
+ // Get all like buttons
+        const likeButtons = document.querySelectorAll('.like-btn');
+
+        // Attach click event to each like button
+        likeButtons.forEach(function(likeButton) {
+            likeButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                const publicationId = likeButton.getAttribute('data-publication-id');
+
+                // Make AJAX request
+                fetch(`/add-like/${publicationId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any additional headers if required
+                    },
+                    // You can add body data here if needed
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Assuming your controller returns JSON response
+                })
+                .then(data => {
+                    // Handle success response if needed
+                    console.log(data);
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            });
+        });
 
   </script>    
 {% endblock %}
