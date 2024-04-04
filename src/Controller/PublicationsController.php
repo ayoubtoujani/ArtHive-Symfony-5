@@ -180,15 +180,18 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     {
         //get the user from the session
         $user = $sessionInterface->get('user');
-
-    if (!$user instanceof Users) {
+        // Initialize searchTerm variable
+        $searchTerm = null;
+        // Initialize publications variable
+        $publications = null;
+    
             // Récupérer le terme de recherche depuis la requête
         $searchTerm = $request->query->get('q');
 
         // Récupérer les produits correspondant au terme de recherche depuis la base de données
         $publications =$publicationRepository->searchPublicationsByTerm($searchTerm);
   
-    }
+    
 
         // Passer les produits filtrés au template Twig
         return $this->render('publications/afficherPublications.html.twig', [
