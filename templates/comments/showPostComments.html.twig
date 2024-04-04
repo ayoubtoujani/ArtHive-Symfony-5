@@ -365,12 +365,11 @@ body {
                     <div class="comment-content">
                         {{ comment.getContenuCommentaire() }}
                     </div>
-           <!-- <div class="like-toggle">
+           <!--  --> 
+           <div class="like-toggle">
                         <input id="like-comment-{{ comment.getIdCommentaire() }}" class="like-checkbox" type="checkbox">
                         <label for="like-comment-{{ comment.getIdCommentaire() }}">Like</label>
-                    </div> -->    
-                            <button type="button" class="btn-like-comment" data-comment-id="{{ comment.getIdCommentaire() }}">Like</button>
-     
+                    </div>   
                 </div>
             </div>
             {% endfor %}
