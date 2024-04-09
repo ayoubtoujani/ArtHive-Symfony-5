@@ -33,6 +33,8 @@ class PublicationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Publications::class);

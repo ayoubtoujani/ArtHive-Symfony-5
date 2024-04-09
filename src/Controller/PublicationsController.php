@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 
+
+
 class PublicationsController extends AbstractController
 {
     #[Route('/publications', name: 'afficher_publications', methods: ['GET', 'POST'])]
@@ -86,7 +88,7 @@ class PublicationsController extends AbstractController
 
             // Fetch existing publications
             $publications = $publicationRepository->findAll();
-
+            
             return $this->render('publications/afficherPublications.html.twig', [
                 'publications' => $publications,
                 'form' => $form->createView(),
@@ -203,7 +205,7 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     }
    
     #[Route('/add-like/{id}', name: 'add_like')]
-    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session): RedirectResponse
+    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session,Request $request):RedirectResponse
     {
         
         
@@ -214,10 +216,6 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
          
             $publication = $publicationRepository->find($id);
             
-            if (!$publication) {
-                // Handle the case where the publication is not found
-                return $this->redirectToRoute('afficher_publications');
-            }
             
             $existingReaction = $entityManager->getRepository(Reactions::class)->findOneBy([
                 // Find the reaction by the user ID and the publication
@@ -246,9 +244,8 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
             // Handle the case where the user is not logged in
             return $this->redirectToRoute('app_login');
         }
-        
-            // Redirect back to the publications page
-            return $this->redirectToRoute('afficher_publications');
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer);        
        
     }
 }

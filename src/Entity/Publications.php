@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Users; // Import the Users entity class
+use App\Repository\PublicationRepository;
+use Doctrine\Common\Collections\Collection;
 /**
  * @ORM\Table(name="publications", indexes={@ORM\Index(name="id_user", columns={"id_user"})})
  * @ORM\Entity(repositoryClass=PublicationRepository::class)
@@ -97,4 +99,25 @@ class Publications
         $this->urlFile = $urlFile;
         return $this;
     }
+   /**
+     * @ORM\OneToMany(targetEntity=Reactions::class , mappedBy="publication")
+     * @ORM\JoinColumn(name="id_publication", referencedColumnName="id_publication")
+     */
+    private $reactions;
+
+    /**
+     * @return Collection|Reactions[]
+     */
+    public function getReactions(): Collection
+    {
+        return $this->reactions;
+    }
+
+    //count all reactions
+    public function countReactions(): int
+    {
+        return count($this->reactions);
+    }
+    
+
 }
