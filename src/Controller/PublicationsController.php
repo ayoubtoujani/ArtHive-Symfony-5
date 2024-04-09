@@ -203,49 +203,52 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     }
    
     #[Route('/add-like/{id}', name: 'add_like')]
-    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session): JsonResponse
+    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session): RedirectResponse
     {
-        // Retrieve the user from the session
+        
+        
+       //get the loggin user from the session
         $user = $session->get('user');
-    
         // Check if a user is logged in
         if ($user instanceof Users) {
+         
             $publication = $publicationRepository->find($id);
-    
+            
             if (!$publication) {
                 // Handle the case where the publication is not found
-                return new JsonResponse(['error' => 'Publication not found'], JsonResponse::HTTP_NOT_FOUND);
+                return $this->redirectToRoute('afficher_publications');
             }
-    
+            
             $existingReaction = $entityManager->getRepository(Reactions::class)->findOneBy([
                 // Find the reaction by the user ID and the publication
                 'user' => $user,
                 'publication' => $publication
             ]);
-    
-            // Check if the user has already liked the publication
-            if ($existingReaction) {
-                // User has already liked the publication, you might want to handle this case accordingly
-                return new JsonResponse(['error' => 'User has already liked the publication'], JsonResponse::HTTP_BAD_REQUEST);
+
+            
+            
+            if (!$existingReaction) {
+                // Create a new reaction
+                $reaction = new Reactions();
+                // Set the user entity directly from the session
+                $reaction->setUser($user);
+                $reaction->setPublication($publication); // Set the publication entity
+                $reaction->setDAjoutReaction(new \DateTime()); // Set the date of adding the reaction
+                // Save the reaction to the database
+                $entityManager->persist($user);
+                $entityManager->persist($reaction);
+                $entityManager->flush();
             }
     
-            // Create a new reaction
-            $reaction = new Reactions();
-            // Set the user entity directly from the session
-            $reaction->setUser($user);
-            $reaction->setPublication($publication); // Set the publication entity
-            $reaction->setDAjoutReaction(new \DateTime()); // Set the date of adding the reaction
-            // Save the reaction to the database
-            $entityManager->persist($reaction);
-            $entityManager->flush();
-    
-            // Return a success JSON response
-            return new JsonResponse(['message' => 'Like added successfully'], JsonResponse::HTTP_OK);
-        } else {
-            // Handle the case where the user is not logged in
-            // You might want to redirect the user to the login page or display an error message
-            return new JsonResponse(['error' => 'User not logged in'], JsonResponse::HTTP_UNAUTHORIZED);
         }
+        else {
+
+            // Handle the case where the user is not logged in
+            return $this->redirectToRoute('app_login');
+        }
+        
+            // Redirect back to the publications page
+            return $this->redirectToRoute('afficher_publications');
+       
     }
-    
 }
