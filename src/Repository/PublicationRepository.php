@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Publications;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
+
 
 /**
  * @method Publications|null find($id, $lockMode = null, $lockVersion = null)
@@ -34,7 +36,21 @@ class PublicationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
+     /**
+     * Find favorite publications for a given user.
+     *
+     * @param int $userId The ID of the user for whom to fetch favorite publications
+     * @return array|null
+     */
+    public function findFavoritePublicationsForUser(int $userId)
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.favoriteUsers', 'fu')
+            ->andWhere('fu.idUser = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getResult();
+    }
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Publications::class);

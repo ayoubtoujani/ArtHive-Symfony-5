@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Users; // Import the Users entity class
 use App\Repository\PublicationRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+
 /**
  * @ORM\Table(name="publications", indexes={@ORM\Index(name="id_user", columns={"id_user"})})
  * @ORM\Entity(repositoryClass=PublicationRepository::class)
@@ -39,6 +42,40 @@ class Publications
      * @ORM\Column(name="url_file", type="text", length=0, nullable=true)
      */
     private $urlFile;
+
+     /**
+     * @ORM\ManyToMany(targetEntity=Users::class , cascade={"persist"})
+     * @ORM\JoinTable(name="publication_user_favorite",
+     *      joinColumns={@ORM\JoinColumn(name="publication_id", referencedColumnName="id_publication")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id_user")}
+     * )
+     */
+    private $favoriteUsers;
+    public function __construct()
+    {
+        $this->favoriteUsers = new ArrayCollection();
+    }
+
+    public function getFavoriteUsers(): Collection
+    {
+        return $this->favoriteUsers;
+    }
+
+    public function addFavoriteUser(Users $user): self
+    {
+        if (!$this->favoriteUsers->contains($user)) {
+            $this->favoriteUsers[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteUser(Users $user): self
+    {
+        $this->favoriteUsers->removeElement($user);
+
+        return $this;
+    }
 
     // Getter and setter methods for other properties...
 

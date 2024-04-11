@@ -224,10 +224,7 @@ body {
 
 {% block content %}
 
-    <h1>My Posts</h1>
-
-    <a id="seeallfav" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('app_posts_favorites') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >see all fav</a>
-
+    <h1>My Favorites</h1>
     <div class="publication-container">
         {% for publication in publications %}
            <div class="publication-item" >
@@ -235,8 +232,7 @@ body {
             <div style="position: relative;">
              <div class="dropdown">
      
-<a id="updatePost" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('update_post', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Update</a>
- <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('delete_publication', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Delete</a>
+<a id="removefromfavorites" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('remove_from_favorites', {'idU': user.getIdUser(), 'idP': publication.getIdPublication()}) }}" aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Remove from favorites</a>
   
 </div>
                 <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
@@ -286,10 +282,7 @@ body {
             <img id="modal-img" class="modal-image">
         </div>
     </div>
-     <div id="updatePostModal" class="modal">
-    <div class="modal-content">
-
-    </div>
+    
 </div>
   <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -297,8 +290,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const modal = document.getElementById('myModal');
     const modalImg = document.getElementById("modal-img");
     const closeModal = document.getElementsByClassName("close")[0];
-    const updatePostButton = document.getElementById("updatePost"); // Select the create post button
-    const updatePostModal = document.getElementById("updatePostModal"); // Select the add post modal
  const commentIcons = document.querySelectorAll('.bookmarkBtn');
        
 commentIcons.forEach(icon => {
@@ -326,17 +317,7 @@ commentIcons.forEach(icon => {
 
     closeModal.onclick = function() {
         modal.style.display = "none";
-    }
- function openUpdatePostModal() {
-    const updatePostModal = document.getElementById("updatePostModal"); // Select the add post modal
-        updatePostModal.style.display = "block";
-    }
-    
-     if (updatePostButton) {
-        updatePostButton.addEventListener('click', openUpdatePostModal);
-    }
-
-    
+    } 
 //add an alert when click an the href with the id = deleteButton
     const deleteButton = document.getElementById("deleteButton");
     deleteButton.addEventListener('click', function(event) {

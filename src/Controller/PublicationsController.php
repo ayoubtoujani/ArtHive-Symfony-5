@@ -248,4 +248,77 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
         return $this->redirect($referer);        
        
     }
+
+    #[Route('/add-to-favorites/{id}', name: 'add_to_favorites')]
+    public function addToFavorites($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session): RedirectResponse
+    {
+        // Get the logged-in user from the session
+        $user = $session->get('user');
+        
+        
+        // Check if a user is logged in
+        if ($user instanceof Users) {
+            $userId = $user->getIdUser();
+            $publication = $publicationRepository->find($id);
+            //find user by id 
+            $user2 = $entityManager->getRepository(Users::class)->find($userId);
+            // Add the logged-in user to the favorite users of the publication
+            $publication->addFavoriteUser($user2);
+            
+            // Save the updated publication to the database
+            $entityManager->flush();
+        } else {
+            // Handle the case where the user is not logged in
+            return $this->redirectToRoute('app_login');
+        }
+        
+        // Redirect back to the publications page
+        return $this->redirectToRoute('afficher_publications');
+    }
+
+    // Add a method to fetch all publications with favorite users here 
+    #[Route('/publications/favorites', name: 'app_posts_favorites')]
+    public function getAllFav(SessionInterface  $session,EntityManagerInterface $entityManager ): Response
+    {
+        // Retrieve the user from the session
+        $user = $session->get('user');
+        // Check if a user is logged in
+        if ($user instanceof Users) {
+            
+            $userId = $user->getIdUser();
+            // Fetch all publications with favorite users from repository 
+            $publications = $entityManager->getRepository(Publications::class)->findFavoritePublicationsForUser($userId);
+            return $this->render('publications/favorites.html.twig', [
+                'publications' => $publications,
+                'user' => $user,
+            ]);
+        }
+    }
+
+    // remove a favorite user from a publication
+
+    #[Route('/remove-from-favorites/{idP}/{idU}', name: 'remove_from_favorites')]
+    public function removeFromFavorites($idU,$idP,EntityManagerInterface $entityManager, SessionInterface $session): RedirectResponse
+{
+    // Retrieve the user from the session
+    $user = $session->get('user');
+    
+    // Check if a user is logged in
+    if ($user instanceof Users) {
+        // Find the publication
+        $publication = $entityManager->getRepository(Publications::class)->find($idP);
+        
+        // Remove the user from the favorite users of the publication
+        $user2 = $entityManager->getRepository(Users::class)->find($idU);
+        $publication->removeFavoriteUser($user2);
+        
+        // Update the database
+        $entityManager->flush();
+    }
+    
+    // Redirect back to the favorites page
+    return $this->redirectToRoute('app_posts_favorites');
+}
+
+    
 }

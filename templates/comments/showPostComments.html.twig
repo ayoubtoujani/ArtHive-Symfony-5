@@ -391,8 +391,10 @@ body {
     <span class="option-2">Added to Favorites</span>
   </div>
 </label>
+      <a href="{{ path('add_to_favorites', {'id': publication.idPublication}) }}" >Add to Favorites</a>
 
     </div>
+
 </div>
     <div class="comment-section">
         <div class="comment">
@@ -537,7 +539,6 @@ body {
                 document.getElementById('see-all-comments-btn').innerText = 'See All';
             }
         });
-        
-   
+
     </script>
 {% endblock %}

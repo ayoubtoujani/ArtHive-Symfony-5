@@ -167,7 +167,7 @@ class AdminController extends AbstractController
         return $fileName;
     }
     
-#[Route('/delete-publication/{id}', name: 'delete_publication_by_admin', methods: ['GET', 'POST'])]
+#[Route('/delete-publication-admin/{id}', name: 'delete_publication_by_admin', methods: ['GET', 'POST'])]
 public function deletePublication($id, PublicationRepository $publicationRepository): RedirectResponse
 {
     $publication = $publicationRepository->find($id);
