@@ -336,7 +336,7 @@ body {
 {% block content %}
  <!-- background image for this twig page  -->
     
-<form action="{{ path('show_comments', { 'id': publication.idPublication }) }}" method="post" enctype="multipart/form-data">
+<form action="{{ path('show_comments', { 'id': publication.idPublication }) }}" method="post" enctype="multipart/form-data" novalidate>
     <div class="post-container">
         <!-- User's Information -->
        <div class="user-info">

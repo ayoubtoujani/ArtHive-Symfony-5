@@ -26,6 +26,7 @@ class PublicationsController extends AbstractController
     #[Route('/publications', name: 'afficher_publications', methods: ['GET', 'POST'])]
     public function add(Request $request, PublicationRepository $publicationRepository, SessionInterface $session): Response
     {
+        $likedPublications = [];
         // Retrieve the user from the session
         $user = $session->get('user');
         
@@ -89,10 +90,14 @@ class PublicationsController extends AbstractController
             // Fetch existing publications and order them by date of creation
             $publications = $publicationRepository->findBy([], ['dCreationPublication' => 'DESC']);
             
+            // Fetch liked publications by the user
+            $likedPublicationIds = $publicationRepository->findLikedPublicationIdsByUser($user);
+            
             return $this->render('publications/afficherPublications.html.twig', [
                 'publications' => $publications,
                 'form' => $form->createView(),
                 'user' => $user,
+                'likedPublicationIds' => $likedPublicationIds,
             ]);
         } else {
             // Handle the case where the user is not logged in
@@ -324,7 +329,5 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     
     // Redirect back to the favorites page
     return $this->redirectToRoute('app_posts_favorites');
-}
-
-    
+}  
 }
