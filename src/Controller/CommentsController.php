@@ -65,7 +65,6 @@ class CommentsController extends AbstractController
             // Redirect to the comments page after adding the comment
             return $this->redirectToRoute('show_comments', ['id' => $id]);
         }
-    
         // If the form is not valid or not submitted, render the comments page with the form
         return $this->render('comments/showPostComments.html.twig', [
             'commentForm' => $form->createView(),

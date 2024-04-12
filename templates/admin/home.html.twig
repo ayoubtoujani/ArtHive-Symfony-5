@@ -31,17 +31,18 @@
                     </span>
                     <h3>Utilisateurs</h3>
                 </a>
+              
                 <a href={{ path('app_admin_posts') }}>
                     <span class="material-icons-sharp">
-                        posts
+                        post_add
                     </span>
                     <h3>Posts</h3>
                 </a>
-                <a href={{ path('app_admin_groups') }}>
+                 <a href={{ path('app_admin_groups') }}>
                     <span class="material-icons-sharp">
                         groups
                     </span>
-                    <h3>Groupes</h3>
+                    <h3>Groups</h3>
                 </a>
                 
 
@@ -79,6 +80,7 @@
         <!-- Main Content -->
         {% block content %}
         <main>
+           
             <h1>Analytics</h1>
             <!-- Analyses -->
             <div class="analyse">
@@ -139,9 +141,9 @@
                 </table>
                 <a href="#">Show All</a>
             </div>
-            <!-- End of Recent Orders -->
-
-        </main>
+        
+        </main>   
+       
         <!-- End of Main Content -->
         {% endblock %}
         

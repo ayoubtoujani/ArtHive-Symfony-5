@@ -56,34 +56,30 @@
             max-width: 100%;
             height: auto;
         }
-
-        .error {
-            color: red;
-            font-size: 14px;
-        }
         
     </style>
 </head>
 <body>
   
 
-    <div class="add-post-container" style="border-radius: 10px;" position: center;>
-        <div class="add-post-content" background-color: #f9f9f9; style="border-radius: 10px;">
+    <div class="add-post-container">
+        <div class="add-post-content" background-color: #f9f9f9;>
             <h1 style="text-align: center; font-size: 26px; font-weight: bold;">Ajouter une Nouvelle Publication</h1>
             
-<form method="post" action="{{ path('afficher_publications') }}" enctype="multipart/form-data" novalidate>
+<form method="post" action="{{ path('app_admin_posts') }}" enctype="multipart/form-data">
                 {{ form_start(form) }}
                 
                 <div>
                     {{ form_label(form.contenuPublication) }}
                     {{ form_widget(form.contenuPublication, {'attr': {'class': 'add-page-text-field'}}) }}
-                    {{ form_errors(form.contenuPublication, {'attr': {'class': 'error'}}) }}
+                    
+                    {{ form_errors(form.contenuPublication) }}
                 </div>
 
                 <div>
                     {{ form_label(form.urlFile) }}
                     {{ form_widget(form.urlFile, {'attr': {'id': 'file'}}) }}
-                    {{ form_errors(form.urlFile, {'attr': {'class': 'error'}}) }}
+                    {{ form_errors(form.urlFile) }}
                 </div>
 
              
@@ -95,7 +91,7 @@
                     <button type="submit" class="create-post-button" style="background-color: #4848ed; color: #fff; width: 50%;">Publier</button>
                     <button id="deleteImage" class="delete-button" style=" width: 50%;">Supprimer l'image</button>
                     <div>
-                        <a href="{{ path('afficher_publications') }}" id="cancelButton" class="cancel-button" style="background-color: #f00; color: #fff;">Annuler</a>
+                        <a href="{{ path('app_admin_posts') }}" id="cancelButton" class="cancel-button" style="background-color: #f00; color: #fff;">Annuler</a>
                     </div>
                 </div>
                 
@@ -123,6 +119,7 @@
                 reader.readAsDataURL(file);
             }
         });
+
         document.getElementById('deleteImage').addEventListener('click', function() {
             document.querySelector('input[type="file"]').value = ''; // Clear the file input
             const preview = document.querySelector('.image-preview-container');
@@ -136,7 +133,6 @@
             }
         });
     });
-    
 </script>
 
 

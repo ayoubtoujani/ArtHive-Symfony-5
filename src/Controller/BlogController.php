@@ -109,7 +109,6 @@ class BlogController extends AbstractController
     {
         // Retrieve the user from the session
         $user = $session->get('user');
-
         // Check if a user is logged in
         if ($user instanceof Users) {
             return $this->render('feed.html.twig', [
