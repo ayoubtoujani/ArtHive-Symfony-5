@@ -1,6 +1,10 @@
 # config/services.yaml
 parameters:
     images_directory: '%kernel.project_dir%/public/images/'
+    forbidden_words:
+        - badword1
+        - badword2
+        - badword3
 services:
     # Default configuration for services in *this* file
     _defaults:
@@ -24,3 +28,9 @@ services:
     App\Services\CountryApi:
         arguments:
             $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
+
+    App\Notifier\MyNotifier:
+
+    App\Service\ProfanityFilter:
+        arguments:
+            $forbiddenWords: '%forbidden_words%'

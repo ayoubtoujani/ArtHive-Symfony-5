@@ -351,9 +351,10 @@ body {
 
         </div>
     {% endfor %}
+    {% if publications is empty %}
+                <img src="https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png" alt="post Not Found" style="border-radius: 10px; width: 98%">
+        {% endif %}
 </div>
-
-
     <!-- Modal popup -->
     <div id="myModal" class="modal">
         <span class="close">&times;</span>
@@ -419,7 +420,15 @@ const addPostCloseBtn = addPostModal.querySelector('.close');
     addPostCloseBtn.addEventListener('click', function() {
         addPostModal.style.display = "none";
     });   
+// i want to verifiy if there is no form errors inthe addPost.html.twig
+// if there is  form errors, i want to close the modal
+    {% if form_errors(form.contenuPublication) or form_errors(form.urlFile) %}
+        window.onload = function() {
+            document.getElementById('addPostModal').style.display = 'block';
+        };
+    {% endif %}
 });
+
  function toggleLike(button) {
     var likeCount = button.querySelector('.likeCount');
     var likeText = button.querySelector('.like');

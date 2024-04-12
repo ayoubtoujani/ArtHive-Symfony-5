@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Reactions;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-
+use Symfony\Component\Notifier\Notification\Notification;
+use Symfony\Component\Notifier\Recipient\Recipient;
+use Symfony\Component\Notifier\NotifierInterface;
 
 
 
@@ -86,8 +86,8 @@ class PublicationsController extends AbstractController
                 return $this->redirectToRoute('afficher_publications');
             }
 
-            // Fetch existing publications
-            $publications = $publicationRepository->findAll();
+            // Fetch existing publications and order them by date of creation
+            $publications = $publicationRepository->findBy([], ['dCreationPublication' => 'DESC']);
             
             return $this->render('publications/afficherPublications.html.twig', [
                 'publications' => $publications,
@@ -205,52 +205,57 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     }
    
     #[Route('/add-like/{id}', name: 'add_like')]
-    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session,Request $request):RedirectResponse
+    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session, Request $request, NotifierInterface $notifier): RedirectResponse
     {
-        
-        
-       //get the loggin user from the session
+        // Get the logged-in user from the session
         $user = $session->get('user');
+        
         // Check if a user is logged in
         if ($user instanceof Users) {
-         
+            $findUser = $entityManager->getRepository(Users::class)->find($user->getIdUser());
             $publication = $publicationRepository->find($id);
             
-            
             $existingReaction = $entityManager->getRepository(Reactions::class)->findOneBy([
-                // Find the reaction by the user ID and the publication
-                'user' => $user,
+                'user' => $findUser,
                 'publication' => $publication
             ]);
-
-            
-            
+    
             if (!$existingReaction) {
                 // Create a new reaction
                 $reaction = new Reactions();
-                // Set the user entity directly from the session
-                $reaction->setUser($user);
-                $reaction->setPublication($publication); // Set the publication entity
-                $reaction->setDAjoutReaction(new \DateTime()); // Set the date of adding the reaction
+                $reaction->setUser($findUser);
+                $reaction->setPublication($publication);
+                $reaction->setDAjoutReaction(new \DateTime());
+                
                 // Save the reaction to the database
-                $entityManager->persist($user);
                 $entityManager->persist($reaction);
                 $entityManager->flush();
+              /*  // Create a notification
+                $notification = new Notification('You have liked a publication', ['browser']);
+                $recipient = new Recipient($findUser->getEmail());
+                // Send the notification
+                $notifier->send($notification, $recipient);
+                */
+
+
             }
-    
+            else {
+                // Handle the case where the user has already liked the publication remove the like
+                $entityManager->remove($existingReaction);
+                $entityManager->flush();
+            }
         }
         else {
-
             // Handle the case where the user is not logged in
             return $this->redirectToRoute('app_login');
         }
-        $referer = $request->headers->get('referer');
-        return $this->redirect($referer);        
-       
+        
+        // Redirect back to the previous page
+        return $this->redirect($request->headers->get('referer'));
     }
-
+    
     #[Route('/add-to-favorites/{id}', name: 'add_to_favorites')]
-    public function addToFavorites($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session): RedirectResponse
+    public function addToFavorites($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session,Request $request): RedirectResponse
     {
         // Get the logged-in user from the session
         $user = $session->get('user');
@@ -272,8 +277,9 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
             return $this->redirectToRoute('app_login');
         }
         
-        // Redirect back to the publications page
-        return $this->redirectToRoute('afficher_publications');
+        // stay in the same page
+        $referer = $request->headers->get('referer');
+        return $this->redirect($referer); 
     }
 
     // Add a method to fetch all publications with favorite users here 

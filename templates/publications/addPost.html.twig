@@ -56,30 +56,34 @@
             max-width: 100%;
             height: auto;
         }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
         
     </style>
 </head>
 <body>
   
 
-    <div class="add-post-container">
-        <div class="add-post-content" background-color: #f9f9f9;>
+    <div class="add-post-container" style="border-radius: 10px;" position: center;>
+        <div class="add-post-content" background-color: #f9f9f9; style="border-radius: 10px;">
             <h1 style="text-align: center; font-size: 26px; font-weight: bold;">Ajouter une Nouvelle Publication</h1>
             
-<form method="post" action="{{ path('afficher_publications') }}" enctype="multipart/form-data">
+<form method="post" action="{{ path('afficher_publications') }}" enctype="multipart/form-data" novalidate>
                 {{ form_start(form) }}
                 
                 <div>
                     {{ form_label(form.contenuPublication) }}
                     {{ form_widget(form.contenuPublication, {'attr': {'class': 'add-page-text-field'}}) }}
-                    
-                    {{ form_errors(form.contenuPublication) }}
+                    {{ form_errors(form.contenuPublication, {'attr': {'class': 'error'}}) }}
                 </div>
 
                 <div>
                     {{ form_label(form.urlFile) }}
                     {{ form_widget(form.urlFile, {'attr': {'id': 'file'}}) }}
-                    {{ form_errors(form.urlFile) }}
+                    {{ form_errors(form.urlFile, {'attr': {'class': 'error'}}) }}
                 </div>
 
              
@@ -119,7 +123,6 @@
                 reader.readAsDataURL(file);
             }
         });
-
         document.getElementById('deleteImage').addEventListener('click', function() {
             document.querySelector('input[type="file"]').value = ''; // Clear the file input
             const preview = document.querySelector('.image-preview-container');
@@ -133,6 +136,7 @@
             }
         });
     });
+    
 </script>
 
 
