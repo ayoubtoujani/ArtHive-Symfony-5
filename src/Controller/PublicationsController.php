@@ -26,7 +26,7 @@ class PublicationsController extends AbstractController
     #[Route('/publications', name: 'afficher_publications', methods: ['GET', 'POST'])]
     public function add(Request $request, PublicationRepository $publicationRepository, SessionInterface $session): Response
     {
-        $likedPublications = [];
+        
         // Retrieve the user from the session
         $user = $session->get('user');
         
@@ -92,7 +92,7 @@ class PublicationsController extends AbstractController
             
             // Fetch liked publications by the user
             $likedPublicationIds = $publicationRepository->findLikedPublicationIdsByUser($user);
-            
+
             return $this->render('publications/afficherPublications.html.twig', [
                 'publications' => $publications,
                 'form' => $form->createView(),
@@ -185,6 +185,7 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
 #[Route('/publications/search', name: 'app_posts_search')]
      public function search(Request $request,PublicationRepository $publicationRepository,SessionInterface $sessionInterface): Response
     {
+
         //get the user from the session
         $user = $sessionInterface->get('user');
         // Initialize searchTerm variable
@@ -198,6 +199,10 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
         // Récupérer les produits correspondant au terme de recherche depuis la base de données
         $publications =$publicationRepository->searchPublicationsByTerm($searchTerm);
   
+
+
+        // Fetch liked publications by the user
+        $likedPublicationIds = $publicationRepository->findLikedPublicationIdsByUser($user);
     
 
         // Passer les produits filtrés au template Twig
@@ -206,6 +211,7 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
             'form' => $this->createForm(AddPostType::class)->createView(),
             'user'  => $user,
             'publications' => $publications,
+            'likedPublicationIds' => $likedPublicationIds,
         ]);
     }
    

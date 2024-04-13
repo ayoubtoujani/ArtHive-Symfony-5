@@ -427,7 +427,25 @@ const addPostCloseBtn = addPostModal.querySelector('.close');
     {% endif %}
 });
 
+<!-------------------------------------------------- Recherche ------------------------------------------------------->
+ $(document).ready(function() {
+    $('#search-bar').on('submit', function(event) {
+        event.preventDefault(); // Empêche le formulaire de se soumettre normalement
 
+        var searchTerm = $('#search-bar input[type="search"]').val(); // Récupère la valeur de la recherche
+
+        $.ajax({
+            url: '/publications/search?q=' + searchTerm,
+            method: 'GET', // Utiliser la méthode GET pour passer le terme de recherche en tant que paramètre
+            success: function(response) {
+                $('.publication-container').html(response); // Met à jour les résultats de la recherche dans la div .produit-container
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+});
 
   </script>    
 {% endblock %}
