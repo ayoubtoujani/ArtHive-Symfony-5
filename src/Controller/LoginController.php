@@ -2,16 +2,13 @@
 
 namespace App\Controller;
 use App\Entity\Users;
-use SessionIdInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
-use Symfony\Component\Form\FormError;
 
 
 
@@ -101,7 +98,7 @@ class LoginController extends AbstractController
         }else{
             $nom = 'unknown';
         }
-        return $this->render('login/test.html.twig', [
+        return $this->render('feed.html.twig', [
             'user' => $user,
             'nom' => $nom
         ]);
