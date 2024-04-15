@@ -27,4 +27,23 @@ class EvenementsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Récupère les événements de la semaine en cours.
+     *
+     * @return Evenements[] Returns an array of Evenements objects
+     */
+    public function findEventsThisWeek(): array
+    {
+        $startOfWeek = new \DateTime('monday this week');
+        $endOfWeek = new \DateTime('sunday this week');
+
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.dDebutEvenement BETWEEN :start AND :end')
+            ->setParameter('start', $startOfWeek)
+            ->setParameter('end', $endOfWeek)
+            ->orderBy('e.dDebutEvenement', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

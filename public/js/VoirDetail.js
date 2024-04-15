@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const openModalBtn = document.querySelector('.openModalBtn');
     const createEventModal = document.getElementById('createEventModal');
     const closeModalBtn = createEventModal.querySelector('.close');
+    const imagePreview = document.getElementById('imagePreview'); // Get the image preview element
 
     openModalBtn.addEventListener('click', function (event) {
         event.preventDefault(); // Empêcher le comportement par défaut de navigation
@@ -149,7 +150,33 @@ document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.remove('blur'); // Retirer la classe de flou de la page si l'utilisateur clique en dehors de la modale
         }
     });
+    const formErrors = document.querySelectorAll('.form-control.is-invalid');
+    if (formErrors.length > 0) {
+        createEventModal.style.display = 'flex';
+        document.body.classList.add('blur');
+    }
+
+    const addEventButton = document.getElementById('add'); // Get the submit button
+    addEventButton.addEventListener('click', function () {
+        const formErrors = document.querySelectorAll('.form-control.is-invalid');
+        if (formErrors.length === 0) { // Only hide the image preview if there are no errors
+            imagePreview.style.display = 'none';
+        }
+    });
+
+    // Function to preview image
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 });
+
  ///////////////////////////////////////////////////////////////////////////////////////////
  function formatDateForDateTimeInput(dateString) {
     var parts = dateString.split(' ');
@@ -161,6 +188,9 @@ document.addEventListener('DOMContentLoaded', function () {
 // Appel de la fonction pour formater la date de début de l'événement
 var dDebutEvenementInput = document.getElementById('form_dDebutEvenement');
 dDebutEvenementInput.value = formatDateForDateTimeInput(dDebutEvenementInput.value);
+
+var dFinEvenementInput = document.getElementById('form_dFinEvenement');
+dFinEvenementInput.value = formatDateForDateTimeInput(dFinEvenementInput.value);
 
 
 
@@ -181,6 +211,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+
+
+// Fonction pour valider la date de fin côté client
+function validateEndDate() {
+    const startDate = new Date(document.getElementById('form_dDebutEvenement').value);
+    const endDate = new Date(document.getElementById('form_dFinEvenement').value);
+
+    if (endDate < startDate) {
+        alert("La date de fin ne peut pas être antérieure à la date de début.");
+        return false;
+    }
+    return true;
+}
+
+// Écouter l'événement de soumission du formulaire
+document.getElementById('createEventForm').addEventListener('submit', function(event) {
+    // Valider la date de fin avant de soumettre le formulaire
+    if (!validateEndDate()) {
+        event.preventDefault(); // Empêcher la soumission du formulaire si la validation échoue
+    }
+});
+
 
 /////////////////////////////////////////////DROPDOWN EDIT & DELETE/////////////////////////////////////////
 // Supprimer les écouteurs d'événements existants
@@ -243,7 +297,25 @@ document.querySelectorAll('.delete-event').forEach(link => {
     });
 });
 
+///////////////////////////////////////////////////////// Recherche /////////////////////////////////////////////////
+ $(document).ready(function() {
+    $('#search-bar').on('submit', function(event) {
+        event.preventDefault(); // Empêche le formulaire de se soumettre normalement
 
+        var searchTerm = $('#search-bar input[type="search"]').val(); // Récupère la valeur de la recherche
+
+        $.ajax({
+            url: '/evenement/search?q=' + searchTerm,
+            method: 'GET', // Utiliser la méthode GET pour passer le terme de recherche en tant que paramètre
+            success: function(response) {
+                $('.produit-container').html(response); // Met à jour les résultats de la recherche dans la div .produit-container
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+});
 
 
 

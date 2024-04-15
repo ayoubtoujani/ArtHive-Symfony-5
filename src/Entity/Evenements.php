@@ -27,9 +27,21 @@ class Evenements
      */
     private $idEvenement;
 
+
     /**
      * @var string
      *
+         * @Assert\NotBlank(message=" titre doit etre non vide")
+          * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Le titre ne doit pas contenir de chiffres"
+     * )
+     * @Assert\Length(
+     *      min = 5,
+     *      minMessage=" Entrer un titre au mini de 5 caracteres"
+     *
+     *     )
      * @ORM\Column(name="titre_evenement", type="text", length=0, nullable=false)
      */
     private $titreEvenement;
@@ -47,6 +59,11 @@ class Evenements
     /**
      * @var \DateTime
      *
+        * @Assert\NotBlank(message="La date de fin de l'événement est requise")
+     * @Assert\GreaterThanOrEqual(
+     *     propertyPath="dDebutEvenement",
+     *     message="La date de fin doit être postérieure ou égale à la date de début"
+     * )
      * @ORM\Column(name="d_fin_evenement", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
     private $dFinEvenement ;
@@ -54,6 +71,12 @@ class Evenements
     /**
      * @var string
      *
+      * @Assert\NotBlank(message="description  doit etre non vide")
+     * @Assert\Length(
+     *      min = 7,
+     *      max = 10000,
+     *      minMessage = "doit etre >=7 ",
+     *      maxMessage = "doit etre <=10000" )
      * @ORM\Column(name="description_evenement", type="text", length=0, nullable=false)
      */
     private $descriptionEvenement;

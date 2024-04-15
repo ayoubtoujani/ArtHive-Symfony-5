@@ -46,7 +46,12 @@ class LoginController extends AbstractController
             if ($foundUser && $foundUser->getMdpUser() === $password) {
                 $success = 'Login successful';
                 $session->set('user', $foundUser);
-                return $this->redirectToRoute('app_test');
+                 // Check if user has admin role
+                 if ($foundUser->getRole() === 'ROLE_ADMIN') {
+                    return $this->redirectToRoute('app_admin'); // Redirect to admin dashboard
+                } else {
+                    return $this->redirectToRoute('app_feed'); // Redirect to regular user dashboard
+                }
             } else {
                 $error = 'Invalid email or password';
             }
@@ -55,9 +60,9 @@ class LoginController extends AbstractController
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
             $user = $registerForm->getData();
                 
-            $user->setPhoto('default.jpg');
+            $user->setPhoto('images/user.png');
             $user->setRole('ROLE_USER');
-            $user->setBio('This is a bio');
+            $user->setBio('');
 
             // Additional validation or processing if needed before persisting
             $entityManager = $this->getDoctrine()->getManager();
@@ -67,7 +72,7 @@ class LoginController extends AbstractController
             $success = 'Registration successful';
             $session->set('user', $user);
 
-            return $this->redirectToRoute('app_test');
+            return $this->redirectToRoute('afficher_publications');
         }
         
         return $this->render('login/login.html.twig', [
@@ -76,6 +81,7 @@ class LoginController extends AbstractController
             'state' => $state,
             'error' => $error,
             'success' => $success,
+            
         ]);
     }
 
@@ -108,4 +114,3 @@ class LoginController extends AbstractController
     }
 
 }
-

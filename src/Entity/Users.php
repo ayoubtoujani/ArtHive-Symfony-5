@@ -7,66 +7,87 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Users
- * @ORM\Entity
+ *
  * @ORM\Table(name="users", indexes={@ORM\Index(name="nom_user", columns={"nom_user"})})
+ * @ORM\Entity
  */
-
 class Users
 {
-
-/**
-     * @ORM\Id
+    /**
+     * @var int
+     *
      * @ORM\Column(name="id_user", type="integer", nullable=false)
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $idUser;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="nom_user", type="string", length=255, nullable=false)
      */
     private $nomUser;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="prenom_user", type="string", length=255, nullable=false)
      */
     private $prenomUser;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="email", type="string", length=255, nullable=false)
      */
     private $email;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="mdp_user", type="string", length=255, nullable=false)
      */
     private $mdpUser;
 
     /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="d_naissance_user", type="date", nullable=false)
      */
     private $dNaissanceUser;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="ville", type="string", length=255, nullable=false)
      */
     private $ville;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="num_tel_user", type="string", length=255, nullable=false)
      */
     private $numTelUser;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="photo", type="text", length=0, nullable=false)
      */
     private $photo;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="role", type="string", length=255, nullable=false)
      */
     private $role;
 
     /**
+     * @var string
+     *
      * @ORM\Column(name="bio", type="text", length=0, nullable=false)
      */
     private $bio;

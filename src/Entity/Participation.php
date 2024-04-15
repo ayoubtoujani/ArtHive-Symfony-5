@@ -26,7 +26,7 @@ class Participation
     /**
  * @var \Users
  *
- * @ORM\ManyToOne(targetEntity="Users", cascade={"persist"})
+ * @ORM\ManyToOne(targetEntity="Users")
  * @ORM\JoinColumns({
  *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
  * })

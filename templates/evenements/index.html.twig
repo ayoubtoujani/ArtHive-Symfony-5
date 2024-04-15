@@ -252,6 +252,50 @@
     color: #fff;
 }
 
+.week-events-box {
+    margin-top: 20px; /* Espacement par rapport aux autres contenus */
+    padding: 20px; /* Espacement interne */
+    border: 1px solid #ccc; /* Bordure */
+    border-radius: 8px; /* Coins arrondis */
+    background-color: #f9f9f9; /* Couleur de fond */
+}
+
+.week-events-box h5 {
+    margin-bottom: 10px; /* Espacement par rapport aux événements */
+    font-size: 18px; /* Taille de police */
+    font-weight: bold; /* Gras */
+    color: #333333; /* Couleur du texte */
+    text-transform: uppercase; /* Mettre le texte en majuscules */
+    border-bottom: 2px solid #ccc; /* Bordure inférieure */
+    padding-bottom: 5px; /* Espacement sous la bordure */
+}
+
+
+/* Styles pour les événements dans la boîte */
+.week-events-box .event-container {
+    display: flex;
+    flex-wrap: nowrap; /* Empêcher le retour à la ligne des événements */
+    overflow-x: auto; /* Activer le défilement horizontal si nécessaire */
+    margin-top: 10px; /* Espacement par rapport au titre */
+}
+
+/* Style pour chaque événement */
+.week-events-box .event-item {
+    flex: 0 0 auto; /* Empêcher les événements de redimensionner */
+    margin-right: 10px; /* Espacement entre les événements */
+    /* Vos autres styles pour les événements */
+}
+h6 {
+    margin-top: 20px; /* Espacement par rapport au contenu précédent */
+    margin-bottom: 20px; /* Espacement par rapport aux événements */
+    font-size: 18px; /* Taille de police */
+    font-weight: bold; /* Gras */
+    color: #333333; /* Couleur du texte */
+    text-transform: uppercase; /* Mettre le texte en majuscules */
+    border-bottom: 2px solid #ccc; /* Bordure inférieure */
+    padding-bottom: 5px; /* Espacement sous la bordure */
+}
+
 
 
     </style>
@@ -278,6 +322,41 @@
         </div>
     </div>
     
+
+
+    <div class="week-events-box">
+        <h5>Évènements de cette semaine</h5>
+        <div class="events-this-week-scroll">
+    <div class="event-container">
+        {% for event in eventsThisWeek %}
+            <div class="event-item {% if event.isDatePassed %}event-passed{% endif %}" data-categorie="{{ event.categorieEvenement }}">
+                <img class="event-image {% if event.isDatePassed %}disabled{% endif %}" src="{{ asset('images/evenement/' ~ event.image) }}" alt="Image de l'événement">
+                <h2 class="event-title">{{ event.titreEvenement }}</h2>
+                <p class="event-date">
+                    <span><i class="fa-regular fa-clock" style="color: #3642dd;"></i></span>
+                    {{ event.dDebutEvenement|date('Y-m-d H:i') }} - {{ event.dFinEvenement|date('Y-m-d H:i') }}
+                </p>
+                <p class="event-lieu">
+                    <span><i class="fa-solid fa-location-dot" style="color: #3642dd;"></i></span>
+                    {{ event.lieuEvenement }}
+                </p>
+                <div class="voir-detail-container button-container">
+                    <a href="#" class="voir-detail {% if event.isDatePassed %}disabled{% endif %}" data-evenement="{{ event.idEvenement }}">Voir détail</a>
+                   
+                </div>
+            </div>
+        {% endfor %}
+        {% if eventsThisWeek is empty %}
+            <p>Il n'a pas des évènements cette semaine</p>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+
+
+
+        <h6>Tous les évènements</h6>
             <div class="event-container">
                 {% for evenement in evenements %}
                     <div class="event-item {% if evenement.isDatePassed %}event-passed{% endif %}"  data-categorie="{{ evenement.categorieevenement }}" >
@@ -296,6 +375,9 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% if evenements is empty %}
+                <img src="{{ asset('images/evenement/notfound.gif') }}" alt="Event Not Found" style="border-radius: 10px; width: 98%">
+                {% endif %}
             </div>
 
              <!-- Ajoutez ceci à votre HTML pour la modale -->
@@ -307,7 +389,6 @@
       <p id="modal-date" class="event-date"></p>
       <p id="modal-lieu" class="event-lieu"><i class="fa-solid fa-location-dot"></i></p>
       <p id="modal-description" class="event-description">Description : </p>
-
     </div>
   </div>
 

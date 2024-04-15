@@ -9,6 +9,7 @@
     {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.css">
+  
 
 
     <style>
@@ -257,8 +258,40 @@
 }
 
 .createEventModal .cancelEvent {
+    background-color: #afbccd; /* Couleur de fond */
+
     width: 100%;
             padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+
+}
+.cancelEvent {
+    background-color: #afbccd; /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    padding: 10px 2px; /* Ajouter de l'espace à l'intérieur du bouton */
+    border: none; /* Supprimer la bordure du bouton */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur au survol */
+    transition: background-color 0.3s ease; /* Animation de transition pour la couleur de fond */
+    font-size: 16px; /* Taille de la police */
+    display: inline-block; /* Permet au bouton d'avoir la largeur nécessaire */
+    text-decoration: none; /* Supprime la décoration de texte */
+    text-align: center; /* Centre le texte horizontalement */
+}
+
+.cancelEvent:hover {
+    background-color: #999; /* Changement de couleur de fond au survol */
+}
+
+.createEventModal .addEvent {
+    background-color: #1f09ec; /* Changement de couleur de fond au survol */
+
+    width: 100%;
+            padding: 10px 10px;
             margin-top: 10px;
             border: none;
             border-radius: 5px;
@@ -403,7 +436,24 @@
 .modifier-evenement:hover {
     background-color: #0c4e8a; /* Changement de couleur de fond au survol */
 }
-
+.invalid-date {
+    background-color: #ffcccc; /* Couleur de fond rouge */
+}
+.form-control.is-invalid {
+            border-color: #dc3545;
+            padding-right: calc(1.5em + .75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23dc3545'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(.375em + .1875rem) center;
+            background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+        }
+        .invalid-feedback {
+            display: block;
+            width: 100%;
+            margin-top: .25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
 
     </style>
 {% endblock %}
@@ -451,18 +501,25 @@
                     {{ form_start(form) }}
                     <div class="image-preview-container">
                         <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: auto; max-height: auto;">
-                        {{ form_row(form.image, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Image associée à l\'événement', 'onchange': 'previewImage(this)'} }) }}
+                        {{ form_row(form.image, { 'attr': { 'onchange': 'previewImage(this)'} }) }}
                     </div>
-                                      
-                     {{ form_row(form.titreEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Titre de l\'événement'} }) }}
-                    {{ form_row(form.dDebutEvenement, { 'label': 'Date de début de l\'événement', 'attr': {'class': 'add-event-text-field datepicker'}, 'widget': 'single_text' }) }}
-                    {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'add-event-text-field datepicker'}, 'widget': 'single_text' }) }}
-                    {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Description de l\'événement'} }) }}
-                    {{ form_row(form.lieuEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Lieu de l\'événement'} }) }}
-                    {{ form_row(form.categorieevenement, { 'attr': {'class': 'custom-select', 'placeholder': 'Catégorie de l\'événement'} }) }}
+                    {{ form_row(form.titreEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.titreEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Titre de l\'événement'} }) }}
+                    {{ form_label(form.dDebutEvenement, 'Date de début de l\'événement') }}
+                    {{ form_widget(form.dDebutEvenement, { 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dDebutEvenement.vars.errors|length ? ' is-invalid' : '')} }) }}
+                    {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dFinEvenement.vars.errors|length ? ' is-invalid' : '')}, 'widget': 'single_text' }) }}
+                    {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.descriptionEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Description de l\'événement'} }) }}
+                    {{ form_row(form.lieuEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.lieuEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Lieu de l\'événement'} }) }}
+                    {{ form_row(form.categorieevenement, { 'attr': {'class': 'form-control custom-select' ~ (form.categorieevenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Catégorie de l\'événement'} }) }}
+                    
+                    <div class="boutons-container" >
+                        <button type="submit" class="addEvent" id="add">Ajouter</button>
+                        <a href="{{ path('vos_evenements') }}" id="cancelEvent" class="cancelEvent">Annuler</a>
+
+                    </div>
                     {{ form_end(form) }}
                 </form>
-                <button id="cancelEvent" class="cancelEvent">Annuler</button>
+
+                
             </div>
         </div>
     </div>
@@ -497,29 +554,40 @@ document.addEventListener('DOMContentLoaded', function () {
     const createEventModal = document.getElementById('createEventModal');
     const closeModalBtn = createEventModal.querySelector('.close');
     const blurBackground = document.querySelector('.blur');
-        // Initialiser les éléments datepicker
+     // Vérifier si le formulaire contient des erreurs
+     const formErrors = document.querySelectorAll('.form-control.is-invalid');         // Variable pour stocker l'URL de l'image sélectionnée
+     let imageURL = '';
 
+// Fonction pour prévisualiser une image sélectionnée
+function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                imageURL = e.target.result; // Stocker l'URL de l'image
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+  // Si des erreurs sont présentes, afficher le modal
+  if (formErrors.length > 0  || !imageInput.files[0] ) {
+    event.preventDefault();
+        createEventModal.style.display = 'flex';
+        document.body.classList.add('blur');
+
+    }
 
 
     openModalBtn.addEventListener('click', function (event) {
         event.preventDefault();
         createEventModal.style.display = 'flex';
         document.body.classList.add('blur');
-        const inputFile = document.getElementById('form_image');
-    const imagePreview = document.getElementById('image-preview');
+      
+    });
 
-    inputFile.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = 'block';
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-    });
 
     closeModalBtn.addEventListener('click', function () {
         createEventModal.style.display = 'none';
@@ -532,6 +600,24 @@ document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.remove('blur');
         }
     });
+
+ 
+
+ 
+
+    const imageInput = document.getElementById('form_image');
+    if (imageInput) {
+        // Sauvegarder l'URL de l'image lorsqu'une nouvelle image est sélectionnée
+        imageInput.addEventListener('change', function () {
+            previewImage(this);
+        });
+
+        // Restaurer l'image précédemment sélectionnée lorsque le formulaire est affiché
+        imageURL = imageInput.value;
+        if (imageURL) {
+            document.getElementById('imagePreview').src = imageURL;
+        }
+    }
 });
 
 $(document).ready(function() {
@@ -555,9 +641,9 @@ $(document).ready(function() {
     }
 }
 
-
-
     </script>
+    
+   
     
 {% endblock %}
 
