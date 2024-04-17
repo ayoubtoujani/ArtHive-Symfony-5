@@ -1,0 +1,13 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}Edit Reclamationgroupe{% endblock %}
+
+{% block content %}
+    <h1>Edit Reclamationgroupe</h1>
+
+    {{ include('reclamationgroupe/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_reclamationgroupe_index') }}">back to list</a>
+
+    {{ include('reclamationgroupe/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,47 @@
+app_blog:
+    path: /blog
+    controller: App\Controller\BlogController::index
+app_feed:
+    path: /feed
+    controller: App\Controller\BlogController::feed
+add_like:
+    path: /add-like/{id}
+    controller: App\Controller\PublicationsController::addLike
+app_login:
+    path: /login
+    controller: App\Controller\LoginController::login
+
+app_admin_dashboard:
+    path: /admin/dashboard
+    controller: App\Controller\AdminController::index
+
+
+app_admin_users:
+    path: /admin/users
+    controller: App\Controller\AdminController::getAllUsers
+
+app_admin_posts:
+    path: /admin/posts
+    controller: App\Controller\AdminController::getAllPosts
+
+app_admin_groups:
+    path: /admin/groups
+    controller: App\Controller\AdminController::getAllGroups
+
+app_admin_events:
+    path: /admin/events
+    controller: App\Controller\AdminController::getAllEvents
+
+app_admin_products:
+    path: /admin/produits
+    controller: App\Controller\AdminController::getAllProducts
+
+app_admin_reports:
+    path: /admin/reports
+    controller: App\Controller\AdminController::getAllReports
+groups_create:
+    path: '/groups/new'
+    controller: App\Controller\GroupsController::new
+app_groups:
+    path: /groups
+    controller: App\Controller\GroupsController::index

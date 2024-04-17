@@ -1,0 +1,473 @@
+{% extends 'admin/home.html.twig' %}
+{% block title %}
+    ArtHive | Posts
+{% endblock %}
+
+{% block stylesheets %}
+     <style>
+          /* Styles for the publication list */
+ .publication-container {
+          display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between; /* Ajustez l'espacement entre les produits */
+                margin-top: 20px;
+                padding: 20px;
+                width: 110%; 
+        }
+
+        .publication-item {
+           flex-basis: calc(33.33% - 25px); 
+            margin-bottom: 40px; 
+            margin-right: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            position: relative; 
+        }
+
+        .publication-item:hover {
+    box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
+    transform: translateY(1px); /* Move the publication item down by 2px */
+    scale: 1.04; /* Slightly increase the size of the publication item */
+    transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+        
+.publication-title {
+    font-size: 10px;
+    font-weight: bold;
+    color: #1877f2;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+        .publication-date {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+ .publication-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        h1 {
+            color: #4848ed; /* Text color in blue */
+            text-align: center; /* Horizontal centering */
+            margin-top: 0; /* Remove default margin to align with the rest of the content */
+            margin-bottom: 20px; /* Bottom spacing to separate from the following content */
+            font-size: 50px; /* Larger font size */
+        }
+           .content {
+                width:190%;
+                float: right;
+            }
+            /* Affiche la description du produit lorsque survolée */
+            .produit-item:hover .produit-description {
+                display: block;
+            }
+
+            .icon-container {
+            display: flex; /* Utilisation de Flexbox */
+            align-items: center; /* Alignement vertical centré */
+            justify-content: center; /* Alignement horizontal centré */
+        }
+
+         .icon-container i {
+           margin-right: 10px; /* Espacement entre les icônes */
+             }
+
+          
+
+    
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 9999; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%; /* Max width */
+            max-height: 80%; /* Max height */
+        }
+        .modal-content-comment {
+            position: relative;
+            margin: auto;
+            width: 80%;
+            max-width: 600px;
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .modal-image {
+            max-width: 50%; /* Set maximum width */
+            max-height: 80vh; /* Set maximum height as 80% of viewport height */
+            display: block;
+            margin: 0 auto; /* Center the image horizontally */
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .publication-title {
+                display: none;
+                position: absolute;
+                top: 88%; /* Positionne le rectangle de description au milieu verticalement */
+                left: 50%; /* Positionne le rectangle de description au milieu horizontalement */
+                transform: translate(-50%, -50%); /* Centre le rectangle de description */
+                width: 100%; /* Largeur ajustée pour le rectangle de description */
+                background-color: rgba(255, 255, 255, 0.8); /* Fond blanc avec opacité */
+                padding: 10px; /* Espacement autour du texte de description */
+                box-sizing: border-box; /* Inclut le padding dans la largeur et la hauteur */
+                text-align: center; /* Centrer le texte horizontalement */
+        }
+        .publication-item:hover .publication-title {
+                display: block;
+        }
+                .icon-container {
+            display: flex; /* Utilisation de Flexbox */
+            align-items: center; /* Alignement vertical centré */
+            justify-content: center; /* Alignement horizontal centré */
+        }
+        .bookmarkBtn {
+  width: 130px;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: .3s;
+  overflow: hidden;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.062);
+}
+
+.IconContainer {
+  width: 30px;
+  height: 30px;
+  background-color: rgb(103, 74, 228);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+  transition-duration: .3s;
+}
+
+.icon {
+  border-radius: 1px;
+}
+
+.text {
+  height: 100%;
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(26, 26, 26);
+  z-index: 1;
+  transition-duration: .3s;
+  font-size: 1.04em;
+  font-weight: 600;
+}
+
+.bookmarkBtn:hover .IconContainer {
+  width: 120px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.bookmarkBtn:hover .text {
+  transform: translate(10px);
+  width: 0;
+  font-size: 0;
+  transition-duration: .3s;
+}
+
+.bookmarkBtn:active {
+  transform: scale(0.95);
+  transition-duration: .3s;
+}
+body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        .button {
+  --main-focus: #2d8cf0;
+  --font-color: #dedede;
+  --bg-color-sub: #222;
+  --bg-color: #323232;
+  --main-color: #dedede;
+  position: relative;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  background-color: var(--bg-color);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.button, .button__icon, .button__text {
+  transition: all 0.3s;
+}
+
+.button .button__text {
+  transform: translateX(25px);
+  color: var(--font-color);
+  font-weight: 600;
+}
+
+.button .button__icon {
+  position: absolute;
+  transform: translateX(109px);
+  height: 100%;
+  width: 39px;
+  background-color: var(--bg-color-sub);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button .svg {
+  width: 20px;
+  stroke: var(--main-color);
+}
+
+.button:hover {
+  background: var(--bg-color);
+}
+
+.button:hover .button__text {
+  color: transparent;
+}
+
+.button:hover .button__icon {
+  width: 148px;
+  transform: translateX(0);
+}
+
+.button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px var(--main-color);
+}
+.delete {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+  gap: 2px;
+}
+
+.svgIcon {
+  width: 12px;
+  transition-duration: 0.3s;
+}
+
+.svgIcon path {
+  fill: white;
+}
+
+.delete:hover {
+  transition-duration: 0.3s;
+  background-color: rgb(255, 69, 69);
+  align-items: center;
+  gap: 0;
+}
+
+.bin-top {
+  transform-origin: bottom right;
+}
+.delete:hover .bin-top {
+  transition-duration: 0.5s;
+  transform: rotate(160deg);
+}
+
+    </style>
+{% endblock %}
+{% block content %}
+<main>
+     <h1>Admin Posts</h1>
+    <div>
+        <button type="button" class="button"id="create-post-button">
+  <span class="button__text">Ajouter</span>
+  <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+</button>
+     </div>
+    <div class="publication-container">
+        {% for publication in publications %}
+        
+           <div class="publication-item" >
+           
+            <!-- Publication Image and Title -->
+            <div style="position: relative;">
+             
+     <button class="delete">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 69 14"
+    class="svgIcon bin-top"
+  >
+    <g clip-path="url(#clip0_35_24)">
+      <path
+        fill="black"
+        d="M20.8232 2.62734L19.9948 4.21304C19.8224 4.54309 19.4808 4.75 19.1085 4.75H4.92857C2.20246 4.75 0 6.87266 0 9.5C0 12.1273 2.20246 14.25 4.92857 14.25H64.0714C66.7975 14.25 69 12.1273 69 9.5C69 6.87266 66.7975 4.75 64.0714 4.75H49.8915C49.5192 4.75 49.1776 4.54309 49.0052 4.21305L48.1768 2.62734C47.3451 1.00938 45.6355 0 43.7719 0H25.2281C23.3645 0 21.6549 1.00938 20.8232 2.62734ZM64.0023 20.0648C64.0397 19.4882 63.5822 19 63.0044 19H5.99556C5.4178 19 4.96025 19.4882 4.99766 20.0648L8.19375 69.3203C8.44018 73.0758 11.6746 76 15.5712 76H53.4288C57.3254 76 60.5598 73.0758 60.8062 69.3203L64.0023 20.0648Z"
+      ></path>
+    </g>
+    <defs>
+      <clipPath id="clip0_35_24">
+        <rect fill="white" height="14" width="69"></rect>
+      </clipPath>
+    </defs>
+  </svg>
+
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 69 57"
+    class="svgIcon bin-bottom"
+  >
+    <g clip-path="url(#clip0_35_22)">
+      <path
+        fill="black"
+        d="M20.8232 -16.3727L19.9948 -14.787C19.8224 -14.4569 19.4808 -14.25 19.1085 -14.25H4.92857C2.20246 -14.25 0 -12.1273 0 -9.5C0 -6.8727 2.20246 -4.75 4.92857 -4.75H64.0714C66.7975 -4.75 69 -6.8727 69 -9.5C69 -12.1273 66.7975 -14.25 64.0714 -14.25H49.8915C49.5192 -14.25 49.1776 -14.4569 49.0052 -14.787L48.1768 -16.3727C47.3451 -17.9906 45.6355 -19 43.7719 -19H25.2281C23.3645 -19 21.6549 -17.9906 20.8232 -16.3727ZM64.0023 1.0648C64.0397 0.4882 63.5822 0 63.0044 0H5.99556C5.4178 0 4.96025 0.4882 4.99766 1.0648L8.19375 50.3203C8.44018 54.0758 11.6746 57 15.5712 57H53.4288C57.3254 57 60.5598 54.0758 60.8062 50.3203L64.0023 1.0648Z"
+      ></path>
+    </g>
+    <defs>
+      <clipPath id="clip0_35_22">
+        <rect fill="white" height="57" width="69"></rect>
+      </clipPath>
+    </defs>
+  </svg>
+</button>
+
+ <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('delete_publication_by_admin', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Delete</a>
+  
+
+                <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
+                <div>
+                    <p class="publication-title"style = "font-size:13px;">{{ publication.getContenuPublication() }}</p>
+                                        <div class="icon-container">
+                        <i class="fa-solid fa-search-plus zoom-icon" style="color: #3642dd;"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- User Information -->
+            <div style="display: flex; align-items: center; ">
+                 <img class="profile-image" src="{{ asset('images/' ~ publication.getUser().getPhoto()) }}" style="width: 55px; height: 55px; margin-left: 10px; border-radius: 50%;">
+                 <div style="margin-left: 10px;">
+                  <p class="username-label">
+                   <a href="#" style="font-weight: bold; text-decoration: none; color: inherit;">{{ publication.getUser().getNomUser() }} {{ publication.getUser().getPrenomUser() }}</a>
+                     </p>
+                     <p class="publication-date">{{ publication.getDCreationPublication()|time_ago }}</p>
+                </div>
+            </div>
+           <!-- Like and Comment Buttons -->
+<div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+    <!-- Like Button -->
+   <a href="{{ path('add_like', {'id': publication.getIdPublication()}) }}" class="btn btn-primary" data-publication-id="{{ publication.getIdPublication() }}" style="margin-right: 10px; width: 110px; height: 35px; display: flex; align-items: center; justify-content: center;display:none;">
+    <img src="https://cdn-icons-png.flaticon.com/512/10027/10027265.png" alt="Like Icon" style="width: 25px; height: 25px; display: none;">
+</a>
+    <!-- Comment Button -->
+    <button class="bookmarkBtn like-btn" data-publication-id="{{ publication.getIdPublication() }}" style="margin-left: 10px; width: 130px; height: 40px;">
+        <span class="IconContainer">
+            <svg fill="white" viewBox="0 0 512 512" height="1em">
+                <!-- Comment SVG path -->
+                <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c-4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"></path>
+            </svg>
+        </span>
+        <p class="text">Comments</p>
+    </button>
+</div>
+        </div>
+        
+        {% endfor %}
+
+   
+    </div>
+    <div id="addPostModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+           {% include 'admin/Ajouter.html.twig' %}
+        </div>
+    </div>
+      <script>
+document.addEventListener("DOMContentLoaded", function() {
+   const createPostButton = document.getElementById("create-post-button"); // Select the create post button
+    const addPostModal = document.getElementById("addPostModal"); // Select the add post modal
+ const commentIcons = document.querySelectorAll('.bookmarkBtn');
+
+
+
+    function openCreatePostModal() {
+        const addPostModal = document.getElementById('addPostModal');
+        addPostModal.style.display = "block";
+    }
+     if (createPostButton) {
+        createPostButton.addEventListener('click', openCreatePostModal);
+    }   
+commentIcons.forEach(icon => {
+    icon.addEventListener('click', function() {
+        const publicationId = icon.dataset.publicationId;
+        window.location.href = "/showComments/" + publicationId;
+    });
+});
+
+//add an alert when click an the href with the id = deleteButton
+    const deleteButton = document.getElementById("deleteButton");
+    deleteButton.addEventListener('click', function(event) {
+        const confirmDelete = confirm("Are you sure you want to delete this publication?");
+        if (!confirmDelete) {
+            event.preventDefault();
+        }
+    });
+const addPostCloseBtn = addPostModal.querySelector('.close');
+    addPostCloseBtn.addEventListener('click', function() {
+        addPostModal.style.display = "none";
+    });   
+});
+
+
+
+  </script>
+</main>
+{% endblock %}

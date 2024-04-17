@@ -1,0 +1,86 @@
+{# templates/groups/form.html.twig #}
+
+{{ form_start(form, {'attr': {'class': 'custom-form'}}) }}
+
+<div class="form-group">
+    {{ form_label(form.nomGroup, 'Nom du groupe', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.nomGroup, {'attr': {'class': 'form-control' ~ (form_errors(form.nomGroup)|length ? ' is-invalid' : '')}}) }}
+    {% if form_errors(form.nomGroup)|length %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.nomGroup) }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.image, 'Image', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.image, {'attr': {'class': 'form-control' ~ (form_errors(form.image)|length ? ' is-invalid' : '')}}) }}
+    {% if form_errors(form.image)|length %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.image) }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.descriptionGroup, 'Description du groupe', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.descriptionGroup, {'attr': {'class': 'form-control' ~ (form_errors(form.descriptionGroup)|length ? ' is-invalid' : '')}}) }}
+    {% if form_errors(form.descriptionGroup)|length %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.descriptionGroup) }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.user, 'Utilisateur', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.user, {'attr': {'class': 'form-control' ~ (form_errors(form.user)|length ? ' is-invalid' : '')}}) }}
+    {% if form_errors(form.user)|length %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.user) }}
+        </div>
+    {% endif %}
+</div>
+
+{# Add other form fields as needed #}
+
+<button class="btn btn-primary" type="submit">Save</button>
+{{ form_end(form) }}
+<style>/* custom.css */
+
+    .custom-form {
+        max-width: 400px;
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        margin-bottom: 0.5rem;
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
+</style>

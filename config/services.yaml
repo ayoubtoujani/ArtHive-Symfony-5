@@ -1,0 +1,27 @@
+# config/services.yaml
+parameters:
+    images_directory: '%kernel.project_dir%/public/images/'
+    image_directoryy: '%kernel.project_dir%/public/uploads/images'
+services:
+    # Default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    # Makes classes in src/ available to be used as services
+    # This creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Add more service definitions when explicit configuration is needed
+    # Please note that last definitions always *replace* previous ones
+
+    # Register the Twig extension as a service
+    App\Twig\AppExtension:
+        tags: ['twig.extension']  # This tag registers the class as a Twig extension
+    App\Services\CountryApi:
+        arguments:
+            $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'

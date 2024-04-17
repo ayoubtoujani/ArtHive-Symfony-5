@@ -1,0 +1,33 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}Reclamations for Group{% endblock %}
+
+{% block content %}
+    <h1>Reclamations for Group</h1>
+
+    {% if reclamations is empty %}
+        <p>No reclamations found for this group.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Reclamation ID</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for reclamation in reclamations %}
+                <tr>
+                    <td>{{ reclamation.idReclamation }}</td>
+                    <td>{{ reclamation.descReclamation }}</td>
+                    <td>
+                        <a href="{{ path('app_reclamationgroupe_show', {'idReclamation': reclamation.idReclamation}) }}">Show</a>
+                        <a href="{{ path('app_reclamationgroupe_edit', {'idReclamation': reclamation.idReclamation}) }}">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

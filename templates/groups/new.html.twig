@@ -1,0 +1,11 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}New Groups{% endblock %}
+
+{% block content %}
+    <h1>Create new Groups</h1>
+
+    {{ include('groups/_form.html.twig') }}
+
+    <a href="{{ path('app_groups_index') }}">back to list</a>
+{% endblock %}
