@@ -24,9 +24,7 @@ class Publications
     private $idPublication;
 
     /**
-     * @var string
-     * @Assert\NotBlank(message="The Content of the Post should not be empty")
-     * @ORM\Column(name="contenu_publication", type="text", length=16777215)
+     * @ORM\Column(name="contenu_publication", type="text", length=16777215 , nullable=true)
      */
     private $contenuPublication;
 
@@ -110,7 +108,7 @@ class Publications
         return $this->contenuPublication;
     }
 
-    public function setContenuPublication(string $contenuPublication): self
+    public function setContenuPublication(string $contenuPublication=null): self
     {
         $this->contenuPublication = $contenuPublication;
         return $this;
