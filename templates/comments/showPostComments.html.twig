@@ -403,19 +403,31 @@ body {
             </div>
             <div>
                 <div class="comment-user-name">{{ userFromDb.getNomUser() }} {{ userFromDb.getPrenomUser() }}</div>
-                {{ form_start(commentForm) }}
-                <div>
-                    {{ form_label(commentForm.contenuCommentaire, null, {'label_attr': {'for': 'contenuCommentaire'}}) }}
-                    {{ form_widget(commentForm.contenuCommentaire, {'attr': {'id': 'contenuCommentaire', 'class': 'add-page-text-field'}}) }}
-                    {{ form_errors(commentForm.contenuCommentaire) }}
-                </div>
-                <button type="submit" class="comment-submit-button">Add</button>
-                {{ form_end(commentForm) }}
+               {% if comment is defined %}
+    {{ form_start(updateCommentForm) }}
+    <div>
+        {{ form_label(updateCommentForm.contenuCommentaire, null, {'label_attr': {'for': 'contenuCommentaire'}}) }}
+        {{ form_widget(updateCommentForm.contenuCommentaire, {'attr': {'id': 'contenuCommentaire', 'class': 'add-page-text-field'}}) }}
+        {{ form_errors(updateCommentForm.contenuCommentaire) }}
+    </div>
+    <button type="submit" class="comment-submit-button">Save Update</button>
+    <a href="{{ path('show_comments', { 'id': publication.idPublication }) }}" class="cancel-button">Cancel</a>
+    {{ form_end(updateCommentForm) }}
+{% else %}
+    {{ form_start(commentForm) }}
+    <div>
+        {{ form_label(commentForm.contenuCommentaire, null, {'label_attr': {'for': 'contenuCommentaire'}}) }}
+        {{ form_widget(commentForm.contenuCommentaire, {'attr': {'id': 'contenuCommentaire', 'class': 'add-page-text-field'}}) }}
+        {{ form_errors(commentForm.contenuCommentaire) }}
+    </div>
+    <button type="submit" class="comment-submit-button">Add</button>
+    <a href="{{ path('show_comments', { 'id': publication.idPublication }) }}" class="cancel-button">Cancel</a>
+    {{ form_end(commentForm) }}
+{% endif %}
+                
             </div>
         </div>
-
-
-
+    </div>
         <h3>List of Comments ({{ comments|length }})</h3>
     <!-- Additional comments can be dynamically added here -->
         <div class="comment-list">
@@ -430,13 +442,11 @@ body {
                         <span class="comment-date">{{ comment.getDAjoutCommentaire()|date('F d, Y') }}</span>
                            {% if comment.getUser().getIdUser() == user.getIdUser()%}
                                                 <div class="dropdown">
-                                             
                                                     <span class="dropbtn" style="font-size: 20px;">...</span>
                                                     <div class="dropdown-content">
                                                         <a href="{{ path('delete_comment', {'id': comment.getIdCommentaire()}) }}">Delete</a>
                                                         <a href="{{ path('update_comment', {'id': comment.getIdCommentaire()}) }}">Edit</a>
-                                                    </div>
-                                              
+                                                    </div>    
                                             </div>
                                               {% endif %}
                        
@@ -471,7 +481,6 @@ body {
                             <div class="dropdown-content">
                                 <a href="{{ path('delete_comment', {'id': comment.getIdCommentaire()}) }}">Delete</a>
                                 <a href="{{ path('update_comment', {'id': comment.getIdCommentaire()}) }}">Edit</a>
-                                >Edit</a>
                             </div>
                         </div>
                     </div>

@@ -30,6 +30,7 @@ class PublicationsController extends AbstractController
         // Retrieve the user from the session
         $user = $session->get('user');
         
+       // $newFilename = null;
         // Check if a user is logged in
         if ($user instanceof Users) {
             $publication = new Publications();
@@ -42,30 +43,24 @@ class PublicationsController extends AbstractController
                 $urlFile = $form->get('urlFile')->getData();
 
                 // Check if a file has been uploaded
-                if ($urlFile) {
+                 // Check if a file has been uploaded
+            if ($urlFile) {
+                // Generate a unique name for the file before saving it
+                $newFilename = uniqid().'.'.$urlFile->guessExtension();
 
-
-                    // Extracting file extension without relying on guesser
-             
-
-                    $originalFilename = pathinfo($urlFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    $safeFilename = $this->sanitizeFileName($originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$urlFile->getClientOriginalExtension();
-
-
-                
-                    // Move the file to the directory where images are stored
-                    try {
-                        $urlFile->move(
-                            $this->getParameter('images_directory'),
-                            $newFilename
-                        );
-                    } catch (FileException $e) {
-                        // Handle file upload error
-
-                        throw new \Exception('Error uploading file');
-                    }
+                // Move the file to the directory where images are stored
+                try {
+                    $urlFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
                 }
+
+                // Store the file name in the entity
+                $publication->setUrlFile($newFilename);
+            }
             
                 // Fetch the user from the database
                 $userRepository = $this->getDoctrine()->getRepository(Users::class);
@@ -104,13 +99,7 @@ class PublicationsController extends AbstractController
                 return $this->redirectToRoute('app_login');
         }
     }
-    private function sanitizeFileName($fileName) {
-        // Remove special characters and spaces
-        $fileName = preg_replace('/[^A-Za-z0-9_.-]/', '', $fileName);
-        // Convert spaces to underscores
-        $fileName = str_replace(' ', '_', $fileName);
-        return $fileName;
-    }
+
     #[Route('/my', name: 'my_publications')]
     public function myPub(Request $request,PublicationRepository $publicationRepository, SessionInterface $session): Response
     {

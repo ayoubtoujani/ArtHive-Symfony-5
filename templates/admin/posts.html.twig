@@ -12,7 +12,7 @@
                 justify-content: space-between; /* Ajustez l'espacement entre les produits */
                 margin-top: 20px;
                 padding: 20px;
-                width: 110%; 
+                width: 130%; 
         }
 
         .publication-item {
@@ -325,14 +325,14 @@ body {
 {% endblock %}
 {% block content %}
 <main>
-     <h1>Admin Posts</h1>
+     <h1>All Posts</h1>
     <div>
-        <button type="button" class="button"id="create-post-button">
+        <button type="button" class="button"id="create-post-button" style = background-color: #4848ed; color: white;>
   <span class="button__text">Ajouter</span>
   <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
 </button>
      </div>
-    <div class="publication-container">
+    <div class="publication-container" >
         {% for publication in publications %}
         
            <div class="publication-item" >
@@ -464,6 +464,14 @@ const addPostCloseBtn = addPostModal.querySelector('.close');
     addPostCloseBtn.addEventListener('click', function() {
         addPostModal.style.display = "none";
     });   
+
+    // i want to verifiy if there is no form errors inthe addPost.html.twig
+// if there is  form errors, i want to close the modal
+    {% if form_errors(form.contenuPublication) or form_errors(form.urlFile) %}
+        window.onload = function() {
+            document.getElementById('addPostModal').style.display = 'block';
+        };
+    {% endif %}
 });
 
 

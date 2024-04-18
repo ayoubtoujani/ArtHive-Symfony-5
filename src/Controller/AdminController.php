@@ -29,9 +29,14 @@ class AdminController extends AbstractController
             if ($user instanceof Users) {
                 //check to logged in user is admin
                 if($user->getRole() ===  'ROLE_ADMIN'){
+                    //first lets count all the posts in the database
+                    $publicationRepository = $this->getDoctrine()->getRepository(Publications::class);
+                    $publications = $publicationRepository->findAll();
+                    $countPosts = count($publications);
                     return $this->render('admin/home.html.twig', [
                         'controller_name' => 'AdminController',
                         'user' => $user,
+                        'countPosts' => $countPosts,
                     ]);
 
                 }else{
@@ -146,8 +151,8 @@ class AdminController extends AbstractController
                 return $this->redirectToRoute('app_admin_posts');
             }
 
-            // Fetch existing publications
-            $publications = $publicationRepository->findAll();
+            // Fetch existing publications from the database and display them in the template in reverse order
+            $publications = $publicationRepository->findBy([], ['dCreationPublication' => 'DESC']);
 
             return $this->render('admin/posts.html.twig', [
                 'publications' => $publications,

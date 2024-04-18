@@ -7,6 +7,7 @@ use App\Entity\Users; // Import the Users entity class
 use App\Repository\PublicationRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -23,6 +24,8 @@ class Publications
     private $idPublication;
 
     /**
+     * @var string
+     * @Assert\NotBlank(message="The Content of the Post should not be empty")
      * @ORM\Column(name="contenu_publication", type="text", length=16777215)
      */
     private $contenuPublication;
@@ -38,8 +41,8 @@ class Publications
      */
     private $user;
 
-    /**
-     * @ORM\Column(name="url_file", type="text", length=0, nullable=true)
+     /**
+     * @ORM\Column(name="url_file", type="text", length=255, nullable=false)
      */
     private $urlFile;
 
@@ -131,7 +134,7 @@ class Publications
         return $this->urlFile;
     }
 
-    public function setUrlFile(?string $urlFile): self
+    public function setUrlFile(string $urlFile=null): self
     {
         $this->urlFile = $urlFile;
         return $this;

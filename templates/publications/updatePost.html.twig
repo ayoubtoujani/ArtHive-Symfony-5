@@ -166,7 +166,7 @@
 {% block content %}
 <h1> Update Your Post </h1>
    <div class="modal-content" style="width: 100%; height: auto;">
-        <form action="{{ path('update_post', {'id': publication.getIdPublication()}) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ path('update_post', {'id': publication.getIdPublication()}) }}" method="POST" enctype="multipart/form-data" >
             {{ form_start(form) }}
             <div class="publication-container" style="width: 100%; height: auto;">
                 <div class="publication-item"  style="width: 100%; height: auto;">   

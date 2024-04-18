@@ -131,10 +131,10 @@ class Commandes
         return $this;
     }
 
-    public function getIdPanier(): ?Panier
+   /* public function getIdPanier(): ?Panier
     {
         return $this->idPanier;
-    }
+    }*/
 
     public function setIdPanier(?Panier $idPanier): static
     {

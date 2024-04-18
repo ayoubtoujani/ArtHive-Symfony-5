@@ -72,7 +72,7 @@ class CommentsController extends AbstractController
             'comments' => $findCommentsBypublicationId,
             'userFromDb' => $user,
             'user'=>$user,
-            'update' => 'add',
+            
         ]);
     } else {
         // Handle the case where the user is not logged in
@@ -138,30 +138,29 @@ public function updateComment($id, Request $request, SessionInterface $session, 
 
     // Check if the current user is the owner of the comment
     if ($comment->getUser()->getIdUser() === $user->getIdUser()) {
-        // Create and handle the comment update form
-        $form = $this->createForm(AddCommentType::class, $comment);
+        // use the form to update the comment
+        $form = $this->createForm(UpdateFormType::class, $comment);
         $form->handleRequest($request);
 
         // Check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
+            dump('Form submitted'); // Debugging
+            dump($form->getData()); // Debugging
+            
             // Save the updated comment to the database
-            $entityManager->persist($comment);
             $entityManager->flush();
-
             // Redirect to the comments page after updating the comment
             return $this->redirectToRoute('show_comments', ['id' => $comment->getPublication()->getIdPublication()]);
         }
 
         // Render the comment update form
         return $this->render('comments/showPostComments.html.twig', [
-            'commentForm' => $form->createView(),
+            'updateCommentForm' => $form->createView(),
             'comment' => $comment,
             'publication' => $comment->getPublication(),
             'comments' => $this->getDoctrine()->getRepository(Commentaires::class)->findBy(['publication' => $comment->getPublication()]),
             'userFromDb' => $user,
             'user'=>$user,
-            'update' => 'update',
-
         ]);
     }
 
