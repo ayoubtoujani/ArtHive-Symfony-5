@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
         {{ form_start(editProfileForm) }}
         <div class="row mb-5">
             <div class="col-12 d-flex justify-content-center">
@@ -21,9 +21,9 @@
             </div>
         </div>
         
-        <div class="row mb-1">
+        <div class="row">
             <div class="col-12 d-flex justify-content-center">
-                <img id="preview" class="img-fluid rounded h-50" src="{{ asset(user.photo) }}" alt="Profile photo" >
+                <img id="preview" class="img-fluid rounded h-50" src="{{ asset('/images/profile_pictures/' ~ user.photo)  }}" alt="Profile photo" >
             </div>
         </div>
 
@@ -63,6 +63,13 @@
 
             <div class="col-6">
                 {{ form_widget(editProfileForm.numTelUser, {'attr': {'class': 'form-control', 'placeholder': 'Phone Number'}}) }}
+                <span class="text-danger" style="font-size:12px;">{{ form_errors(editProfileForm.numTelUser) }}</span>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                {{ form_widget(editProfileForm.bio, {'attr': {'class': 'form-control', 'placeholder': 'Bio'}}) }}
                 <span class="text-danger" style="font-size:12px;">{{ form_errors(editProfileForm.numTelUser) }}</span>
             </div>
         </div>

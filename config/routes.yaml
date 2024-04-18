@@ -2,6 +2,18 @@ app_login:
     path: /login
     controller: App\Controller\LoginController::login
 
+app_profile:
+    path: /profile
+    controller: App\Controller\ProfileController::index
+
+app_profileEdit:
+    path: /profile/edit
+    controller: App\Controller\ProfileController::editProfile
+
+app_forgot_password:
+    path: /forgot-password
+    controller: App\Controller\ForgotPasswordController::forgotPassword
+
 app_admin_dashboard:
     path: /admin/dashboard
     controller: App\Controller\AdminController::index

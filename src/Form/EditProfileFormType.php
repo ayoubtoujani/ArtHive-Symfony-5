@@ -85,7 +85,17 @@ class EditProfileFormType extends AbstractType
                     'message' => 'Your phone number should contain only numbers.',
                 ]),
             ],
-        ]);
+        ])
+
+        ->add('bio', TextType::class, [
+            'constraints' => [
+                new Length([
+                    'max' => 255,
+                    'maxMessage' => 'Your bio should not exceed {{ limit }} characters.',
+                ]),
+            ],
+        ]
+        );
     }
 
     public function validateAge($value, ExecutionContextInterface $context)

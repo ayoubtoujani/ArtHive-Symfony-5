@@ -12,7 +12,7 @@
 
     <div class="container{{ state == 'register' ? ' active' }}" id="container">
         <div class="form-container sign-up">
-            <form method="post">
+            <form method="post" novalidate>
                 {{ form_start(registerForm) }}
                 <h2>Sign Up</h2>
                 <div class="row">
@@ -71,7 +71,7 @@
 
         
         <div class="form-container sign-in">
-            <form method="post">
+            <form method="post" novalidate>
                 {{ form_start(loginForm) }}
                 <h2>Sign In</h2>
                 {% if error %}
