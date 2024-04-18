@@ -6,6 +6,7 @@ use App\Entity\Publications;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
+use App\Entity\Users;
 
 
 /**
@@ -35,6 +36,22 @@ class PublicationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findLikedPublicationIdsByUser(Users $user)
+    {
+        $query = $this->createQueryBuilder('p')
+            ->select('p.idPublication')
+            ->leftJoin('p.reactions', 'r')
+            ->andWhere('r.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery();
+    
+        $result = $query->getResult();
+    
+        // Flatten the array of arrays to a flat array of publication IDs
+        $publicationIds = array_column($result, 'idPublication');
+    
+        return $publicationIds;
+    }
 
      /**
      * Find favorite publications for a given user.
@@ -51,6 +68,15 @@ class PublicationRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findLikedPublicationsByUser(Users $user)
+{
+    return $this->createQueryBuilder('p')
+        ->leftJoin('p.reactions', 'r')
+        ->andWhere('r.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getResult();
+}
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Publications::class);
