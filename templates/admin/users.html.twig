@@ -80,45 +80,36 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.nomUser }} {{ user.prenomUser }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.ville }}</td>
+                            <td>{{ user.dNaissanceUser|date('Y-m-d') }}</td>
+                            <td>{{ user.numTelUser }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <a href="{{ path('app_admin_user_edit', {'id': user.getIdUser()}) }}">
+                                    <span class="material-icons-sharp">
+                                        edit
+                                    </span>
+                                </a>
+                                <a href="{{ path('app_admin_user_delete', {'id': user.getIdUser()}) }}">
+                                    <span class="material-icons-sharp">
+                                        delete
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </main>
 
 
 
-        <!-- Right Section -->
-        <div class="right-section">
-            <div class="nav">
-                <button id="menu-btn">
-                    <span class="material-icons-sharp">
-                        menu
-                    </span>
-                </button>
-                <div class="dark-mode">
-                    <span class="material-icons-sharp active">
-                        light_mode
-                    </span>
-                    <span class="material-icons-sharp">
-                        dark_mode
-                    </span>
-                </div>
-
-                <div class="profile">
-                    <div class="info">
-                        <p>Hey, <b>Reza</b></p>
-                        <small class="text-muted">Admin</small>
-                    </div>
-                    <div class="profile-photo">
-                        <img src="images/profile-1.jpg">
-                    </div>
-                </div>
-
-            </div>
-            <!-- End of Nav -->
-
-
-
-        </div>
     </div>
 
     <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
