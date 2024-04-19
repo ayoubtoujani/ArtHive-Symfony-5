@@ -5,6 +5,13 @@
     ArtHive | Vos Produits
 {% endblock %}
 
+{% block search_bar %}
+        <form action="{{ path('app_marketplace_search') }}" method="GET" class="search-bar">
+            <input type="search" name="q" placeholder="Rechercher dans votre listes de produits.">
+            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </form>
+{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('/styleFeed.css') }}">
@@ -89,6 +96,54 @@
             margin-bottom: 10px; 
         }
 
+                 .left .sidebar{
+            margin-top: 1rem;
+            background: var(--color-white);
+            border-radius: var(--card-border-radius);
+            margin-left: -7rem; /* Décaler la barre latérale vers la gauche */
+            width : 100%;
+        }
+
+            body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+  
+    .left .sidebar{
+        margin-top: 1rem;
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        margin-left: -7rem; /* Décaler la barre latérale vers la gauche */
+        width : 200%;
+    }
+
+    .content {
+        margin-left: 0rem; /* Ajustez la valeur selon vos besoins */
+       width:240%;
+    }
+
+      .left .btn {
+    margin-top: 1rem;
+     margin-left: -46%;
+    width: 100%;
+    text-align: centre;
+    padding: 1rem 0;}
+
+        main .container .left .profile {
+        padding: var(--card-padding);
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        display: flex;
+        align-items: center;
+        column-gap: 1rem;
+        width: 200%;
+        margin-left: -7rem;
+
+    }
+
     </style>
 {% endblock %}
 
@@ -96,7 +151,7 @@
     <h1>Vos produits</h1>
     {% if produits is not empty %}
         {% for produit in produits %}
-            <div class="product-container" style="width: 120%; margin-left:40px">
+            <div class="product-container" style="width: 100%; margin-left:40px">
                 <div class="product-image">
                     <img src="{{ asset('images/produit/' ~ produit.imageProduit) }}" alt="{{ produit.nomProduit }}">
                 </div>
@@ -127,6 +182,7 @@
 
 
     <script>
+    
         // Récupérer l'élément avec l'ID "cartCount" dans le bloc "panier"
         const cartCountElement = document.getElementById('cartCount');
 
@@ -140,5 +196,27 @@
             .catch(error => {
                 console.error('Erreur lors de la récupération du nombre de produits dans le panier :', error);
             });
+
+
+
+             $(document).ready(function() {
+    $('#search-bar').on('submit', function(event) {
+        event.preventDefault(); // Empêche le formulaire de se soumettre normalement
+
+        var searchTerm = $('#search-bar input[type="search"]').val(); // Récupère la valeur de la recherche
+
+        $.ajax({
+            url: '/vosproduit/search?q=' + searchTerm,
+            method: 'GET', // Utiliser la méthode GET pour passer le terme de recherche en tant que paramètre
+            success: function(response) {
+                $('.produit-container').html(response); // Met à jour les résultats de la recherche dans la div .produit-container
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+});
+
     </script>
 {% endblock %}
