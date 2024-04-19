@@ -9,7 +9,225 @@
     
 
     <title>{% block title %}ArtHive{% endblock %}</title>
-    {% block stylesheets %}{% endblock %}
+
+
+    {% block stylesheets %}
+        <style>
+        /*==================================================NAVBAR==================================*/
+    nav {
+        width: 100%;
+        background: white;
+        padding: 0.7rem 0;
+        position: fixed;
+        top: 0;
+        z-index: 10;
+    }
+    nav .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    nav .search-bar{
+        background:rgb(242, 241, 241) ;
+        border-radius: var(--border-radius) ;
+        padding: var(--search-padding);
+    }
+    nav .search-bar input[type="search"] {
+        background: rgb(242, 241, 241);
+        width: 30vw;
+        margin-left: 1rem;
+        font-size: 0.9rem;
+        color: var(--color-dark);
+    }
+    nav .search-bar input[type="search"]::placeholder {
+        color: var(--color-gray);
+    }
+    nav .create {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    /*======================================================= MAIN =============================================== */
+    main {
+        position: relative;
+        top: 5.4rem;
+    }
+    main .container {
+        display: flex;
+        grid-template-columns: 18vw 1fr ;
+        column-gap: 2rem;
+        position: relative;
+    }
+    /*======================================================= LEFT ============================================= */
+    main .container .left{
+        height: max-content;
+        position: sticky;
+        top: var(--sticky-top-left);
+        left: -10rem; /* Ajoutez cette ligne pour décaler la barre latérale de 2rem vers la gauche */
+    }
+    main .container .left .profile {
+        padding: var(--card-padding);
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        display: flex;
+        align-items: center;
+        column-gap: 1rem;
+        width: 200%;
+        margin-left: -7rem;
+
+    }
+    /*=============================================== SIDEBAR ===================================*/
+
+
+    .left {
+        margin-left: 0; /* Réinitialiser la marge */
+        flex: 0 0 8vw; /* Définir la largeur fixe pour correspondre à la barre latérale */
+    }
+
+    .left .profile {
+        padding: var(--card-padding);
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        display: flex;
+        align-items: center;
+        column-gap: 1rem; /* Espacement horizontal entre la photo et le nom */
+        width: calc(100% + 2rem); /* Ajustez la largeur pour compenser le déplacement */
+    }
+
+
+
+
+    .left .sidebar{
+        margin-top: 1rem;
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        margin-left: -7rem; /* Décaler la barre latérale vers la gauche */
+    }
+
+    .left .sidebar .menu-item {
+        display: flex;
+        align-items: center;
+        height: 4rem;
+        cursor: pointer;
+        transition: all 300ms ease;
+        position: relative;
+    }
+    .left .sidebar .menu-item:hover {
+        background: rgb(242, 241, 241);
+    }
+    .left .sidebar i{
+        font-size: 1rem;
+        color: gray;
+        margin-left: 1rem;
+        position: relative;
+    }
+    .left .sidebar h3 {
+        margin-left: 1.5rem;
+        font-size: 1rem;
+    }
+    .left .sidebar .active {
+        background:  rgb(242, 241, 241);
+    }
+    .left .sidebar .active i,
+    .left .sidebar .active h3 {
+        color: rgb(72, 72, 237);
+    }
+    .left .sidebar .active::before{
+        content: "";
+        display: block;
+        width: 0.3rem;
+        height: 100%;
+        position: absolute;
+        background:  rgb(72, 72, 237);
+    }
+    .left .sidebar .menu-item:first-child.active {
+        border-top-left-radius: var(--card-border-radius);
+        overflow: hidden;
+    }
+    .left .sidebar .menu-item:last-child.active {
+        border-bottom-left-radius: var(--card-border-radius);
+        overflow: hidden;
+    }
+
+    .left .btn {
+    margin-top: 1rem;
+    margin-right: -20erm;
+    width: 100%;
+    text-align: centre;
+    padding: 1rem 0;}
+
+    .btn{
+    display: inline-block;
+    padding: var(--btn-padding);
+    font-weight: 500;
+    margin-right: -20erm;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 300ms ease;
+    font-size: 0.9rem;
+    text-align: center;
+
+}
+
+
+
+    .button {
+                --color: rgb(72, 72, 237);
+                font-family: inherit;
+                display: inline-block;
+                width: 8em;
+                height: 2.6em;
+                line-height: 2.5em;
+                margin: 20px;
+                position: relative;
+                overflow: hidden;
+                border: 2px solid var(--color);
+                transition: color .5s;
+                z-index: 1;
+                font-size: 17px;
+                border-radius: 6px;
+                font-weight: 500;
+                color: var(--color);
+            }
+
+            .button:before {
+                content: "";
+                position: absolute;
+                z-index: -1;
+                background: var(--color);
+                height: 150px;
+                width: 200px;
+                border-radius: 50%;
+            }
+
+            .button:hover {
+                color: #fff;
+            }
+
+            .button:before {
+                top: 100%;
+                left: 100%;
+                transition: all .7s;
+            }
+
+            .button:hover:before {
+                top: -30px;
+                left: -30px;
+            }
+
+            .button:active:before {
+                background: #5112e3;
+                transition: background 0s;
+            }
+        </style>     
+        {% endblock %}
+
+
+
+
+
 
 </head>
 <body>
@@ -28,7 +246,8 @@
                 <button class="btn btn-primary" for="panier" style="padding:10px; width: 90px;"><i class="fa-solid fa-shopping-cart"></i><span id="cartCount">  </span></button>
             {% endblock %}    
                 <div class="profile-photo">
-                    <img src="/images/photoprofile.png" alt="">
+                     <img src="{{ asset('/images/users/' ~ user.getPhoto() ) }}" style="width: 50px; height: 50px;" alt="">
+
                 </div>
         </div>
         </div>
@@ -38,37 +257,38 @@
     <main> 
         <div class="container">
     <!..............................LEFT.............................>
-            <div class="left">
+   <div class="left">
                 <a class="profile">
                     <div class="profile-photo">
-                        <img src="/images/photoprofile.png" alt="">
+                      <img src="{{ asset('/images/users/' ~ user.getPhoto() ) }}" style="width: 50px; height: 50px;" alt="">
+
                     </div>
-                    <div class="handle">
-                        <h4>Shams Ben Said</h4>
-                        <p class="text-muted">
-                            @shams
-                        </p>
-                    </div>
+                            {% if user is not null %}
+                <div class="handle" id="nameLoggedinuser">
+                    <h4>{{ user.getNomUser() }} {{ user.getPrenomUser() }}</h4>
+                    <p class="text-muted">@{{ user.getNomUser() }}</p>
+                </div>
+            {% endif %}
                 </a>
                 <!.................................SIDEBAR.....................................>
                 <div class="sidebar">
-                    <a class="menu-item active">
+                <a class="menu-item " id="home" href="{{ path('app_feed') }}" >
+                        <span><i class="fa-solid fa-house"></i></span><h3>Home</h3>
+                    </a>
+                    <a class="menu-item "  id="profile">
                         <span><i class="fa-solid fa-user"></i></span><h3>Profile</h3>
                     </a>
-                    <a class="menu-item">
-                        <span><i class="fa-solid fa-house"></i></span><h3>Fil d'actualité</h3>
-                    </a>
-                    <a class="menu-item">
+                    <a class="menu-item" id="groups" >
                         <span><i class="fa-solid fa-people-group"></i></span><h3>Groupes</h3>
                     </a>
-                    <a class="menu-item" href="{{ path('app_marketplace') }}">
+                    <a class="menu-item"id = "marketplace" href="{{ path('app_marketplace') }}">
                         <span><i class="fa-solid fa-shop"></i></span><h3>Marketplace</h3>
                     </a>
-                    <a class="menu-item" >
-                        <span><i class="fa-solid fa-calendar-days"></i></span><h3>Evènements</h3>
+                    <a class="menu-item" id= "events" >
+                        <span><i class="fa-solid fa-calendar-days"></i></span><h3>Events</h3>
                     </a>
-                    <a class="menu-item ">
-                        <span><i class="fa-solid fa-palette"></i></span><h3>Thème</h3>
+                    <a class="menu-item " id ="themes">
+                        <span><i class="fa-solid fa-palette"></i></span><h3>Themes</h3>
                     </a>
                 </div>
                 <!.................END OF SIDEBAR............>
@@ -86,5 +306,34 @@
 
  
 </main>
+
+ <script>
+     document.addEventListener("DOMContentLoaded", function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            function activateMenuItem(item) {
+                menuItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+                item.classList.add('active');
+                // Enregistrer l'ID de l'élément actif dans le stockage local
+                localStorage.setItem('activeMenuItemId', item.id);
+            }
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    activateMenuItem(item);
+                });
+            });
+
+            // Vérifier s'il y a un élément de menu actif enregistré dans le stockage local
+            const activeMenuItemId = localStorage.getItem('activeMenuItemId');
+            if (activeMenuItemId) {
+                const activeMenuItem = document.getElementById(activeMenuItemId);
+                if (activeMenuItem) {
+                    activateMenuItem(activeMenuItem);
+                }
+            }    
+        });
+    </script>
 </body>
 </html>
