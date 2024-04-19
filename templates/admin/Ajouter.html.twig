@@ -77,13 +77,15 @@
                 <div>
                     {{ form_label(form.contenuPublication) }}
                     {{ form_widget(form.contenuPublication, {'attr': {'class': 'add-page-text-field'}}) }}
-                    {{ form_errors(form.contenuPublication, {'attr': {'class': 'error'}}) }}
+                  <div class="error">  {{ form_errors(form.contenuPublication, {'attr': {'class': 'error'}}) }} </div>
                 </div>
 
                 <div>
                     {{ form_label(form.urlFile) }}
                     {{ form_widget(form.urlFile, {'attr': {'id': 'file'}}) }}
+                 <div class="error">
                     {{ form_errors(form.urlFile) }}
+                    </div>
                 </div>
 
              

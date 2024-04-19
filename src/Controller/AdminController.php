@@ -98,7 +98,7 @@ class AdminController extends AbstractController
         if ($user instanceof Users) {
             $publication = new Publications();
             
-            $form = $this->createForm(AddPostType::class, $publication);
+            $form = $this->createForm(AddPostType::class, $publication, ['validation_groups' => ['addPost']]);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {

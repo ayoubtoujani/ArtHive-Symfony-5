@@ -35,7 +35,7 @@ class PublicationsController extends AbstractController
         if ($user instanceof Users) {
             $publication = new Publications();
             
-            $form = $this->createForm(AddPostType::class, $publication);
+            $form = $this->createForm(AddPostType::class, $publication, ['validation_groups' => ['addPost']]);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -58,7 +58,7 @@ class PublicationsController extends AbstractController
                     // ... handle exception if something happens during file upload
                 }
 
-                // Store the file name in the entity
+                // Store the file name in the database to retrieve it later but check if the file is not null
                 $publication->setUrlFile($newFilename);
             }
             

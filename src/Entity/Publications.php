@@ -25,6 +25,7 @@ class Publications
 
     /**
      * @ORM\Column(name="contenu_publication", type="text", length=16777215 , nullable=true)
+     * @Assert\NotBlank(message="The Content of the Post should not be empty",groups={"addPost"})
      */
     private $contenuPublication;
 
@@ -40,12 +41,17 @@ class Publications
     private $user;
 
      /**
-     * @ORM\Column(name="url_file", type="text", length=255, nullable=false)
+      * @ORM\Column(name="url_file", type="text", length=255, nullable=false)
+           * @Assert\NotBlank(message="The Image of the Post should not be empty",groups={"addPost"})
+           * @Assert\File(
+           *    maxSize = "5M",
+           *   mimeTypes = {"image/jpeg", "image/png", "image/gif"},
+           *  mimeTypesMessage = "Please upload a valid Image File",groups={"addPost"} )
      */
     private $urlFile;
 
      /**
-     * @ORM\ManyToMany(targetEntity=Users::class , cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity=Users::class )
      * @ORM\JoinTable(name="publication_user_favorite",
      *      joinColumns={@ORM\JoinColumn(name="publication_id", referencedColumnName="id_publication")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id_user")}
@@ -132,7 +138,7 @@ class Publications
         return $this->urlFile;
     }
 
-    public function setUrlFile(string $urlFile=null): self
+    public function setUrlFile(?string $urlFile): self
     {
         $this->urlFile = $urlFile;
         return $this;

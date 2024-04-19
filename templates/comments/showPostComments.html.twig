@@ -328,6 +328,11 @@ body {
             background-attachment: fixed;
         }
 
+.error {
+    color: red; 
+    font-size: 14px;
+
+}
 
 
     </style>
@@ -408,7 +413,7 @@ body {
     <div>
         {{ form_label(updateCommentForm.contenuCommentaire, null, {'label_attr': {'for': 'contenuCommentaire'}}) }}
         {{ form_widget(updateCommentForm.contenuCommentaire, {'attr': {'id': 'contenuCommentaire', 'class': 'add-page-text-field'}}) }}
-        {{ form_errors(updateCommentForm.contenuCommentaire) }}
+       <div class="error"> {{ form_errors(updateCommentForm.contenuCommentaire) }} </div>
     </div>
     <button type="submit" class="comment-submit-button">Save Update</button>
     <a href="{{ path('show_comments', { 'id': publication.idPublication }) }}" class="cancel-button">Cancel</a>
@@ -418,7 +423,7 @@ body {
     <div>
         {{ form_label(commentForm.contenuCommentaire, null, {'label_attr': {'for': 'contenuCommentaire'}}) }}
         {{ form_widget(commentForm.contenuCommentaire, {'attr': {'id': 'contenuCommentaire', 'class': 'add-page-text-field'}}) }}
-        {{ form_errors(commentForm.contenuCommentaire) }}
+        <div class="error"> {{ form_errors(commentForm.contenuCommentaire) }} </div>
     </div>
     <button type="submit" class="comment-submit-button">Add</button>
     <a href="{{ path('show_comments', { 'id': publication.idPublication }) }}" class="cancel-button">Cancel</a>
