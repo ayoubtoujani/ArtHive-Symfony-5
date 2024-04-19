@@ -1,0 +1,224 @@
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/styleAdmin.css') }}">
+     <title>{% block title %}ArtHive Dashboard{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+<style>
+    aside .sidebar{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow);
+    border-radius: 15px;
+    height: 80vh;
+    width:200px;
+    position: fixed;
+    top: 9rem;
+    transition: all 0.3s ease;
+}
+
+.logo{
+    display:flex !important;
+    justify-content: center !important;
+    position: fixed;
+    width:200px;
+    margin-left: -25px;    
+    margin-bottom: 20px;  
+}
+    body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main{
+            margin-top: 1.4rem;
+            margin-left: 3rem;
+        }
+</style>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="logo" style="height:15%">
+                <img src="{{ asset('images/arthive_black.png') }}">
+            </div>
+
+            <div class="sidebar">
+                <a href="{{ path('app_admin') }} "class="active">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+
+                <a href="{{ path('app_admin_users') }}">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Utilisateurs</h3>
+                </a>
+              
+                <a href={{ path('app_admin_posts') }}>
+                    <span class="material-icons-sharp">
+                        post_add
+                    </span>
+                    <h3>Posts</h3>
+                </a>
+                 <a href={{ path('app_admin_groups') }}>
+                    <span class="material-icons-sharp">
+                        groups
+                    </span>
+                    <h3>Groups</h3>
+                </a>
+                
+
+                <a href={{ path('app_admin_events') }}>
+                    <span class="material-icons-sharp">
+                        event
+                    </span>
+                    <h3>Evénements</h3>
+                </a>
+
+                <a href={{ path('app_admin_products') }}>
+                    <span class="material-icons-sharp">
+                        inventory_2
+                    </span>
+                    <h3>Produits</h3>
+                </a>
+
+                <a href={{ path('app_admin_reports') }}>
+                    <span class="material-icons-sharp">
+                        report_gmailerrorred
+                    </span>
+                    <h3>Reports</h3>
+                </a>
+
+                <a href="{{ path('app_login') }}" id="logout">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+
+        <!-- Main Content -->
+        {% block content %}
+        <main>
+           
+            <h1>Analytics</h1>
+            <!-- Analyses -->
+            <div class="analyse">
+                <div class="sales">
+                    <div class="status">
+                        <div class="info">
+                            <h3>Utilisateurs</h3>
+                            <h1>65,024</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="visits">
+                    <div class="status">
+                        <div class="info">
+                            <h3>Groupes</h3>
+                            <h1>14,981</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="searches">
+                    <div class="status">
+                        <div class="info">
+                            <h3>Evénements</h3>
+                            <h1>2,147</h1>
+                        </div>
+                    </div>
+                </div>
+             <div style="display: flex;">
+                    <div class="">
+                            <div class="status">
+                                <div class="info">
+                                    <h3 style="text-align: center; font-size: 16px;">Nombre Total de Produits</h3>
+                                    <h1 style="text-align: center;  color: #4848ed;  font-size: 40px;">{{ nombreTotalProduits }}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               </div> 
+            <!-- End of Analyses -->
+
+
+
+
+            <!-- Recent Orders Table -->
+            <div class="recent-orders">
+                <h2>Recent Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <a href="#">Show All</a>
+            </div>
+        
+        </main>   
+       
+        <!-- End of Main Content -->
+        {% endblock %}
+        
+
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>{{ user.getPrenomUser() }}</b></p>
+                        <small class="text-muted">{{ user.getNomUser() }}</small>
+                    </div>
+                    <div class="profile-photo">
+                      <img src="{{ asset('images/' ~ user.getPhoto() ) }}" style="width: 30px; height: 30px;" alt="">
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Nav -->
+
+
+
+        </div>
+
+
+    </div>
+
+    <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
+</body>
