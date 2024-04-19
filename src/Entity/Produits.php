@@ -6,6 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Users;
 
+
 /**
  * Produits
  *
@@ -34,6 +35,7 @@ class Produits
      * @var string
      *
      * @ORM\Column(name="nom_produit", type="string", length=255, nullable=false)
+     *
      */
     private $nomProduit;
 
@@ -69,6 +71,7 @@ class Produits
      * @var string
      *
      * @ORM\Column(name="categ_produit", type="string", length=255, nullable=false)
+     *
      */
     private $categProduit;
 
@@ -124,7 +127,7 @@ class Produits
         return $this->nomProduit;
     }
 
-    public function setNomProduit(string $nomProduit): static
+    public function setNomProduit(string $nomProduit=null): self
     {
         $this->nomProduit = $nomProduit;
 
@@ -148,7 +151,7 @@ class Produits
         return $this->prixProduit;
     }
 
-    public function setPrixProduit(float $prixProduit): static
+    public function setPrixProduit(float $prixProduit=null): self
     {
         $this->prixProduit = $prixProduit;
 
@@ -160,7 +163,7 @@ class Produits
         return $this->descriptionProduit;
     }
 
-    public function setDescriptionProduit(string $descriptionProduit): static
+    public function setDescriptionProduit(string $descriptionProduit=null): self
     {
         $this->descriptionProduit = $descriptionProduit;
 
@@ -184,7 +187,7 @@ class Produits
         return $this->categProduit;
     }
 
-    public function setCategProduit(string $categProduit): static
+    public function setCategProduit(string $categProduit=null): self
     {
         $this->categProduit = $categProduit;
 
@@ -196,7 +199,7 @@ class Produits
         return $this->stockProduit;
     }
 
-    public function setStockProduit(int $stockProduit): static
+    public function setStockProduit(int $stockProduit=null): self
     {
         $this->stockProduit = $stockProduit;
 
