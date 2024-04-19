@@ -19,7 +19,8 @@ use App\Entity\Produits;
 use App\Form\ProduitType;
 use App\Entity\Users;
 use App\Entity\Panier;
-
+use App\Form\ModifierProduitType;
+use Knp\Component\Pager\PaginatorInterface;
 
 class MarketplaceController extends AbstractController
 {
@@ -32,10 +33,11 @@ class MarketplaceController extends AbstractController
     }
 
     #[Route('/marketplace', name: 'app_marketplace', methods: ['GET', 'POST'])]
-    public function add(Request $request, SessionInterface $session): Response
+    public function add(Request $request, SessionInterface $session, PaginatorInterface $paginator): Response
     {
           // Récupérer les produits depuis la base de données
           $produits = $this->getDoctrine()->getRepository(Produits::class)->findAll();
+      
     
           // Récupérer la catégorie sélectionnée depuis la requête
           $categorie = $request->query->get('categorie');
@@ -46,13 +48,21 @@ class MarketplaceController extends AbstractController
                   return $produit->getCategProduit() === $categorie;
               });
           }
-      
+
+               // Paginer les résultats
+               $produits = $paginator->paginate(
+                $produits, // Requête à paginer
+                $request->query->getInt('page', 1), // Numéro de page
+                9 // Nombre d'éléments par page
+            );
+    
+
           // Calculer le prix maximal parmi tous les produits
           $maxPrix = $this->getDoctrine()->getRepository(Produits::class)->createQueryBuilder('p')
                   ->select('MAX(p.prixProduit)')
                   ->getQuery()
                   ->getSingleScalarResult();
-
+            
         // Check if a user is logged in
         $user = $session->get('user');
        
@@ -98,18 +108,19 @@ class MarketplaceController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($produit);
             $entityManager->flush();
+            
+           
 
             // Redirect to the index page or any other page as needed
             return $this->redirectToRoute('app_marketplace');
         }
-            // Fetch existing publications
-           
 
             return $this->render('marketplace/marketplace.html.twig', [
                 'produits' => $produits,
                 'form' => $form->createView(),
                 'user' => $user,
                 'maxPrix' => $maxPrix, 
+                'categorie' => $categorie,
             ]);
         } else {
             // Handle the case where the user is not logged in
@@ -118,9 +129,6 @@ class MarketplaceController extends AbstractController
         }
     }
 
-    
-    
-    
     #[Route('/acheter/{name}', name: 'achat_produit')]
     public function acheterProduit($name, SessionInterface $session): Response
     {
@@ -130,20 +138,18 @@ class MarketplaceController extends AbstractController
         // Récupérer les détails du produit correspondant au nom
         $produit = $this->getDoctrine()->getRepository(Produits::class)->findOneBy(['nomProduit' => $name]);
     
-
         // Récupérer l'utilisateur connecté depuis la session
         $user = $session->get('user');
-
+    
         // Vérifier si l'utilisateur est connecté
         if (!$user instanceof Users) {
-
             // rediriger vers la page de connexion
             return $this->redirectToRoute('app_login');
         }
-
+    
         // Récupérer les produits du panier de l'utilisateur connecté
         $panierItems = $this->getDoctrine()->getRepository(Panier::class)->findBy(['idUser' => $user->getIdUser()]);
-
+    
         // Récupérer les détails des produits à partir des enregistrements du panier
         $products = [];
         foreach ($panierItems as $item) {
@@ -152,32 +158,48 @@ class MarketplaceController extends AbstractController
                 $products[] = $product;
             }
         }
-            // Passer les détails du produit et du panier au template Twig
-            return $this->render('marketplace/achat.html.twig', [
-                'produit' => $produit,
-                'products' => $products,
-                'user' => $user,
-            ]);
     
-        
+        // Calculer le total du panier
+        $totalPrix = $this->calculerTotalPanier($user, $entityManager);
+    
+        // Passer les détails du produit et du panier au template Twig
+        return $this->render('marketplace/achat.html.twig', [
+            'produit' => $produit,
+            'products' => $products,
+            'user' => $user,
+            'totalPrix' => $totalPrix,
+        ]);
     }
+    
     
 
 
     
     #[Route('/marketplace/search', name: 'app_marketplace_search')]
-     public function search(Request $request): Response
+     public function search(Request $request, SessionInterface $session,  PaginatorInterface $paginator): Response
     {
-       
-            // Récupérer le terme de recherche depuis la requête
+        $user = $session->get('user');
         $searchTerm = $request->query->get('q');
 
-        // Récupérer les produits correspondant au terme de recherche depuis la base de données
-        $produits = $this->getDoctrine()->getRepository(Produits::class)->createQueryBuilder('p')
+        $produits = $this->getDoctrine()
+            ->getRepository(Produits::class)
+            ->createQueryBuilder('p')
+            ->leftJoin('p.user', 'u')
             ->where('p.nomProduit LIKE :term')
-            ->setParameter('term', '%'.$searchTerm.'%')
+            ->orwhere('p.categProduit LIKE :term')
+            ->orWhere('u.nomUser LIKE :term')
+            ->orWhere('u.prenomUser LIKE :term')
+            ->setParameter('term', '%' . $searchTerm . '%')
             ->getQuery()
             ->getResult();
+
+            // Paginer les résultats de recherche
+          // Paginer les résultats
+          $produits = $paginator->paginate(
+            $produits, // Requête à paginer
+            $request->query->getInt('page', 1), // Numéro de page
+            9 // Nombre d'éléments par page
+        );
 
         $maxPrix = $this->getDoctrine()->getRepository(Produits::class)->createQueryBuilder('p')
             ->select('MAX(p.prixProduit)')
@@ -192,6 +214,7 @@ class MarketplaceController extends AbstractController
             'produits' => $produits,
             'searchTerm' => $searchTerm,
             'maxPrix' => $maxPrix,
+            'user' => $user,
             'form' => $form->createView(),
             
         ]);
@@ -210,6 +233,7 @@ class MarketplaceController extends AbstractController
             // Passer les produits au template Twig
             return $this->render('marketplace/vosproduit.html.twig', [
                 'produits' => $produits,
+                'user' => $user,
             ]);
         } else {
             // Rediriger vers la page de connexion si aucun utilisateur n'est connecté
@@ -239,8 +263,9 @@ class MarketplaceController extends AbstractController
     }
 
     #[Route('/produit/modifier/{id}', name: 'modifier_produit')]
-    public function modifierProduit(int $id, Request $request): Response
+    public function modifierProduit(int $id, Request $request, SessionInterface $session): Response
     {
+        $user = $session->get('user');
         // Récupérer le produit à modifier depuis la base de données
         $entityManager = $this->getDoctrine()->getManager();
         $produit = $entityManager->getRepository(Produits::class)->find($id);
@@ -251,36 +276,18 @@ class MarketplaceController extends AbstractController
         }
 
         // Créer le formulaire de modification
-        $form = $this->createForm(ProduitType::class, $produit);
+        $form = $this->createForm(ModifierProduitType::class, $produit);
+        
         $form->handleRequest($request);
 
         // Traiter la soumission du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
+            
             // Enregistrer les modifications dans la base de données
             $entityManager->flush();
-
-            // Vérifier si un nouveau fichier image a été téléchargé
-            $newImageFile = $form->get('imageProduit')->getData();
-            if ($newImageFile) {
-                // Gérer le téléchargement du nouveau fichier image
-                $newFilename = uniqid().'.'.$newImageFile->guessExtension();
-                try {
-                    $newImageFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // Gérer les erreurs de téléchargement du fichier
-                }
-
-                // Mettre à jour l'image du produit avec le nouveau nom de fichier
-                $produit->setImageProduit($newFilename);
-
                 // Enregistrer à nouveau le produit avec l'image mise à jour
                 $entityManager->persist($produit);
                 $entityManager->flush();
-            }
-
             // Rediriger vers une page appropriée (par exemple, la liste des produits de l'utilisateur)
             return $this->redirectToRoute('vos_produits');
         }
@@ -289,6 +296,7 @@ class MarketplaceController extends AbstractController
         return $this->render('marketplace/modifierProduit.html.twig', [
             'form' => $form->createView(),
             'produit' => $produit,
+            'user' => $user,
         ]);
     }
 
@@ -335,6 +343,7 @@ class MarketplaceController extends AbstractController
         return new Response('Produit ajouté au panier', Response::HTTP_OK);
     }
 
+
     #[Route('/supprimer-panier', name: 'supprimer_panier')]
     public function supprimerPanier(EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
@@ -360,7 +369,6 @@ class MarketplaceController extends AbstractController
         return new Response('Le panier a été vidé avec succès', Response::HTTP_OK);
     }
 
-    // Ajoutez cette méthode à votre contrôleur MarketplaceController
     #[Route('/supprimer-produit-panier/{id}', name: 'supprimer-produit-panier')]
     public function supprimerDuPanier(int $id, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
@@ -381,6 +389,15 @@ class MarketplaceController extends AbstractController
     
         // Vérifier si l'élément du panier existe
         if ($panierItem) {
+            // Récupérer le produit correspondant à l'élément du panier
+            $produit = $entityManager->getRepository(Produits::class)->find($panierItem->getIdProduit());
+    
+            if ($produit) {
+                // Mettre à jour le stock du produit
+                $produit->setStockProduit($produit->getStockProduit() + 1);
+                $entityManager->flush();
+            }
+    
             // Supprimer l'entrée du panier
             $entityManager->remove($panierItem);
             $entityManager->flush();
@@ -416,6 +433,28 @@ class MarketplaceController extends AbstractController
         return new JsonResponse(['nombreProduits' => $nombreProduits]);
     }
         
+
+
+    private function calculerTotalPanier($user, EntityManagerInterface $entityManager)
+    {
+        // Récupérer les éléments du panier pour l'utilisateur connecté
+        $panierItems = $entityManager->getRepository(Panier::class)->findBy(['idUser' => $user->getIdUser()]);
+
+        // Initialiser la variable pour stocker la somme des prix
+        $totalPrix = 0;
+
+        // Parcourir les éléments du panier et ajouter le prix de chaque produit au total
+        foreach ($panierItems as $panierItem) {
+            $produit = $entityManager->getRepository(Produits::class)->find($panierItem->getIdProduit());
+            if ($produit) {
+                $totalPrix += $produit->getPrixProduit();
+            }
+        }
+
+        // Retourner le totalPrix
+        return $totalPrix;
+  
+   }
 
 
     
