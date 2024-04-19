@@ -343,6 +343,7 @@ section{
         </nav>
         </div>
 
+{% block content %}
 <!-- Landing Page -->
 <section class="landingpage">
     <div class="content">
@@ -368,7 +369,6 @@ section{
             <p data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">Bienvenue sur ArtHive, cette plateforme est dédiée à l'expression artistique. Passionnés par l'art sous toutes ses formes, fournir un espace où les artistes peuvent partager leur créativité, trouver de l'inspiration et se connecter avec d'autres passionnés d'art. Que vous soyez un peintre, un sculpteur, un photographe ou un artiste dans tout autre domaine, ArtHive est là pour vous accompagner dans votre voyage artistique. Rejoignez cette communauté et explorez un monde d'opportunités artistiques.</p>
         </div>
     </div>
-
 </section>
 
 <section class="details-foods">
@@ -404,6 +404,7 @@ section{
         </div>
     </div>
 </section>
+
 <section class="download">
     <div class="container">
         <div class="image">
@@ -418,13 +419,15 @@ section{
                 </div>
         </div>
     </div>
-
 </section>
+{% endblock %}
 
-
+{% block scripts %}
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 <script>
   AOS.init();
 </script>
+{% endblock %}
+
 </body>
 </html>

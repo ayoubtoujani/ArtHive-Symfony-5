@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Users;
+
 
 /**
  * Produits
@@ -33,6 +35,7 @@ class Produits
      * @var string
      *
      * @ORM\Column(name="nom_produit", type="string", length=255, nullable=false)
+     *
      */
     private $nomProduit;
 
@@ -68,6 +71,7 @@ class Produits
      * @var string
      *
      * @ORM\Column(name="categ_produit", type="string", length=255, nullable=false)
+     *
      */
     private $categProduit;
 
@@ -84,6 +88,22 @@ class Produits
      * @ORM\Column(name="d_publication_produit", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
     private $dPublicationProduit = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users")
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
+     */
+    private $user;
+
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    
+    
 
     public function getIdProduit(): ?int
     {
@@ -107,7 +127,7 @@ class Produits
         return $this->nomProduit;
     }
 
-    public function setNomProduit(string $nomProduit): static
+    public function setNomProduit(string $nomProduit=null): self
     {
         $this->nomProduit = $nomProduit;
 
@@ -131,7 +151,7 @@ class Produits
         return $this->prixProduit;
     }
 
-    public function setPrixProduit(float $prixProduit): static
+    public function setPrixProduit(float $prixProduit=null): self
     {
         $this->prixProduit = $prixProduit;
 
@@ -143,7 +163,7 @@ class Produits
         return $this->descriptionProduit;
     }
 
-    public function setDescriptionProduit(string $descriptionProduit): static
+    public function setDescriptionProduit(string $descriptionProduit=null): self
     {
         $this->descriptionProduit = $descriptionProduit;
 
@@ -167,7 +187,7 @@ class Produits
         return $this->categProduit;
     }
 
-    public function setCategProduit(string $categProduit): static
+    public function setCategProduit(string $categProduit=null): self
     {
         $this->categProduit = $categProduit;
 
@@ -179,7 +199,7 @@ class Produits
         return $this->stockProduit;
     }
 
-    public function setStockProduit(int $stockProduit): static
+    public function setStockProduit(int $stockProduit=null): self
     {
         $this->stockProduit = $stockProduit;
 
@@ -196,6 +216,16 @@ class Produits
         $this->dPublicationProduit = $dPublicationProduit;
 
         return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function __construct()
+    {
+        $this->dPublicationProduit = new \DateTime();
     }
 
 

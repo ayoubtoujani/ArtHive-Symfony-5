@@ -100,7 +100,7 @@ class Commandes
         return $this->telephone;
     }
 
-    public function setTelephone(int $telephone): static
+    public function setTelephone(?int $telephone): self
     {
         $this->telephone = $telephone;
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use App\Entity\Produits;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +35,7 @@ class Panier
      * @ORM\Column(name="id_produit", type="integer", nullable=false)
      */
     private $idProduit;
+
 
     public function getIdPanier(): ?int
     {
