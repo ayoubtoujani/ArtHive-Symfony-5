@@ -6,7 +6,6 @@
 
 {% block panier %}
 {{ parent() }}
-
 {% endblock %} 
 
 {% block stylesheets %}
@@ -160,7 +159,7 @@
             left: 80%;
             top: 50%;
             transform: translate(-50%, -50%);
-            height: 450px; /* Hauteur maximale pour le contenu de la modal */
+            height: 500px; /* Hauteur maximale pour le contenu de la modal */
         }
 
         
@@ -215,6 +214,48 @@
         .prix {
             color: #3642dd; /* Couleur du texte pour le prix */
         }
+
+            body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
+
+
+  
+    .left .sidebar{
+        margin-top: 1rem;
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        margin-left: -7rem; /* Décaler la barre latérale vers la gauche */
+        width : 450%;
+    }
+
+    .content {
+        margin-left: 2rem; /* Ajustez la valeur selon vos besoins */
+       width:240%;
+    }
+
+      .left .btn {
+    margin-top: 1rem;
+     margin-left: -5rem;
+    width: 250%;
+    text-align: centre;
+    padding: 1rem 0;}
+
+        main .container .left .profile {
+        padding: var(--card-padding);
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        display: flex;
+        align-items: center;
+        column-gap: 1rem;
+        width: 450%;
+        margin-left: -7rem;
+
+    }
     </style>
 {% endblock %}
 
@@ -274,7 +315,10 @@
                     </div>
                 </div>
                 {% endfor %}
+                
             </div>
+            <h5 id="nombreProduitsLabel" style="margin-top:10px; margin-left:20px;">Nombre de produits :</h5>
+            <h3 id="totalLabel" style="margin-top:10px; margin-left:20px;">Total: {{ totalPrix }} $</h3>
             <div class="Commande" style="display: flex;">
                 <button type="button" class="btn-passerComm">Commander</button>
                 <button type="button" class="btn-supptoute-panier">Supprimer</button>
@@ -284,8 +328,9 @@
 </div>
 
 
+
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+   document.addEventListener("DOMContentLoaded", function () {
             const btnAjouterPanier = document.querySelector('.btn-ajouter-panier');
             if (btnAjouterPanier) {
                 btnAjouterPanier.addEventListener('click', function () {
@@ -396,19 +441,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Récupérer l'élément avec l'ID "cartCount"
-const cartCountElement = document.getElementById('cartCount');
+    // Récupérer l'élément avec l'ID "cartCount"
+    const cartCountElement = document.getElementById('cartCount');
 
-// Effectuer une requête AJAX pour récupérer le nombre de produits dans le panier
-fetch('/cartCount')
-    .then(response => response.json())
-    .then(data => {
-        // Mettre à jour le contenu de l'élément "cartCount" avec le nombre de produits
-        cartCountElement.textContent = `(${data.nombreProduits})`;
-    })
-    .catch(error => {
-        console.error('Erreur lors de la récupération du nombre de produits dans le panier :', error);
-    });
+    // Récupérer l'élément avec l'ID "nombreProduitsLabel"
+    const nombreProduitsLabelElement = document.getElementById('nombreProduitsLabel');
+
+    // Effectuer une requête AJAX pour récupérer le nombre de produits dans le panier
+    fetch('/cartCount')
+        .then(response => response.json())
+        .then(data => {
+            // Mettre à jour le contenu de l'élément "cartCount" avec le nombre de produits
+            cartCountElement.textContent = `(${data.nombreProduits})`;
+
+            // Mettre à jour le contenu de l'élément "nombreProduitsLabel" avec le nombre de produits
+            nombreProduitsLabelElement.textContent += ` ${data.nombreProduits}`;
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération du nombre de produits dans le panier:', error);
+        });
+
 
 
 
