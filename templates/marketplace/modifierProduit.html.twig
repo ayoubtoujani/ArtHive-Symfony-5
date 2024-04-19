@@ -62,14 +62,14 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 10px;
-            width: 500px;
+            width:700px;
             height: auto;
             margin-left: 30px;
             margin-bottom: 30px;
         }
         .cadre-image img {
-            max-width: calc(100% - 20px); 
-            max-height: calc(120% - 20px);
+            max-width: calc(150% - 20px); 
+            max-height: calc(150% - 20px);
             display: block;
             margin: auto;
         }
@@ -95,27 +95,111 @@
             width: 400px; /* Largeur souhaitée pour les champs de texte */
             height: 40px; /* Hauteur souhaitée pour les champs de texte */
         }
+
+            .left .sidebar{
+            margin-top: 1rem;
+            background: var(--color-white);
+            border-radius: var(--card-border-radius);
+            margin-left: -7rem; /* Décaler la barre latérale vers la gauche */
+            width : 100%;
+        }
+
+        .content {
+            margin-left: -9rem; /* Ajustez la valeur selon vos besoins */
+        }
+
+        .left .btn {
+        margin-top: 1rem;
+        margin-left: -46%;
+        width: 100%;
+        text-align: centre;
+        padding: 1rem 0;}
+
+            body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        
+        .error-field .text-field{
+            border-color: red;
+        }
+        
+        .error-field .text-area{
+            border-color: red;
+        }
+
+        .error-field .cadre-image {
+            border-color: red;
+        }
+
+
+
+        .error-message {
+            color: red;
+            font-size:14px;
+        }
+
+          
+    .left .sidebar{
+        margin-top: 1rem;
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        margin-left: -7rem; /* Décaler la barre latérale vers la gauche */
+        width : 200%;
+    }
+
+    .content {
+        margin-left: 0rem; /* Ajustez la valeur selon vos besoins */
+       width:240%;
+    }
+
+      .left .btn {
+    margin-top: 1rem;
+     margin-left: -46%;
+    width: 100%;
+    text-align: centre;
+    padding: 1rem 0;}
+
+        main .container .left .profile {
+        padding: var(--card-padding);
+        background: var(--color-white);
+        border-radius: var(--card-border-radius);
+        display: flex;
+        align-items: center;
+        column-gap: 1rem;
+        width: 200%;
+        margin-left: -7rem;
+
+    }
     </style>
 {% endblock %}
 
 {% block content %}
    
-    {{ form_start(form) }}
-        <div class="formulaire" style="margin-left: 50px; font-size: 20px; background:#ffffffee; padding:40px; border-radius:20px; width: 110%;">
+    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'modifier_form', 'novalidate': 'novalidate'}}) }}
+        <div class="formulaire" style="margin-left: 50px; font-size: 20px; background:#ffffffee; padding:40px; border-radius:20px; width: 100%;">
          <h1 style="text-align: center; margin-bottom: 20px; font-size: 40px; font-weight: bold; color: #4848ed;">Modifier produit</h1>
-         <div class="formulaire" style="margin-left: 70px">
+         <div class="formulaire" style="margin-left: 70px ">
              <div class="cadre-image">
-                    {{ form_row(form.imageProduit, {'label': false, 'attr': {'onchange': 'previewImage(event)'}}) }}
-                     <img id="image-preview" src="{{ asset('images/produit/' ~ produit.imageProduit) }}" alt="Image du produit">
+                <img src="{{ asset('images/produit/' ~ produit.imageProduit) }}">
+            </div>
 
-             </div>
 
             <div class="nomProduit">
+                {% if form_errors(form.nomProduit) %}
+                    <div class="error-message" style ="margin-bottom: 10px;" >{{ form_errors(form.nomProduit) }}</div>
+                {% endif %}
                 {{ form_label(form.nomProduit) }}
                 {{ form_widget(form.nomProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px;'}}) }}
             </div>
 
             <div class="prix">
+            {% if form_errors(form.prixProduit) %}
+                <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.prixProduit) }}</div>
+            {% endif %}
                 {{ form_label(form.prixProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
                 {{ form_widget(form.prixProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px;'}}) }}
             </div>
@@ -126,16 +210,25 @@
             </div>
 
             <div class="stock">
+                    {% if form_errors(form.stockProduit) %}
+                         <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.stockProduit) }}</div>
+                    {% endif %}
                 {{ form_label(form.stockProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
                 {{ form_widget(form.stockProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; margin-top: 20px;' }}) }}
             </div>
 
             <div class="Categorie">
+            {% if form_errors(form.categProduit) %}
+                <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.categProduit) }}</div>
+            {% endif %}
                 {{ form_label(form.categProduit, null, {'label_attr': {'style': 'margin-right: 10px;'}}) }}
                 {{ form_widget(form.categProduit, {'attr': {'style': 'border: 1px solid #ccc; padding: 5px; margin-bottom: 10px;'}}) }}
             </div>
 
-            <div class="description">
+            <div class="description" style="display: flex; flex-direction: column;">
+                {% if form_errors(form.descriptionProduit) %}
+                    <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.descriptionProduit) }}</div>
+                {% endif %}
                 {{ form_label(form.descriptionProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
                 {{ form_widget(form.descriptionProduit, {'attr': {'class': 'text-area', 'style': 'margin-bottom: 10px; border: 1px solid #ccc; padding: 5px;', 'rows': '4'}}) }}
             </div>
@@ -149,18 +242,6 @@
     {{ form_end(form) }}
 
  <script>
-    function previewImage(event) {
-        var input = event.target;
-        var reader = new FileReader();
-        reader.onload = function() {
-            var img = document.getElementById('image-preview');
-            img.src = reader.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-
-
-
      // Récupérer l'élément avec l'ID "cartCount" dans le bloc "panier"
         const cartCountElement = document.getElementById('cartCount');
 
