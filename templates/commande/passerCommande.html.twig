@@ -46,28 +46,96 @@
         .bouton-prod:hover {
             background-color: #1877f2; 
         }
+
+        .error-field .text-field {
+            border-color: red;
+        }
+
+        .error-message {
+            color: red;
+            font-size:14px;
+        }
+
+
+    body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        
+
+      .left .btn {
+    margin-top: 1rem;
+     margin-left: -50%;
+    width: 100%;
+    text-align: centre;
+    padding: 1rem 0;}
+
+            .content {
+        margin-left: -1rem; /* Ajustez la valeur selon vos besoins */
+
+    }
     </style>
 {% endblock %}
 
 {% block content %}
 <div class="formulaire" style="margin-left: 20px; font-size: 20px; background:#ffffffee; padding:60px; border-radius:20px; width: 120%;">
-    <h1 style="color: #3642dd; margin-bottom: 20px;">Validation de Commande</h1>
-    <p style="color: #969090; margin-bottom: 10px;">Veuillez remplir le formulaire pour valider votre commande</p>
+    <h1 style="color: #3642dd; margin-bottom: 20px; margin-left: 150px;">Validation de Commande</h1>
+    <p style="color: #969090; margin-bottom: 10px; margin-left: 150px;">Veuillez remplir le formulaire pour valider votre commande</p>
+<div style="margin-left: 100px;">
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+ <div style="margin-bottom: 40px;"></div>
+ <div class="nomClient {% if form_errors(form.nomClient) %}error-field{% endif %}">
+    {% if form_errors(form.nomClient) %}
+        <div class="error-message" style ="margin-bottom: 10px;" >{{ form_errors(form.nomClient) }}</div>
+    {% endif %}
+    <label for="{{form.nomClient.vars.id }}">{{ form.nomClient.vars.label }}</label>
+    {{ form_widget(form.nomClient, {'attr': {'class': 'text-field', 'style': 'margin-left: 42px;  width: 400px; height: 40px;'}}) }}
+    
+</div>
+ <div style="margin-bottom: 20px;"></div>
+<div class="prenomClient  {% if form_errors(form.prenomClient) %}error-field{% endif %}">
+    {% if form_errors(form.prenomClient) %}
+        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.prenomClient) }}</div>
+    {% endif %}
+    <label for="{{ form.prenomClient.vars.id }}">{{ form.prenomClient.vars.label }}</label>
+    {{ form_widget(form.prenomClient, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 400px; height: 40px;'}}) }}
+</div>
+ <div style="margin-bottom: 20px;"></div>
 
-    {{ form_start(form) }}
-        {{ form_row(form.nomClient, {'attr': {'class': 'text-field'}}) }}
-        {{ form_row(form.prenomClient, {'attr': {'class': 'text-field'}}) }}
-        {{ form_row(form.telephone, {'attr': {'class': 'text-field'}}) }}
-        {{ form_row(form.eMail, {'attr': {'class': 'text-field'}}) }}
-        {{ form_row(form.adresseLivraison, {'attr': {'class': 'text-field'}}) }}
+<div class="telephone {% if form_errors(form.telephone) %}error-field{% endif %}">
+    {% if form_errors(form.telephone) %}
+        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.telephone) }}</div>
+    {% endif %}
+    <label for="{{ form.telephone.vars.id }}">{{ form.telephone.vars.label }}</label>
+    {{ form_widget(form.telephone, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 380px; height: 40px;'}}) }}
+</div>
+ <div style="margin-bottom: 20px;"></div>
+<div class="eMail {% if form_errors(form.eMail) %}error-field{% endif %}">
+    {% if form_errors(form.eMail) %}
+        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.eMail) }}</div>
+    {% endif %}
+    <label for="{{ form.eMail.vars.id }}">{{ form.eMail.vars.label }}</label>
+    {{ form_widget(form.eMail, {'attr': {'class': 'text-field', 'style': 'margin-left: 38px; width: 400px; height: 40px;'}}) }}
+</div>
+ <div style="margin-bottom: 20px;"></div>
+<div class="adresseLivraison {% if form_errors(form.adresseLivraison) %}error-field{% endif %}">
+    {% if form_errors(form.adresseLivraison) %}
+        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.adresseLivraison) }}</div>
+    {% endif %}
+    <label for="{{ form.adresseLivraison.vars.id }}">{{ form.adresseLivraison.vars.label }}</label>
+    {{ form_widget(form.adresseLivraison, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 300px; height: 40px;'}}) }}
+</div>
 
-       
-
-        <div class="boutons-container" style="display: flex; margin-top: 20px; margin-left: 80px;">
-             <button type="submit" id="validerCommande" class="bouton-prod">Valider la commande</button>
-            <button id="btnAnnuler" class="bouton-prod" style="margin-left: 100px; type="button">Annuler</button>
-        </div>
-    {{ form_end(form) }}
+ <div style="margin-bottom: 20px;"></div>
+    <div class="boutons-container" style="display: flex; margin-top: 20px; margin-left: 80px;">
+         <button type="submit" id="validerCommande" class="bouton-prod">Valider la commande</button>
+        <button id="btnAnnuler" class="bouton-prod" style="margin-left: 100px;" type="button">Annuler</button>
+    </div>
+{{ form_end(form) }}
+</div>
 </div>    
 
 <script>
