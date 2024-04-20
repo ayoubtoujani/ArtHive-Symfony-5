@@ -31,6 +31,13 @@ services:
 
     App\Notifier\MyNotifier:
 
-    App\Service\ProfanityFilter:
+    # Define the BadWordsService as a service
+    App\Services\BadWordsService:
+        # Inject the path to the JSON file containing bad words
         arguments:
-            $forbiddenWords: '%forbidden_words%'
+            $badWordsFilePath: '%kernel.project_dir%/config/bad_words.json'
+
+    # Define the MailgunEmailService as a service
+    App\Services\MailgunEmailService:
+        arguments:
+            $domain: '%mailgun.domain%'

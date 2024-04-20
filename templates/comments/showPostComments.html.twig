@@ -333,7 +333,15 @@ body {
     font-size: 14px;
 
 }
-
+.btn-facebook {
+    background-color: #3b5998;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+}
 
     </style>
 {% endblock %}
@@ -356,6 +364,9 @@ body {
     <div class="post-image-container">
         <!-- Post Image -->
         <img src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Post Image" class="post-image" style="background-color: white; padding: 20px; border-radius: 10px;">
+        <div style position="vertical-align: top;">
+         <a href="https://www.facebook.com/sharer/sharer.php?u={{ absolute_url(path('show_comments', { 'id': publication.idPublication })) }}" target="_blank" class="btn-facebook">Share on Facebook</a>
+        </div>
         <!-- Save Button -->
         <button class="save-button" type="button" id="save-post-image">
             <div class="svg-wrapper-1">
@@ -399,6 +410,7 @@ body {
       <a href="{{ path('add_to_favorites', {'id': publication.idPublication}) }}" >Add to Favorites</a>
 
     </div>
+
 
 </div>
     <div class="comment-section">

@@ -17,12 +17,17 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\ReactionsCommentaires;
 use App\Form\UpdateFormType;
+use App\Services\BadWordsService;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use App\Controller\MailerController;
+use App\Services\Mailer;
+
 
 class CommentsController extends AbstractController
 {
    
     #[Route('/showComments/{id}', name: 'show_comments')]
-    public function addComment($id, Request $request, SessionInterface $session, PublicationRepository $publicationRepository): Response
+    public function addComment($id, Request $request, SessionInterface $session, PublicationRepository $publicationRepository,BadWordsService $badWordsService,FlashBagInterface $flashBag,  MailerController $mailer): Response
     {
         // Get the publication entity by ID
         $publication = $publicationRepository->find($id);
@@ -43,7 +48,19 @@ class CommentsController extends AbstractController
     
         // Check if the form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-            // Retrieve the authenticated user from the session
+            // Check if the comment contains bad words
+            if ($badWordsService->containsBadWord($comment->getContenuCommentaire())) {
+                // Add a flash message
+                $flashBag->add('error', 'Your comment contains inappropriate language.');
+
+                // Send an email to the user
+
+
+
+              
+
+                return $this->redirectToRoute('show_comments', ['id' => $id]);
+            }
            // Fetch the user from the database
            $userRepository = $this->getDoctrine()->getRepository(Users::class);
            $userFromDb = $userRepository->find($user->getIdUser());

@@ -10,10 +10,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints\Callback;
 
+
+use App\Services\BadWordsService;
 
 class AddCommentType extends AbstractType
 {
+    private $badWordsService;
+
+    public function __construct(BadWordsService $badWordsService)
+    {
+        $this->badWordsService = $badWordsService;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -23,18 +33,7 @@ class AddCommentType extends AbstractType
                     new NotBlank([
                         'message' => 'The comment cannot be empty.',
                     ]),
-                    new Assert\Callback([
-                        'callback' => function ($comment, ExecutionContextInterface $context) {
-                            $badWords = ['bad', 'words', 'list'];
-                            foreach ($badWords as $word) {
-                                if (stripos($comment, $word) !== false) {
-                                    $context->buildViolation('The comment contains inappropriate language.')
-                                        ->addViolation();
-                                    break;
-                                }
-                            }
-                        },
-                    ]),
+                    new Callback([$this, 'validateContent']),
                 ],
             ]);
     }
@@ -44,5 +43,12 @@ class AddCommentType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Commentaires::class,
         ]);
+    }
+
+    public function validateContent($value, ExecutionContextInterface $context)
+    {
+        if ($this->badWordsService->containsBadWord($value)) {
+            $context->buildViolation('Your comment contains inappropriate language.')->addViolation();
+        }
     }
 }
