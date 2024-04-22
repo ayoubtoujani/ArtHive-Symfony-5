@@ -291,6 +291,51 @@ body {
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+
+         .pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination-container a{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 50px;
+  color: #1d0fe6;
+  background:white; 
+  font-size:18px;
+  margin: 20px;
+}
+
+
+.pagination-container a:hover,
+.pagination-container a:focus,
+.pagination-container a:active,
+.pagination-container span.active {
+  background-color: #1d0fe6;
+  color: white;
+}
+.pagination-container a.current {
+  background-color: #1d0fe6;
+  color: white;
+}
+
+.pagination-container .current {
+  background-color: blue;
+  color: white;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 50px;
+   font-size:18px;
+  margin: 20px;
+}
     </style>
 {% endblock %}
 
@@ -354,6 +399,11 @@ body {
     {% if publications is empty %}
                 <img src="https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png" alt="post Not Found" style="border-radius: 10px; width: 98%">
         {% endif %}
+
+        <div class="pagination-container">
+    {{ knp_pagination_render(publications) }}
+</div>
+
 </div>
     <!-- Modal popup -->
     <div id="myModal" class="modal">

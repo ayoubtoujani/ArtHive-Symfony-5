@@ -18,13 +18,15 @@ use App\Entity\Reactions;
 use Symfony\Component\Notifier\Notification\Notification;
 use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Notifier\NotifierInterface;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 
 
 class PublicationsController extends AbstractController
 {
     #[Route('/publications', name: 'afficher_publications', methods: ['GET', 'POST'])]
-    public function add(Request $request, PublicationRepository $publicationRepository, SessionInterface $session): Response
+    public function add(Request $request, PublicationRepository $publicationRepository, SessionInterface $session,PaginatorInterface $paginator): Response
     {
         
         // Retrieve the user from the session
@@ -82,17 +84,33 @@ class PublicationsController extends AbstractController
                 return $this->redirectToRoute('afficher_publications');
             }
 
-            // Fetch existing publications and order them by date of creation
+            // Récupérer le terme de recherche depuis la requête
+        $searchTerm = $request->query->get('q');
+
+        if($searchTerm){
+            // Récupérer les produits correspondant au terme de recherche depuis la base de données
+            $publications = $publicationRepository->searchPublicationsByTerm($searchTerm);
+        } else {
+              // Fetch existing publications and order them by date of creation
             $publications = $publicationRepository->findBy([], ['dCreationPublication' => 'DESC']);
+        }
+            // Paginate the results of the query
+            $publications = $paginator->paginate(
+                $publications, // Query results
+                $request->query->getInt('page', 1), // Page number
+                5 // Limit per page
+            );
             
             // Fetch liked publications by the user
             $likedPublicationIds = $publicationRepository->findLikedPublicationIdsByUser($user);
 
+           
             return $this->render('publications/afficherPublications.html.twig', [
                 'publications' => $publications,
                 'form' => $form->createView(),
                 'user' => $user,
                 'likedPublicationIds' => $likedPublicationIds,
+                'searchTerm' => $searchTerm,
             ]);
         } else {
             // Handle the case where the user is not logged in
