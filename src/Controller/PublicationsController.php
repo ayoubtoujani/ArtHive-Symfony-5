@@ -15,10 +15,11 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Reactions;
-use Symfony\Component\Notifier\Notification\Notification;
-use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Notifier\NotifierInterface;
 use Knp\Component\Pager\PaginatorInterface;
+
+
+
 
 
 
@@ -79,6 +80,7 @@ class PublicationsController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($publication);
                 $entityManager->flush();
+                $this->addFlash('success', 'Publication added successfully.');
 
                 // Redirect to the index page or any other page as needed
                 return $this->redirectToRoute('afficher_publications');
@@ -290,11 +292,8 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
             
             // Save the updated publication to the database
             $entityManager->flush();
-        } else {
-            // Handle the case where the user is not logged in
-            return $this->redirectToRoute('app_login');
+            $this->addFlash('success', 'Publication added to favorites successfully.');
         }
-        
         // stay in the same page
         $referer = $request->headers->get('referer');
         return $this->redirect($referer); 

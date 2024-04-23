@@ -365,7 +365,7 @@ body {
         <!-- Post Image -->
         <img src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Post Image" class="post-image" style="background-color: white; padding: 20px; border-radius: 10px;">
         <div style position="vertical-align: top;">
-         <a href="https://www.facebook.com/sharer/sharer.php?u={{ absolute_url(path('show_comments', { 'id': publication.idPublication })) }}" target="_blank" class="btn-facebook">Share on Facebook</a>
+,       <a href="{{ path('share_on_facebook') }}" class="btn-facebook">Share on Facebook</a>
         </div>
         <!-- Save Button -->
         <button class="save-button" type="button" id="save-post-image">
@@ -386,6 +386,7 @@ body {
   type="checkbox"
 />
 <label class="fav" for="favorite">
+  <a href="{{ path('add_to_favorites', {'id': publication.idPublication}) }}" >
   <svg
     class="feather feather-heart"
     stroke-linejoin="round"
@@ -402,12 +403,13 @@ body {
       d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
     ></path>
   </svg>
+  </a>
   <div class="action">
     <span class="option-1">Add to Favorites</span>
     <span class="option-2">Added to Favorites</span>
   </div>
 </label>
-      <a href="{{ path('add_to_favorites', {'id': publication.idPublication}) }}" >Add to Favorites</a>
+      
 
     </div>
 

@@ -5,6 +5,7 @@ parameters:
         - badword1
         - badword2
         - badword3
+
 services:
     # Default configuration for services in *this* file
     _defaults:
@@ -41,3 +42,10 @@ services:
     App\Services\MailgunEmailService:
         arguments:
             $domain: '%mailgun.domain%'
+    
+    Facebook\Facebook:
+        arguments:
+            $config: 
+                'app_id': '%env(FACEBOOK_APP_ID)%'
+                'app_secret': '%env(FACEBOOK_APP_SECRET)%'
+                'default_graph_version': 'v12.0'
