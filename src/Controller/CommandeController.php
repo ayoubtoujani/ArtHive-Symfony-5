@@ -39,23 +39,27 @@ class CommandeController extends AbstractController
     #[Route('/commande', name: 'app_commande')]
     public function passerCommande(Request $request, SessionInterface $session): Response
     {
+
+        // Récupérer l'utilisateur connecté depuis la session
+        $user = $session->get('user');
         $commande = new Commandes();
         $form = $this->createForm(CommandesType::class, $commande);
     
         $form->handleRequest($request);
-    
+     // Vérifier si l'utilisateur est connecté
+     if (!$user instanceof Users) {
+
+        // rediriger vers la page de connexion
+        return $this->redirectToRoute('app_login');
+    }
+    else
+    {
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             
-                // Récupérer l'utilisateur connecté depuis la session
-            $user = $session->get('user');
+                
 
-            // Vérifier si l'utilisateur est connecté
-            if (!$user instanceof Users) {
-
-                // rediriger vers la page de connexion
-                return $this->redirectToRoute('app_login');
-            }
+           
 
     
             // Récupérer les enregistrements de panier associés à l'utilisateur
@@ -80,13 +84,16 @@ class CommandeController extends AbstractController
             $this->addFlash('success', 'Votre commande a été enregistrée avec succès !');
     
             // Rediriger l'utilisateur vers une autre page, par exemple la page d'accueil
-            return $this->redirectToRoute('app_feed');
+            return $this->redirectToRoute('app_marketplace');
         }
     
         return $this->render('commande/passerCommande.html.twig', [
             'form' => $form->createView(),
+            'user' => $user
         ]);
     }
+
+}
     
     
 }

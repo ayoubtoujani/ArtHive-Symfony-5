@@ -28,7 +28,7 @@ use Knp\Component\Pager\PaginatorInterface;
 
 class MarketplaceController extends AbstractController
 {
-    /*
+    
     #[Route('/marketplace', name: 'app_marketplace') ]
     public function index(): Response
     {
@@ -463,7 +463,7 @@ class MarketplaceController extends AbstractController
 
 
     
-*/
+
 
 
 }   
