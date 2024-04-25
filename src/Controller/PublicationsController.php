@@ -100,7 +100,7 @@ class PublicationsController extends AbstractController
             $publications = $paginator->paginate(
                 $publications, // Query results
                 $request->query->getInt('page', 1), // Page number
-                5 // Limit per page
+                6 // Limit per page
             );
             
             // Fetch liked publications by the user
@@ -192,7 +192,7 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     ]);
 }
 #[Route('/publications/search', name: 'app_posts_search')]
-     public function search(Request $request,PublicationRepository $publicationRepository,SessionInterface $sessionInterface): Response
+     public function search(Request $request,PublicationRepository $publicationRepository,SessionInterface $sessionInterface,PaginatorInterface $paginator): Response
     {
 
         //get the user from the session
@@ -207,6 +207,14 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
 
         // Récupérer les produits correspondant au terme de recherche depuis la base de données
         $publications =$publicationRepository->searchPublicationsByTerm($searchTerm);
+
+        // Paginate the results of the query
+        
+        $publications = $paginator->paginate(
+            $publications, // Query results
+            $request->query->getInt('page', 1), // Page number
+            6 // Limit per page
+        );
   
 
 

@@ -232,7 +232,7 @@ body {
             <div style="position: relative;">
              <div class="dropdown">
      
-<a id="removefromfavorites" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('remove_from_favorites', {'idU': user.getIdUser(), 'idP': publication.getIdPublication()}) }}" aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Remove from favorites</a>
+<a id="removefromfavorites" class="btn btn-secondary dropdown-toggle" style="color:red;" href="{{ path('remove_from_favorites', {'idU': user.getIdUser(), 'idP': publication.getIdPublication()}) }}" aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Remove from favorites</a>
   
 </div>
                 <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">

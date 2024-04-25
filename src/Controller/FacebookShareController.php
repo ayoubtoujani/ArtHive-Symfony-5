@@ -35,14 +35,11 @@ class FacebookShareController extends AbstractController
             // Content to share
             $pageId = '1564305041087890'; // Your Facebook user ID
             $message = 'Check out this content from our website!';
-            $link = 'http://127.0.0.1:8000/showComments/208'; // URL of the content to be shared
-            $picture = 'http://example.com/image.jpg'; // URL of an optional image
+          
 
             // Prepare data for sharing
             $postData = [
                 'message' => $message,
-                'link' => $link,
-                'picture' => $picture,
                 'access_token' => $appAccessToken,
             ];
 

@@ -9,6 +9,7 @@
         <input type="search" name="q" placeholder="Rechercher des Publications">
         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
     </form>
+    
 {% endblock %}
 
 
@@ -397,7 +398,8 @@ body {
         </div>
     {% endfor %}
     {% if publications is empty %}
-                <img src="https://user-images.githubusercontent.com/24848110/33519396-7e56363c-d79d-11e7-969b-09782f5ccbab.png" alt="post Not Found" style="border-radius: 10px; width: 98%">
+    <h1> Sorry, No Posts Found </h1>
+                <img src="https://cdn-icons-png.flaticon.com/512/4943/4943620.png" alt="post Not Found" style="border-radius: 10px; width: 98%">
         {% endif %}
 
         <div class="pagination-container">
