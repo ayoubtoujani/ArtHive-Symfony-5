@@ -1,36 +1,35 @@
 # config/services.yaml
 parameters:
+    images_director: '%kernel.project_dir%/public/images/evenement'
+    twilio_account_sid: '%env(TWILIO_ACCOUNT_SID)%'
+    twilio_auth_token: '%env(TWILIO_AUTH_TOKEN)%'
+    twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
+
     images_directory: '%kernel.project_dir%/public/images/'
     forbidden_words:
         - badword1
         - badword2
         - badword3
 services:
+    App\Entity\Evenements:
+    App\Form\DataTransformer\ImageToFileTransformer:
+        tags: ['doctrine.orm.entity_listener']
+
     # Default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    # Makes classes in src/ available to be used as services
-    # This creates a service per class whose id is the fully-qualified class name
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-
-    # Add more service definitions when explicit configuration is needed
-    # Please note that last definitions always *replace* previous ones
-
-    # Register the Twig extension as a service
-    App\Twig\AppExtension:
-        tags: ['twig.extension']  # This tag registers the class as a Twig extension
     App\Services\CountryApi:
         arguments:
             $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
-
-    App\Notifier\MyNotifier:
-
-    App\Service\ProfanityFilter:
-        arguments:
-            $forbiddenWords: '%forbidden_words%'
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

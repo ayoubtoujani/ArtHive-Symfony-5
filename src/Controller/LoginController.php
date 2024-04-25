@@ -61,7 +61,9 @@ class LoginController extends AbstractController
             $user = $registerForm->getData();
                 
             $user->setPhoto('images/user.png');
+            $user->setPhoto('images/user.png');
             $user->setRole('ROLE_USER');
+            $user->setBio('');
             $user->setBio('');
 
             // Additional validation or processing if needed before persisting
@@ -73,6 +75,7 @@ class LoginController extends AbstractController
             $session->set('user', $user);
 
             return $this->redirectToRoute('afficher_publications');
+            return $this->redirectToRoute('afficher_publications');
         }
         
         return $this->render('login/login.html.twig', [
@@ -81,6 +84,7 @@ class LoginController extends AbstractController
             'state' => $state,
             'error' => $error,
             'success' => $success,
+            
             
         ]);
     }
@@ -114,4 +118,3 @@ class LoginController extends AbstractController
     }
 
 }
-

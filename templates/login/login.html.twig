@@ -42,10 +42,7 @@
                         <span class="text-danger" style="font-size:12px;">{{ form_errors(registerForm.dNaissanceUser) }}</span>
                     </div>
 
-                    <div class ="col-6">
-                        {{ form_widget(registerForm.ville, { 'attr': {'class': 'form-control mt-2', 'id': 'country-select'} }) }}
-                        <span class="text-danger" style="font-size:12px;">{{ form_errors(registerForm.ville) }}</span>
-                    </div>
+                    
                 </div>
 
                 <div class="row">
@@ -104,12 +101,12 @@
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
-                    <img src="{{ asset('images/arthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
+                    <img src="{{ asset('images/logoArthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
                     <p>Enter your personal details to use all of site features</p>
                     <button class="hidden" id="login">Sign In</button>
                 </div>
                 <div class="toggle-panel toggle-right">
-                    <img src="{{ asset('images/arthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
+                    <img src="{{ asset('images/logoArthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
                     <p>Register with your personal details to use all of site features</p>
                     <button class="hidden" id="register">Sign Up</button>
                 </div>

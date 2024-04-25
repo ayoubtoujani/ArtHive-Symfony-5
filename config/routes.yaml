@@ -4,9 +4,6 @@ app_blog:
 app_feed:
     path: /feed
     controller: App\Controller\BlogController::feed
-add_like:
-    path: /add-like/{id}
-    controller: App\Controller\PublicationsController::addLike
 app_login:
     path: /login
     controller: App\Controller\LoginController::login

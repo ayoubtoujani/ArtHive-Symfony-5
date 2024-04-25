@@ -1,3 +1,4 @@
+# config/packages/security.yaml
 security:
     providers:
         # Configuration du fournisseur d'utilisateurs pour l'authentification par email
@@ -5,6 +6,7 @@ security:
             entity:
                 class: 'App\Entity\Users'
                 property: 'email'
+                
 
     firewalls:
         main:
