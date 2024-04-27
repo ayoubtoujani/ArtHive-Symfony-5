@@ -56,6 +56,9 @@
     "mercuryseries/flashy-bundle": {
         "version": "v5.1.0"
     },
+    "nomaya/social-bundle": {
+        "version": "dev-master"
+    },
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {

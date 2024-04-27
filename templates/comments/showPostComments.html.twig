@@ -207,7 +207,7 @@
     font-weight: 1000;
     width: 200px;
     max-width: 200px;
-    height: 80px;
+    height: 70px;
     
 }
 
@@ -259,6 +259,7 @@
   width: 200px;
     max-width: 200px;
     height: 80px;
+
 }
 
 #favorite {
@@ -339,7 +340,7 @@ body {
     font-size: 14px;
 
 }
-.btn-facebook {
+.fb-share-button {
     background-color: #3b5998;
     color: white;
     padding: 10px 20px;
@@ -349,6 +350,8 @@ body {
     margin-top: 10px;
     width: 200px;
     max-width: 200px;
+    height: 40px;
+    
 }
 
 .button-container {
@@ -386,7 +389,7 @@ body {
 
 {% block content %}
  <!-- background image for this twig page  -->
-    
+   
 <form action="{{ path('show_comments', { 'id': publication.idPublication }) }}" method="post" enctype="multipart/form-data" novalidate>
     <div class="post-container">
         <!-- User's Information -->
@@ -403,7 +406,12 @@ body {
         <!-- Post Image -->
         <img src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Post Image" class="post-image" style="background-color: white; padding: 20px; border-radius: 10px;">
     <div class="button-container">
-,       <a href="{{ path('share_on_facebook') }}" class="btn-facebook">Share on Facebook</a>
+     <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v19.0&appId=1848760258882344" nonce="DWEjm15c"></script>
+
+<div class="fb-share-button" data-href="" data-layout="" data-size="">
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8000%2FshowComments%2F204&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Partager</a>
+</div>
         
         <!-- Save Button -->
         <button class="save-button" type="button" id="save-post-image">
@@ -557,6 +565,11 @@ body {
 </form>
 
  <script>
+ // Get the current page URL
+    var currentUrl = window.location.href;
+
+    // Set the data-href attribute of the share button to the current URL
+    document.querySelector('.fb-share-button').setAttribute('data-href', currentUrl);
  document.addEventListener("DOMContentLoaded", function () {
     const likeButtons = document.querySelectorAll('.btn-like-comment');
          const postImageUrl = "{{ asset('images/' ~ publication.getUrlFile()) }}";

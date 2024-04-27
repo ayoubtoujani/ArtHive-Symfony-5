@@ -240,17 +240,4 @@ public function addReaction($id, Request $request, SessionInterface $session): R
         return $this->redirectToRoute('app_login');
     }
 }
-
-#[Route('/share-on-facebook', name: 'share_on_facebook')]
-public function shareOnFacebook(Request $request, Facebook $facebook): Response
-{
-    // Get the URL of the current page
-    $url = $request->getUri();
-
-    // Create a Facebook sharing link with the URL
-    $link = 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($url);
-
-    // Redirect the user to the Facebook sharing dialog
-    return new RedirectResponse($link);
-}
 }

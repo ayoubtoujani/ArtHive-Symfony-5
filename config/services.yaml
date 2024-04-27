@@ -5,8 +5,9 @@ parameters:
         - badword1
         - badword2
         - badword3
+    locale: 'fr_FR'  # Set the default locale value here
 
-services:
+services:        
     # Default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
