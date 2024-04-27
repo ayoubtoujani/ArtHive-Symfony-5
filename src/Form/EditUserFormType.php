@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
-use App\Validator\Constraints\UniqueEmail;
+use App\Validator\Constraints\UniqueEmailEdit;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -59,7 +59,9 @@ class EditUserFormType extends AbstractType
             'constraints' => [
                 new NotBlank(['message' => 'Please enter your email.']),
                 new Email(['message' => 'The email "{{ value }}" is not a valid email.']),
-                new UniqueEmail(),
+                new UniqueEmailEdit([
+                    'originalEmail' => $options['data']->getEmail(),
+                ]),
             ],
         ])
 

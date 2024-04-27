@@ -26,7 +26,6 @@ app_admin_users:
 app_admin_user_edit:
     path: /admin/user/edit/{id}
     controller: App\Controller\AdminController::edit
-    methods: [POST]
 
 app_admin_user_delete:
     path: /admin/user/delete/{id}

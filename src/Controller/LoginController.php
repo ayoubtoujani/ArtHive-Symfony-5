@@ -43,6 +43,12 @@ class LoginController extends AbstractController
             if ($foundUser && $foundUser->getMdpUser() === $password) {
                 $success = 'Login successful';
                 $session->set('user', $foundUser);
+                if($foundUser->getRole() == 'ROLE_ADMIN'){
+                    return $this->redirectToRoute('app_admin');
+                }
+                else{
+                    return $this->redirectToRoute('app_test');
+                }
                 return $this->redirectToRoute('app_test');
             } else {
                 $error = 'Invalid email or password';
