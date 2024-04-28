@@ -9,13 +9,26 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
-
-
-
+use \League\OAuth2\Client\Provider\Facebook;
 
 
 class LoginController extends AbstractController
 {
+
+    private $provider;
+
+    public function __construct()
+    {
+        $this->provider = new Facebook([
+            'clientId'          => $_ENV['FCB_ID'],
+            'clientSecret'      => $_ENV['FCB_SECRET'],
+            'redirectUri'       => $_ENV['FCB_CALLBACK'],
+            'graphApiVersion'   => 'v15.0',
+        ]);
+        
+    }
+
+
 
     #[Route('/login', name: 'app_login', methods:['POST'])]
     public function login(Request $request, SessionInterface $session): Response
@@ -110,5 +123,22 @@ class LoginController extends AbstractController
         ]);
     }
 
+    #[Route('/fcb-login', name: 'fcb_login')]
+    public function loginFb():Response
+    {
+        $helper_url = $this->provider->getAuthorizationUrl();
+
+        return $this->redirect($helper_url);
+    }
+
+    #[Route('/fcb-callback', name: 'fcb_callback')]
+    public function callbackFb():Response
+    {
+        dd("ma page");
+        return $this->render('show.html.twig');
+    }
+
 }
+
+
 

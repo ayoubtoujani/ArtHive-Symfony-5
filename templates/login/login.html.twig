@@ -74,6 +74,12 @@
             <form method="post" novalidate>
                 {{ form_start(loginForm) }}
                 <h2>Sign In</h2>
+                <div class="social-icons">
+
+                    <a href="{{ path('fcb_login') }}" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                </div>
                 {% if error %}
                     <p>{{ error }}</p>
                 {% endif %}
