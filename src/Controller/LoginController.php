@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
 use \League\OAuth2\Client\Provider\Facebook;
-
+use PhpParser\Node\Stmt\TryCatch;
 
 class LoginController extends AbstractController
 {
@@ -132,10 +132,48 @@ class LoginController extends AbstractController
     }
 
     #[Route('/fcb-callback', name: 'fcb_callback')]
-    public function callbackFb():Response
+    public function callbackFb(SessionInterface $session):Response
     {
-        dd("ma page");
-        return $this->render('show.html.twig');
+        // Try to get an access token (using the authorization code grant)
+        $token = $this->provider->getAccessToken('authorization_code', [
+            'code' => $_GET['code']
+        ]);
+
+        try {
+            //Get user information
+            $fbUser = $this->provider->getResourceOwner($token);
+            $fbUser = $fbUser->toArray();
+            $email = $fbUser['email'];
+            $nom = $fbUser['first_name'];
+            $prenom = $fbUser['last_name'];
+            $email = $fbUser['email'];
+            $photo = array($fbUser['picture_url']);
+
+            //Check if user already exists
+            $userRepository = $this->getDoctrine()->getRepository(Users::class);
+            $foundUser = $userRepository->findOneBy(['email' => $email]);
+            if($foundUser){
+                $session->set('user', $foundUser);
+            }else{
+                //Create user to store in database
+                $user = new Users();
+                $user->setNomUser($nom);
+                $user->setPrenomUser($prenom);
+                $user->setMdpUser(sha1(str_shuffle('abcdefghjklmnopqrstuvwxyz1234567890')));
+                $user->setEmail($email);
+                //$user->setPhoto($photo[0]); //must be changed with actual FB pfp
+                $user->setPhoto('images/user.png');
+                $session->set('user', $user);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return $this->redirectToRoute('app_test');
+
     }
 
 }
