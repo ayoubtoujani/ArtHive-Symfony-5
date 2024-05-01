@@ -78,7 +78,7 @@
 
                     <a href="{{ path('fcb_login') }}" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
                     
-                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    {# <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a> #}
                 </div>
                 {% if error %}
                     <p>{{ error }}</p>
@@ -95,6 +95,9 @@
                     {{ form_errors(loginForm.mdpUser) }}
                 <input type="hidden" name="state" value="login">        
                 <button type="submit" class="btn btn-primary">Sign in</button>
+                <div class="text-center mt-3">
+                    <a href="{{ path('app_forgot_password') }}" class="text-primary">Forgot your password?</a>
+                </div>
                 {{ form_end(loginForm) }}
             </form>
         </div>
@@ -113,6 +116,8 @@
             </div>
         </div>
     </div>
+
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

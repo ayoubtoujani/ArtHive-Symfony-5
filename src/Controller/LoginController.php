@@ -161,12 +161,23 @@ class LoginController extends AbstractController
                 $user->setPrenomUser($prenom);
                 $user->setMdpUser(sha1(str_shuffle('abcdefghjklmnopqrstuvwxyz1234567890')));
                 $user->setEmail($email);
+                $user->setDNaissanceUser(new \DateTime());
+                $user->setNumTelUser('');
+                $user->setVille('');
+                $user->setBio('');
+                $user->setRole('ROLE_USER');
                 //$user->setPhoto($photo[0]); //must be changed with actual FB pfp
                 $user->setPhoto('images/user.png');
                 $session->set('user', $user);
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($user);
-                $entityManager->flush();
+                try{
+                    $entityManager->flush();
+                }
+                catch(\Exception $e){
+                    dd($e);
+                }
+                
             }
         } catch (\Throwable $th) {
             //throw $th;

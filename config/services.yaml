@@ -26,4 +26,7 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Controller\ForgotPasswordController:
         arguments:
-            $mailApi: '/api/send-email'
+            $mailApi: '@App\Services\MailApi'
+    App\Services\MailApi:
+        arguments:
+            $client: '@http_client'
