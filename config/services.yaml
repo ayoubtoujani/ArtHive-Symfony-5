@@ -27,9 +27,9 @@ services:
     # Register the Twig extension as a service
     App\Twig\AppExtension:
         tags: ['twig.extension']  # This tag registers the class as a Twig extension
-    App\Services\CountryApi:
-        arguments:
-            $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
+   # App\Services\CountryApi:
+    #    arguments:
+    #        $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
 
     App\Notifier\MyNotifier:
 
@@ -38,11 +38,7 @@ services:
         # Inject the path to the JSON file containing bad words
         arguments:
             $badWordsFilePath: '%kernel.project_dir%/config/bad_words.json'
-
-    # Define the MailgunEmailService as a service
-    App\Services\MailgunEmailService:
-        arguments:
-            $domain: '%mailgun.domain%'
+            
     
     Facebook\Facebook:
         arguments:

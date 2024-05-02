@@ -233,7 +233,7 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     }
    
     #[Route('/add-like/{id}', name: 'add_like')]
-    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session, Request $request, NotifierInterface $notifier): RedirectResponse
+    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session, Request $request): RedirectResponse
     {
         // Get the logged-in user from the session
         $user = $session->get('user');
@@ -258,14 +258,6 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
                 // Save the reaction to the database
                 $entityManager->persist($reaction);
                 $entityManager->flush();
-              /*  // Create a notification
-                $notification = new Notification('You have liked a publication', ['browser']);
-                $recipient = new Recipient($findUser->getEmail());
-                // Send the notification
-                $notifier->send($notification, $recipient);
-                */
-
-
             }
             else {
                 // Handle the case where the user has already liked the publication remove the like

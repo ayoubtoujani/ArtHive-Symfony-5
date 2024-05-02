@@ -27,12 +27,13 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class RegisterFormType extends AbstractType
 {
-    private $countryApi;
+   /* private $countryApi;
 
     public function __construct(CountryApi $countryApi)
     {
         $this->countryApi = $countryApi;
     }
+    */
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -91,7 +92,27 @@ class RegisterFormType extends AbstractType
         ])
 
         ->add('ville', ChoiceType::class, [
-            'choices' => $this->getCountryChoices(),
+            'choices' => [
+                'Paris' => 'Paris',
+                'Marseille' => 'Marseille',
+                'Lyon' => 'Lyon',
+                'Toulouse' => 'Toulouse',
+                'Nice' => 'Nice',
+                'Nantes' => 'Nantes',
+                'Montpellier' => 'Montpellier',
+                'Strasbourg' => 'Strasbourg',
+                'Bordeaux' => 'Bordeaux',
+                'Lille' => 'Lille',
+                'Rennes' => 'Rennes',
+                'Reims' => 'Reims',
+                'Le Havre' => 'Le Havre',
+                'Saint-Étienne' => 'Saint-Étienne',
+                'Toulon' => 'Toulon',
+                'Grenoble' => 'Grenoble',
+                'Dijon' => 'Dijon',
+                'Tunist' => 'Tunist',
+                'Angers' => 'Angers',
+            ],
             'constraints' => [
                 new NotBlank(['message' => 'Please select your country.']),
             ],
@@ -124,7 +145,7 @@ class RegisterFormType extends AbstractType
         ]);
     }
 
-    private function getCountryChoices(): array
+/*    private function getCountryChoices(): array
     {
         $countries =  $this->countryApi->getCountries();
 
@@ -135,4 +156,5 @@ class RegisterFormType extends AbstractType
         asort($choices);
         return $choices;
     }
+    */
 }
