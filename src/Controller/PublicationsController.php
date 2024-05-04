@@ -21,6 +21,7 @@ use Symfony\Component\Notifier\NotifierInterface;
 
 
 
+
 class PublicationsController extends AbstractController
 {
     #[Route('/publications', name: 'afficher_publications', methods: ['GET', 'POST'])]
