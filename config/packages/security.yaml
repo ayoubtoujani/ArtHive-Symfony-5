@@ -7,7 +7,6 @@ security:
                 class: 'App\Entity\Users'
                 property: 'email'
                 
-
     firewalls:
         main:
             # Utilisation de la stratégie de connexion basée sur un formulaire

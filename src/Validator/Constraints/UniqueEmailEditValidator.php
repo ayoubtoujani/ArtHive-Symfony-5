@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Doctrine\ORM\EntityManagerInterface;
 
-class UniqueEmailValidator extends ConstraintValidator
+class UniqueEmailEditValidator extends ConstraintValidator
 {
     private $entityManager;
 
@@ -18,7 +18,9 @@ class UniqueEmailValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-
+        if ($constraint->originalEmail === $value) {
+            return;
+        }
 
         $existingUser = $this->entityManager->getRepository(Users::class)->findOneBy(['email' => $value]);
 

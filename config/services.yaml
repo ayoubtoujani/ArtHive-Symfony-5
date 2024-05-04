@@ -4,6 +4,7 @@ parameters:
     twilio_account_sid: '%env(TWILIO_ACCOUNT_SID)%'
     twilio_auth_token: '%env(TWILIO_AUTH_TOKEN)%'
     twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
+    profile_images_directory: '%kernel.project_dir%/public/images/profile_pictures'
 
     images_directory: '%kernel.project_dir%/public/images/'
     forbidden_words:
@@ -28,9 +29,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    App\Services\CountryApi:
-        arguments:
-             $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
@@ -40,3 +38,12 @@ services:
         # Inject the path to the JSON file containing bad words
         arguments:
             $badWordsFilePath: '%kernel.project_dir%/config/bad_words.json'
+            $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    App\Controller\ForgotPasswordController:
+        arguments:
+            $mailApi: '@App\Services\MailApi'
+    App\Services\MailApi:
+        arguments:
+            $client: '@http_client'

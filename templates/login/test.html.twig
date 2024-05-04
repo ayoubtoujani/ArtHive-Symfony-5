@@ -1,0 +1,9 @@
+{% if user %}
+    <p>Welcome, {{ nom }}</p>
+{% else %}
+    <p>ERROR</p>
+{% endif %}
+
+<img src="{{ asset(user.photo) }}">
+
+<a href="{{ path('app_profile') }}">profile</a>

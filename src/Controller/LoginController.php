@@ -2,23 +2,33 @@
 
 namespace App\Controller;
 use App\Entity\Users;
-use SessionIdInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\LoginFormType;
 use App\Form\RegisterFormType;
-use Symfony\Component\Form\FormError;
-
-
-
-
+use \League\OAuth2\Client\Provider\Facebook;
+use PhpParser\Node\Stmt\TryCatch;
 
 class LoginController extends AbstractController
 {
+
+    private $provider;
+
+    public function __construct()
+    {
+        $this->provider = new Facebook([
+            'clientId'          => $_ENV['FCB_ID'],
+            'clientSecret'      => $_ENV['FCB_SECRET'],
+            'redirectUri'       => $_ENV['FCB_CALLBACK'],
+            'graphApiVersion'   => 'v15.0',
+        ]);
+        
+    }
+
+
 
     #[Route('/login', name: 'app_login', methods:['POST'])]
     public function login(Request $request, SessionInterface $session): Response
@@ -46,12 +56,13 @@ class LoginController extends AbstractController
             if ($foundUser && $foundUser->getMdpUser() === $password) {
                 $success = 'Login successful';
                 $session->set('user', $foundUser);
-                 // Check if user has admin role
-                 if ($foundUser->getRole() === 'ROLE_ADMIN') {
-                    return $this->redirectToRoute('app_admin'); // Redirect to admin dashboard
-                } else {
-                    return $this->redirectToRoute('afficher_publications'); // Redirect to regular user dashboard
+                if($foundUser->getRole() == 'ROLE_ADMIN'){
+                    return $this->redirectToRoute('app_admin');
                 }
+                else{
+                    return $this->redirectToRoute('app_test');
+                }
+                return $this->redirectToRoute('app_test');
             } else {
                 $error = 'Invalid email or password';
             }
@@ -61,9 +72,7 @@ class LoginController extends AbstractController
             $user = $registerForm->getData();
                 
             $user->setPhoto('images/user.png');
-            $user->setPhoto('images/user.png');
             $user->setRole('ROLE_USER');
-            $user->setBio('');
             $user->setBio('');
 
             // Additional validation or processing if needed before persisting
@@ -74,8 +83,7 @@ class LoginController extends AbstractController
             $success = 'Registration successful';
             $session->set('user', $user);
 
-            return $this->redirectToRoute('afficher_publications');
-            return $this->redirectToRoute('afficher_publications');
+            return $this->redirectToRoute('app_test');
         }
         
         return $this->render('login/login.html.twig', [
@@ -84,8 +92,6 @@ class LoginController extends AbstractController
             'state' => $state,
             'error' => $error,
             'success' => $success,
-            
-            
         ]);
     }
 
@@ -111,10 +117,87 @@ class LoginController extends AbstractController
         }else{
             $nom = 'unknown';
         }
-        return $this->render('login/test.html.twig', [
+        return $this->render('feed.html.twig', [
             'user' => $user,
             'nom' => $nom
         ]);
     }
 
+    #[Route('/fcb-login', name: 'fcb_login')]
+    public function loginFb():Response
+    {
+        $helper_url = $this->provider->getAuthorizationUrl();
+
+        return $this->redirect($helper_url);
+    }
+
+    #[Route('/fcb-callback', name: 'fcb_callback')]
+    public function callbackFb(SessionInterface $session):Response
+    {
+        // Try to get an access token (using the authorization code grant)
+        $token = $this->provider->getAccessToken('authorization_code', [
+            'code' => $_GET['code']
+        ]);
+
+        try {
+            //Get user information
+            $fbUser = $this->provider->getResourceOwner($token);
+            $fbUser = $fbUser->toArray();
+            $email = $fbUser['email'];
+            $nom = $fbUser['first_name'];
+            $prenom = $fbUser['last_name'];
+            $email = $fbUser['email'];
+            $photo = array($fbUser['picture_url']);
+
+            //Check if user already exists
+            $userRepository = $this->getDoctrine()->getRepository(Users::class);
+            $foundUser = $userRepository->findOneBy(['email' => $email]);
+            if($foundUser){
+                $session->set('user', $foundUser);
+            }else{
+                //Create user to store in database
+                $user = new Users();
+                $user->setNomUser($nom);
+                $user->setPrenomUser($prenom);
+                $user->setMdpUser(sha1(str_shuffle('abcdefghjklmnopqrstuvwxyz1234567890')));
+                $user->setEmail($email);
+                $user->setDNaissanceUser(new \DateTime());
+                $user->setNumTelUser('');
+                $user->setVille('');
+                $user->setBio('');
+                $user->setRole('ROLE_USER');
+                
+                //Photo is changed with actual FB pfp
+                $photoData = file_get_contents($photo[0]);
+                if($photoData){
+                    $fileName = uniqid() . '.jpg';
+                    $filePath = $this->getParameter('profile_images_directory') . '/' . $fileName;
+                    if (file_put_contents($filePath, $photoData) === false) {
+                        throw new \Exception('Error uploading file');
+                    }
+                    $user->setPhoto($fileName);
+                }                
+
+                $session->set('user', $user);
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                try{
+                    $entityManager->flush();
+                }
+                catch(\Exception $e){
+                    dd($e);
+                }
+                
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        return $this->redirectToRoute('app_test');
+
+    }
+
 }
+
+
+
