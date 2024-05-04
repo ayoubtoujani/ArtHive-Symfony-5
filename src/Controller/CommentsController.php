@@ -29,7 +29,7 @@ class CommentsController extends AbstractController
 {
    
     #[Route('/showComments/{id}', name: 'show_comments')]
-    public function addComment($id, Request $request, SessionInterface $session, PublicationRepository $publicationRepository,BadWordsService $badWordsService,FlashBagInterface $flashBag,  MailerController $mailer): Response
+    public function addComment($id, Request $request, SessionInterface $session, PublicationRepository $publicationRepository,BadWordsService $badWordsService,FlashBagInterface $flashBag): Response
     {
         // Get the publication entity by ID
         $publication = $publicationRepository->find($id);
