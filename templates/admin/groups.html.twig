@@ -6,8 +6,62 @@
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
-{% block content %}
-    {# Your content for the posts page goes here #}
 
-    <h1>this is the page of Groups</h1>
+
+{% block groupe_number %}
+    <div class="visits">
+        <div class="status">
+            <div class="info">
+                <h3>Groupes</h3>
+                <h1 style="color: #1844f1">{{ numberOfGroups }}</h1>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+
+{% block content %}
+
+
+
+    <h1>Groups index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>IdGroup</th>
+            <th>NomGroup</th>
+            <th>Image</th>
+            <th>DescriptionGroup</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for group in groups %}
+            <tr>
+                <td>{{ group.idGroup }}</td>
+                <td>{{ group.nomGroup }}</td>
+                <td>
+                    {% if group.image %}
+                        <img src="{{ asset('uploads/images/' ~ group.image) }}" alt="{{ group.image }}" style="max-width: 100px; max-height: 100px;">
+                    {% else %}
+                        <img src="{{ asset('path_to_placeholder_image_placeholder.jpg') }}" alt="Image not found" style="max-width: 100px; max-height: 100px;">
+                    {% endif %}
+                </td>
+                <td>{{ group.descriptionGroup }}</td>
+                <td>
+                    <a href="{{ path('app_groups_show', {'idGroup': group.idGroup}) }}">Show</a>
+                    <a href="{{ path('app_groups_edit', {'idGroup': group.idGroup}) }}">Edit</a>
+                    <a href="{{ path('app_reclamationgroupe_newback', {'groupId': group.idGroup}) }}">Add Reclamation</a> {# Add this link #}
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">No group found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+<a href="{{ path('app_groups_new') }}">Create new</a>   {% endblock %}
