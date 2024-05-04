@@ -28,6 +28,8 @@ class AdminController extends AbstractController
    #[Route('/admin', name: 'app_admin')]
     public function index(SessionInterface $session): Response
     {
+        $evenements = $this->getDoctrine()->getRepository(Evenements::class)->findAll();
+        $nombreTotalEvenements = count($evenements);
 
             // Retrieve the user from the session
             $user = $session->get('user');
@@ -39,6 +41,8 @@ class AdminController extends AbstractController
                     return $this->render('admin/home.html.twig', [
                         'controller_name' => 'AdminController',
                         'user' => $user,
+                        'nombreTotalEvenements' => $nombreTotalEvenements,
+
                     ]);
 
                 }else{
@@ -213,11 +217,44 @@ public function deletePublication($id, PublicationRepository $publicationReposit
     public function getAllEvents(EvenementsRepository $evenementsRepository,SessionInterface $session, Request $request, ParticipationsRepository $participationRepository): Response
     {
         $evenements = $this->getDoctrine()->getRepository(Evenements::class)->findAll();
+        $nombreTotalEvenements = count($evenements);
+        // Initialiser le tableau pour stocker le nombre de produits dans chaque catégorie
+        $nombreEvenementsParCategorie = array(
+           'PEINTURE' => 0, 
+           'SCULPTURE' => 0,
+           'MUSIQUE' => 0, 
+           'CINEMA' => 0,
+           'THEATRE' => 0,
+           'PHOTOGRAPHIE' => 0,
+           'ART_NUMERIQUE' => 0,
+           'ART_URBAIN' => 0,
+           'LITTERATURE' => 0,
+        );
+         // Parcourir tous les produits et mettre à jour le tableau avec le nombre de produits dans chaque catégorie
+         foreach ($evenements as $evenement) {
+            $categorieEvenement = $evenement->getCategorieevenement();
+            if (array_key_exists($categorieEvenement, $nombreEvenementsParCategorie)) {
+                $nombreEvenementsParCategorie[$categorieEvenement]++;
+            }
+        }
+        $categorie = $request->query->get('categorie');
+      
+        // Filtrer les produits par catégorie si une catégorie est sélectionnée
+        if ($categorie !== null) {
+            $evenements = array_filter($evenements, function ($evenement) use ($categorie) {
+                return $evenement->getCategorieevenement() === $categorie;
+            });
+        }
+
+
+
+
          // Récupérer le nombre de participants pour chaque événement
          $participantsCounts = [];
          foreach ($evenements as $evenement) {
              $participantsCounts[$evenement->getIdEvenement()] = $participationRepository->countByEvenement($evenement->getIdEvenement());
          }
+         
         // Retrieve the user from the session
         $user = $session->get('user');
         
@@ -279,6 +316,10 @@ public function deletePublication($id, PublicationRepository $publicationReposit
                 'form' => $form->createView(),
                 'participantsCounts' => $participantsCounts,
                 'user' => $user,
+                'nombreTotalEvenements' => $nombreTotalEvenements,
+                'nombreEvenementsParCategorie' => $nombreEvenementsParCategorie,
+
+
             ]);
         } else {
             // Handle the case where the user is not logged in
@@ -392,5 +433,9 @@ public function deletePublication($id, PublicationRepository $publicationReposit
    return $this->redirectToRoute('app_login');
 }
     }
+
+
+
+
 
 }

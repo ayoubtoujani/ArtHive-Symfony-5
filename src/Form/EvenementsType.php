@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use App\Form\DataTransformer\ImageToFileTransformer;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\Regex;
 
 
 
@@ -39,10 +41,9 @@ class EvenementsType extends AbstractType
                 'label' => 'Date de début de l\'événement',
                 'widget' => 'single_text',
                 'required' => true,
+                'data' => new \DateTime(),
                 'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez fournir une date de début d\'événement.'
-                    ]),
+                   
                     new GreaterThanOrEqual([
                         'value' => new \DateTime(), // La date actuelle
                         'message' => 'La date de début ne peut pas être antérieure à la date actuelle.',
@@ -52,17 +53,11 @@ class EvenementsType extends AbstractType
             ->add('dFinEvenement', DateTimeType::class, [ // Utilisez DateType au lieu de DateTimeType
                 'label' => 'Date de fin de l\'événement',
                 'widget' => 'single_text', // Utilisez 'single_text' pour afficher le champ en tant que champ texte simple
-                'constraints' => [
-                    new Assert\NotBlank([
-                        'message' => 'Veuillez fournir une date de début d\'événement.'
-                    ]),
-                    new GreaterThanOrEqual([
-                        'propertyPath' => '[dDebutEvenement]', // Utiliser le nom du champ directement
-                        'message' => 'La date de fin doit être postérieure ou égale à la date de début.',
-                    ]),
-                ],
+                
             ])
-            ->add('descriptionEvenement', TextType::class, [
+
+            
+            ->add('descriptionEvenement', TextareaType::class, [
                 'label' => 'Description de l\'événement'
             ])
             ->add('lieuEvenement', TextType::class, [
@@ -70,7 +65,7 @@ class EvenementsType extends AbstractType
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image associée à l\'événement',
-                'required' => true, // Champ requis basé sur une option
+                'required' => true, // Rendre le champ non requis
                 'constraints' => [
                     new Assert\File([
                         'maxSize' => '5M', // Limite la taille du fichier à 1 Mo
@@ -103,11 +98,8 @@ class EvenementsType extends AbstractType
                 ],
                 'required' => true, // Définir à true si la sélection est obligatoire
                 // Vous pouvez également spécifier d'autres options comme 'expanded' => true pour afficher les choix sous forme de boutons radio
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Créer l\'événement',
-                'attr' => ['class' => 'btn btn-primary']
             ]);
+          
            
             $builder->get('image')->addModelTransformer($this->transformer);
 

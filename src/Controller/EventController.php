@@ -27,6 +27,12 @@ use App\Repository\ParticipationsRepository;
 use App\Entity\Participation;
 use App\Form\EvenementsModificationType;
 use Twilio\Rest\Client;
+use Tattali\CalendarBundle\TattaliCalendarBundle;
+use Symfony\Component\Notifier\NotifierInterface;
+use Symfony\Component\Notifier\Notification\Notification;
+use MercurySeries\FlashyBundle\FlashyNotifier;
+use Knp\Component\Pager\PaginatorInterface;
+
 
 class EventController extends AbstractController
 {
@@ -34,12 +40,20 @@ class EventController extends AbstractController
      * @Route("/events", name="app_events")
      */
      
-     #[Route('/evenements', name: 'evenements_index')]
-     public function index( EvenementsRepository $evenementsRepository, ParticipationsRepository $participationRepository,Request $request,EntityManagerInterface $entityManager): Response
+     #[Route('/evenements', name: 'evenements_index', methods: ['GET', 'POST'])]
+     public function index( EvenementsRepository $evenementsRepository, ParticipationsRepository $participationRepository,Request $request,EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
      {
          $evenements = $this->getDoctrine()->getRepository(Evenements::class)->findAll();
- // Récupérer tous les événements de la semaine en utilisant la méthode de votre repository
- $eventsThisWeek = $evenementsRepository->findEventsThisWeek();         // Récupérer le nombre de participants pour chaque événement
+          // Récupérer la catégorie sélectionnée depuis la requête
+          $categorie = $request->query->get('categorie');
+           // Filtrer les produits par catégorie si une catégorie est sélectionnée
+           if ($categorie !== null) {
+            $evenements = array_filter($evenements, function ($evenement) use ($categorie) {
+                return $evenement->getCategorieevenement() === $categorie;
+            });
+        }
+        // Récupérer tous les événements de la semaine en utilisant la méthode de votre repository
+          $eventsThisWeek = $evenementsRepository->findEventsThisWeek();         // Récupérer le nombre de participants pour chaque événement
           $participantsCounts = [];
           foreach ($evenements as $evenement) {
               $participantsCounts[$evenement->getIdEvenement()] = $participationRepository->countByEvenement($evenement->getIdEvenement());
@@ -48,11 +62,23 @@ class EventController extends AbstractController
      $repository = $this->getDoctrine()->getRepository(Evenements::class);
  
      $evenements = $entityManager->getRepository(Evenements::class)->findBy([], ['dDebutEvenement' => 'DESC']);
+     $query = $this->getDoctrine()
+     ->getRepository(Evenements::class)
+     ->createQueryBuilder('e')
+     ->orderBy('e.dDebutEvenement', 'DESC') // Tri par date de début d'événement
+     ->getQuery();
+        // Paginer les résultats
+        $pagination = $paginator->paginate(
+            $query, // Requête à paginer
+            $request->query->getInt('page', 1), // Numéro de la page, récupéré depuis la requête GET
+            9 // Nombre d'éléments par page
+        );
      
  
          return $this->render('evenements/index.html.twig', [
             'eventsThisWeek' => $eventsThisWeek,
              'evenements' => $evenements,
+             'pagination' => $pagination,
              'participantsCounts' => $participantsCounts,
  
  
@@ -93,7 +119,7 @@ class EventController extends AbstractController
     }
 
     #[Route("/vos-evenements", name: "vos_evenements", methods: ['GET', 'POST'])]
-    public function vosEvenements(Request $request, EntityManagerInterface $entityManager, EvenementsRepository $evenementsRepository,SessionInterface $session): Response
+    public function vosEvenements(Request $request, EntityManagerInterface $entityManager, EvenementsRepository $evenementsRepository,SessionInterface $session, FlashyNotifier $flashy): Response
     {
         // Récupérer l'utilisateur connecté à partir du paramètre de requête
         $user = $session->get('user');
@@ -104,8 +130,10 @@ class EventController extends AbstractController
         $form = $this->createForm(EvenementsType::class, $evenement);
         // Gérer la soumission du formulaire
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
+        
             // Ajuster les données de l'événement si nécessaire (par exemple, lier l'utilisateur connecté)
             $userRepository = $this->getDoctrine()->getRepository(Users::class);
             $userFromDb = $userRepository->find($user->getIdUser());
@@ -130,12 +158,15 @@ class EventController extends AbstractController
 
         // Enregistrer le nom du fichier dans l'objet Evenements
         $evenement->setImage($newFilename);
+        
     }
             // Persister et flusher l'événement
             $entityManager->persist($evenement);
             $entityManager->flush();
-        
-            // Rediriger vers une route appropriée après la création de l'événement
+            //$this->addFlash('success', 'Votre évènement a été ajoutée avec succès !');
+            $session->getFlashBag()->add('success', 'Évènement ajoutée avec succès !');
+
+            $flashy->success('Event created!', 'http://your-awesome-link.com');
             // Par exemple, rediriger vers la page affichant les événements de l'utilisateur
             return $this->redirectToRoute('vos_evenements');
         }
@@ -172,8 +203,6 @@ class EventController extends AbstractController
         // Traiter la soumission du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
             // Enregistrer les modifications dans la base de données
-        
-
                 // Enregistrer à nouveau le produit avec l'image mise à jour
                 $entityManager->persist($evenement);
                 $entityManager->flush();            return $this->redirectToRoute('vos_evenements');
@@ -181,8 +210,6 @@ class EventController extends AbstractController
             }
 
             // Rediriger vers une page appropriée (par exemple, la liste des produits de l'utilisateur)
-        
-
         // Afficher le formulaire de modification pré-rempli
         return $this->render('evenements/editEvenement.html.twig', [
             'form' => $form->createView(),
@@ -194,25 +221,27 @@ class EventController extends AbstractController
     
 
 
-
-    
+ 
 
     #[Route('/evenements/{id}', name: 'evenements_delete', methods: ['POST'])]
-public function deleteEvent(Request $request, $id, EvenementsRepository $evenementsRepository, EntityManagerInterface $entityManager): Response
+public function deleteEvent(Request $request, $id, EvenementsRepository $evenementsRepository, EntityManagerInterface $entityManager,FlashyNotifier $flashy,SessionInterface $session): Response
 {
     // Charger l'événement correspondant depuis le repository
     $evenement = $evenementsRepository->find($id);
-
     // Vérifier si l'événement existe
     if (!$evenement) {
         return new JsonResponse(['error' => 'Événement non trouvé.'], 404);
     }
-
     // Supprimer l'événement de la base de données
     $entityManager->remove($evenement);
     $entityManager->flush();
+    $session->getFlashBag()->add('success', 'Évènement supprimé avec succès !'); //stocke les messages flash
+  // $this->addFlash('success', 'Événement supprimé avec succès !');
+   $flashy->success('Évènement supprimé avec succès !');
+  //$this->get('flashy.notifier')->success('Événement supprimé avec succès');
 
-    // Envoyer une réponse JSON pour indiquer que la suppression a réussi
+
+   // Envoyer une réponse JSON pour indiquer que la suppression a réussi
     return $this->redirectToRoute('vos_evenements', [], Response::HTTP_SEE_OTHER);
 }
 
@@ -295,7 +324,7 @@ if (!$user instanceof Users) {
             $entityManager->persist($participation); 
             $action = 'added';      
             // Envoie du SMS pour la première participation
-           /* $messageBody = "Vous avez participé à l'événement. Réservez la date : " . $event->getDDebutEvenement()->format('Y-m-d H:i');
+            $messageBody = "Vous avez participé à l'événement. Réservez la date : " . $event->getDDebutEvenement()->format('Y-m-d H:i');
             $twilioClient->messages->create(
                 '+21692978106', // Replace with the recipient's phone number
             [
@@ -303,7 +332,7 @@ if (!$user instanceof Users) {
                 'body' => $messageBody
             ]
 
-            );   */
+            );   
         }           
 
         $entityManager->flush();    
@@ -316,9 +345,10 @@ if (!$user instanceof Users) {
 
 
     #[Route('/evenement/search', name: 'app_evenement_search')]
-     public function search (Request $request): Response
+     public function search (Request $request,EvenementsRepository $evenementsRepository, PaginatorInterface $paginator): Response
     {
-        $searchTerm = $request->query->get('q');
+        $searchTerm = $request->query->get('q'); //paramètres de requête dans l'URL
+        $eventsThisWeek = $evenementsRepository->findEventsThisWeek();         // Récupérer le nombre de participants pour chaque événement
 
         $evenements = $this->getDoctrine()
             ->getRepository(Evenements::class)
@@ -327,14 +357,22 @@ if (!$user instanceof Users) {
             ->orwhere('p.categorieevenement LIKE :term')
             ->orwhere('p.lieuEvenement LIKE :term')
             ->setParameter('term', '%' . $searchTerm . '%')
+            ->orderBy('p.dDebutEvenement', 'DESC') // Tri par date de début d'événement
             ->getQuery()
             ->getResult();
+        // Paginer les résultats
+        $pagination = $paginator->paginate(
+            $evenements, // Requête à paginer
+            $request->query->getInt('page', 1), // Numéro de la page, récupéré depuis la requête GET
+            9 // Nombre d'éléments par page
+        );
 
         // Passer les produits filtrés au template Twig
         return $this->render('evenements/index.html.twig', [
             'evenements' => $evenements,
+            'pagination' => $pagination,
             'searchTerm' => $searchTerm,
-            
+            'eventsThisWeek' => $eventsThisWeek,
         ]);
     }
     #[Route("/eventsThisWeek", name:"events_this_week")]

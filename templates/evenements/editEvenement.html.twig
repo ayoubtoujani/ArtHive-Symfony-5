@@ -111,37 +111,78 @@
 .bouton-prod:hover {
     background-color: #1877f2;
 }
-
+.form-control.is-invalid {
+            border-color: #dc3545;
+            padding-right: calc(1.5em + .75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23dc3545'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(.375em + .1875rem) center;
+            background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+        }
+        .invalid-feedback {
+            display: block;
+            width: 100%;
+            margin-top: .25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
+       
 
     </style>
 {% endblock %}
 
 {% block content %}
 
-{{ form_start(form) }}
+
 
         <div class="formulaire" style="margin-left: 40px; font-size: 20px; background:#ffffffee; padding:60px; border-radius:20px; width: 90%;">
          <h1 style="text-align: center; margin-bottom: 20px; font-size: 40px; font-weight: bold; color: #4848ed;">Modifier évènement</h1>
          <div class="formulaire" style="margin-left: 70px">
-            {{ form_start(form) }}
-            <form  method="post" enctype="multipart/form-data">
+            <form  method="POST" enctype="multipart/form-data" novalidate>
+                  {{ form_start(form) }}
 
             <div class="image-preview-container">
-                <img id="imagePreview" src="{{ asset('images/evenement/' ~ evenement.image) }}" alt="Image Preview" style="max-width: auto; max-height: auto;">
-                {{ form_row(form.image, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Image associée à l\'événement', 'onchange': 'previewImage(this)'} }) }}
-            </div>                  
-             {{ form_row(form.titreEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Titre de l\'événement'} }) }}
-            {{ form_row(form.dDebutEvenement, { 'label': 'Date de début de l\'événement', 'attr': {'class': 'add-event-text-field datepicker'}, 'widget': 'single_text' }) }}
-            {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'add-event-text-field datepicker'}, 'widget': 'single_text' }) }}
-            {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Description de l\'événement'} }) }}
-            {{ form_row(form.lieuEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Lieu de l\'événement'} }) }}
-            {{ form_row(form.categorieevenement, { 'attr': {'class': 'custom-select', 'placeholder': 'Catégorie de l\'événement'} }) }}
-            {{ form_end(form) }}
+                <img id="imagePreview" src="{{ asset('images/evenement/' ~ evenement.getImage()) }}" alt="Image Preview" style="max-width: auto; max-height: auto;">
+            </div>
+
+            {{ form_row(form.titreEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.titreEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Titre de l\'événement'} }) }}
+                    {{ form_label(form.dDebutEvenement, 'Date de début de l\'événement') }}
+                    {{ form_widget(form.dDebutEvenement, { 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dDebutEvenement.vars.errors|length ? ' is-invalid' : '')} }) }}
+                    {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dFinEvenement.vars.errors|length ? ' is-invalid' : '')}, 'widget': 'single_text' }) }}
+                    {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.descriptionEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Description de l\'événement'} }) }}
+                    {{ form_row(form.lieuEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.lieuEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Lieu de l\'événement'} }) }}
+                    {{ form_row(form.categorieevenement, { 'attr': {'class': 'form-control custom-select' ~ (form.categorieevenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Catégorie de l\'événement'} }) }}
+                    
+            <div class="boutons-container" style="display: flex; margin-top: 20px;">
+                <button type="submit" class="bouton-prod">Modifier</button>
+                <a href="{{ path('vos_evenements') }}" class="bouton-prod" style="margin-left: 100px;  text-align: center;">Annuler</a>
+            </div>      {{ form_end(form) }}
+
             </form>
         </div>
       </div>  
 
  <script>
+    openModalBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        createEventModal.style.display = 'flex';
+        document.body.classList.add('blur');
+        const inputFile = document.getElementById('form_image');
+    const imagePreview = document.getElementById('image-preview');
+
+    inputFile.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+    });
+
  function previewImage(event) {
         var input = event.target;
         var reader = new FileReader();

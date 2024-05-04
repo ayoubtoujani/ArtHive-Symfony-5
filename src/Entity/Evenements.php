@@ -51,20 +51,20 @@ class Evenements
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="d_debut_evenement", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @Assert\NotBlank(message="La date de début doit étre non vide")
+     * @ORM\Column(name="d_debut_evenement", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
      */
     private $dDebutEvenement ;
 
     /**
      * @var \DateTime
      *
-        * @Assert\NotBlank(message="La date de fin de l'événement est requise")
+        * @Assert\NotBlank(message="La date de fin doit étre non vide")
      * @Assert\GreaterThanOrEqual(
      *     propertyPath="dDebutEvenement",
      *     message="La date de fin doit être postérieure ou égale à la date de début"
      * )
-     * @ORM\Column(name="d_fin_evenement", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="d_fin_evenement", type="datetime", nullable=true, options={"default"="CURRENT_TIMESTAMP"})
      */
     private $dFinEvenement ;
 
@@ -83,21 +83,24 @@ class Evenements
 
     /**
      * @var string
-     *
+           * @Assert\NotBlank(message="lieu  doit etre non vide")
+
      * @ORM\Column(name="lieu_evenement", type="text", length=0, nullable=false)
      */
     private $lieuEvenement;
 
     /**
      * @var string
-     *
+           * @Assert\NotBlank(message="image  doit etre non vide")
+
      * @ORM\Column(name="image", type="string", length=255, nullable=false)
      */
     private $image;
 
     /**
      * @var string
-     *
+           * @Assert\NotBlank(message="categorie  doit etre non vide")
+
      * @ORM\Column(name="categorieEvenement", type="string", length=0, nullable=false)
      */
     private $categorieevenement;
@@ -122,7 +125,7 @@ class Evenements
         return $this->titreEvenement;
     }
 
-    public function setTitreEvenement(string $titreEvenement): static
+    public function setTitreEvenement(string $titreEvenement = null): self
     {
         $this->titreEvenement = $titreEvenement;
 
@@ -134,7 +137,7 @@ class Evenements
         return $this->dDebutEvenement;
     }
 
-    public function setDDebutEvenement(\DateTimeInterface $dDebutEvenement): static
+    public function setDDebutEvenement(\DateTimeInterface $dDebutEvenement = null): self
     {
         $this->dDebutEvenement = $dDebutEvenement;
 
@@ -146,7 +149,7 @@ class Evenements
         return $this->dFinEvenement;
     }
 
-    public function setDFinEvenement(\DateTimeInterface $dFinEvenement): static
+    public function setDFinEvenement(\DateTimeInterface $dFinEvenement = null): self
     {
         $this->dFinEvenement = $dFinEvenement;
 
@@ -158,7 +161,7 @@ class Evenements
         return $this->descriptionEvenement;
     }
 
-    public function setDescriptionEvenement(string $descriptionEvenement): static
+    public function setDescriptionEvenement(string $descriptionEvenement = null): self
     {
         $this->descriptionEvenement = $descriptionEvenement;
 
@@ -248,4 +251,6 @@ public function getParticipantsCount(): int
         $currentDate = new DateTime();
         return $this->dFinEvenement < $currentDate;
     }
+
+    
 }

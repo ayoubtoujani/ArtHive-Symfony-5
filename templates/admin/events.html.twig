@@ -484,6 +484,28 @@
     background-position: 50rem;
   }
 }
+aside .sidebar{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-white);
+    box-shadow: var(--box-shadow);
+    border-radius: 15px;
+    height: 80vh;
+    width:200px;
+    position: fixed;
+    top: 9rem;
+    transition: all 0.3s ease;
+}
+
+.logo{
+    display:flex !important;
+    justify-content: center !important;
+    position: fixed;
+    width:200px;
+    margin-left: -25px;    
+    margin-bottom: 20px;  
+}
+
 
 body {
             background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
@@ -498,12 +520,138 @@ body {
             margin-bottom: 20px; /* Bottom spacing to separate from the following content */
             font-size: 50px; /* Larger font size */
         }
+        .analyse {
+    display: flex; /* Utilisation de flexbox pour la mise en page */
+    justify-content: space-between; /* Les éléments à l'intérieur s'étendent pour occuper tout l'espace disponible */
+    width: 100%; /* Le conteneur occupe toute la largeur de son conteneur parent */
+}
+.analyse > * {
+    padding: 10 20px; /* Ajoute un espace de 10 pixels à gauche et à droite de chaque élément à l'intérieur de .analyse */
+}
+        main .analyse{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+    main .analyse > div{
+        background-color: var(--color-white);
+        padding: var(--card-padding);
+        border-radius: var(--card-border-radius);
+        margin-top: 1rem;
+        box-shadow: var(--box-shadow);
+        cursor: pointer;
+        transition: all 0.1s ease;
+    }
+
+    main .analyse > div:hover{
+        box-shadow: none;
+    }
+
+    main .analyse > div .status{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    main .analyse h3{
+        margin-left: 0.6rem;
+        font-size: 1rem;
+    }
+
+    main .analyse .progresss{
+        position: relative;
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+    }
+
+    main .analyse svg{
+        width: 7rem;
+        height: 7rem;
+    }
+
+    main .analyse svg circle{
+        fill: none;
+        stroke-width: 10;
+        stroke-linecap: round;
+        transform: translate(5px, 5px);
+    }
+
+    main .analyse .sales svg circle{
+        stroke: var(--color-success);
+        stroke-dashoffset: -30;
+        stroke-dasharray: 200;
+    }
+
+    main .analyse .visits svg circle{
+        stroke: var(--color-danger);
+        stroke-dashoffset: -30;
+        stroke-dasharray: 200;
+    }
+
+    main .analyse .searches svg circle{
+        stroke: var(--color-primary);
+        stroke-dashoffset: -30;
+        stroke-dasharray: 200;
+    }
+
+    main .analyse .progresss .percentage{
+        position: absolute;
+        top: -3px;
+        left: -1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+    }
+  
+
     </style>
 {% endblock %}
 {% block content %}
-<main>
+<main style="margin-left: 80px;">
 <h1  style="display: flex; justify-content: center;">Admin évènements</h1>
 <a href="#" class="openModalBtn button">Créer évènement</a>
+<div style="display: flex; justify-content: space-between; margin-top: 10px;">
+    <div class="analyse" style="width: 45%;">
+        <!-- Contenu pour le nombre total des évènements -->
+        <div class="product" style="width: 90%;  height: 160px; ">
+            <div class="status">
+                <div class="info">
+                    <h3 style="text-align: center;">Nombre Total des évènements</h3>
+                    <h1 style="text-align: center;">{{ nombreTotalEvenements }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="analyse" style="width: 45%; margin-top: 5px;">
+        <!-- Contenu pour le nombre des évènements par catégorie -->
+        <div class="product" style="width: 100%;">
+            <div class="status">
+                <div class="info">
+                    <h3 style="text-align: center;">Nombre des évènements de chaque catégorie</h3>
+                    <div style="display: flex; justify-content: space-between; color: #3642dd; margin-left: 20px; ">
+                        <ul style="width: 50%;">
+                            {% for categorie, nombreEvenements in nombreEvenementsParCategorie|slice(1, 5) %}
+                                <li>{{ categorie }}: {{ nombreEvenements }}</li>
+                            {% endfor %}
+                        </ul>
+                        <ul style="width: 50%;">
+                            {% for categorie, nombreEvenements in nombreEvenementsParCategorie|slice(-5, 6) %}
+                                <li>{{ categorie }}: {{ nombreEvenements }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex;">
+
 <div class="event-container">
     {% for evenement in evenements %}
         <div class="event-item "  data-categorie="{{ evenement.categorieevenement }}" >

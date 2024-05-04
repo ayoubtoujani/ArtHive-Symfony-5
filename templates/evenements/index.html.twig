@@ -13,6 +13,9 @@
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('/styleFeed.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.css">
     
 
     <style>
@@ -165,17 +168,20 @@
 .Categorie {
     display: flex;
     align-items: center; /* Alignement vertical au centre */
+    
 }
 
 .Categorie a {
     margin-left: auto; /* Déplacez le lien "Vos événements" vers la droite */
     margin-right: 20px; /* Ajoutez une marge à droite pour l'écart entre les éléments */
+    
 }
 /* Style de base pour le sélecteur */
 .select-wrapper {
   position: relative;
   display: inline-block;
   width: 200px; /* ajustez selon vos besoins */
+  
 }
 
 .select-wrapper select {
@@ -296,6 +302,61 @@ h6 {
     padding-bottom: 5px; /* Espacement sous la bordure */
 }
 
+.event-category {
+    font-size: 12px; /* Taille de la police */
+    font-weight: bold; /* Texte en gras */
+    color: #5b5555; /* Couleur du texte */
+    margin-top: 1px; /* Marge supérieure */
+    margin-left: 10px; /* Espacement à gauche */
+    margin-bottom: 10px;
+
+}
+/* Pagination styles */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pagination-container a{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 50px;
+  color: #1d0fe6;
+  background:white; 
+  font-size:18px;
+  margin: 20px;
+}
+
+
+.pagination-container a:hover,
+.pagination-container a:focus,
+.pagination-container a:active,
+.pagination-container span.active {
+  background-color: #1d0fe6;
+  color: white;
+}
+.pagination-container a.current {
+  background-color: #1d0fe6;
+  color: white;
+}
+
+.pagination-container .current {
+  background-color: blue;
+  color: white;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 50px;
+   font-size:18px;
+  margin: 20px;
+}
+
 
 
     </style>
@@ -304,6 +365,7 @@ h6 {
 
 {% block content %}
     <h1  style="display: flex; justify-content: center;">Découvrir des évènements</h1>
+    
     <a href="{{ path('vos_evenements') }}"  class="vos-evenements-link">Vos événements</a>
     <div class="Categorie" style="margin-left: 20px;">
         <div class="select-wrapper">
@@ -340,6 +402,7 @@ h6 {
                     <span><i class="fa-solid fa-location-dot" style="color: #3642dd;"></i></span>
                     {{ event.lieuEvenement }}
                 </p>
+                <h3 class="event-category">Catégorie : {{ event.categorieevenement }}</h3>
                 <div class="voir-detail-container button-container">
                     <a href="#" class="voir-detail {% if event.isDatePassed %}disabled{% endif %}" data-evenement="{{ event.idEvenement }}">Voir détail</a>
                    
@@ -358,12 +421,13 @@ h6 {
 
         <h6>Tous les évènements</h6>
             <div class="event-container">
-                {% for evenement in evenements %}
+                {% for evenement in pagination %}
                     <div class="event-item {% if evenement.isDatePassed %}event-passed{% endif %}"  data-categorie="{{ evenement.categorieevenement }}" >
                         <img class="event-image  {% if evenement.isDatePassed %}disabled{% endif %}" src="{{ asset('images/evenement/' ~ evenement.image) }}" alt="Image de l'événement">
                         <h2 class="event-title">{{ evenement.titreEvenement }}</h2>
                         <p class="event-date"><span><i class="fa-regular fa-clock" style="color: #3642dd;"></i></span>  {{ evenement.dDebutEvenement|date('Y-m-d H:i') }} - {{ evenement.dFinEvenement|date('Y-m-d H:i') }}</p>
                         <p class="event-lieu"><span><i class="fa-solid fa-location-dot" style="color: #3642dd;"></i></span>  {{ evenement.lieuEvenement }}</p>
+                        <h3 class="event-category">Catégorie : {{ evenement.categorieevenement }}</h3>
                         <div class="voir-detail-container  button-container">
                             <a href="#" class="voir-detail  {% if evenement.isDatePassed %}disabled{% endif %}" data-evenement="{{ evenement.idEvenement }}">Voir détail</a>
                             <button class="participer-btn   {% if evenement.isDatePassed %}disabled{% endif %}" data-evenement="{{ evenement.getIdEvenement() }}">
@@ -375,8 +439,9 @@ h6 {
                         </div>
                     </div>
                 {% endfor %}
-                {% if evenements is empty %}
-                <img src="{{ asset('images/evenement/notfound.gif') }}" alt="Event Not Found" style="border-radius: 10px; width: 98%">
+                {% if evenements is empty %}      
+                <p>Aucune évènements trouvées</p>
+                <img src="{{ asset('images/evenement/ay.png') }}" alt="Event Not Found" style="border-radius: 10px; width: 20%">
                 {% endif %}
             </div>
 
@@ -391,7 +456,11 @@ h6 {
       <p id="modal-description" class="event-description">Description : </p>
     </div>
   </div>
-
+  {# Affichage des liens de pagination #}
+  <div class="pagination-container">
+    {{ knp_pagination_render(pagination) }}
+</div>
+  
   {% block javascripts %}
 {{ parent() }}
     <script src="{{ asset('js/VoirDetail.js') }}"></script>
@@ -407,7 +476,51 @@ h6 {
                 item.classList.add('disabled');
             }
         });
+
+        <!----------------------------------------- Filtrage Categorie ----------------------------------------------->
+        // Attendre que le contenu de la page soit chargé
+        document.addEventListener("DOMContentLoaded", function() {
+            // Récupérer le sélecteur de catégorie
+            const categorieSelect = document.getElementById('categorie');
+
+            // Ajouter un gestionnaire d'événements pour l'événement "change" du sélecteur de catégorie
+            categorieSelect.addEventListener('change', function() {
+                // Récupérer la valeur de la catégorie sélectionnée
+                const selectedCategory = this.value;
+
+                // Récupérer tous les éléments d'événement
+                const eventItems = document.querySelectorAll('.event-item');
+
+                // Parcourir tous les éléments d'événement
+                eventItems.forEach(item => {
+                    // Récupérer la catégorie de l'événement
+                    const eventCategory = item.getAttribute('data-categorie');
+
+                    // Vérifier si l'événement correspond à la catégorie sélectionnée ou si aucune catégorie n'est sélectionnée
+                    if (selectedCategory === '' || eventCategory === selectedCategory) {
+                        // Afficher l'événement
+                        item.style.display = 'block';
+                    } else {
+                        // Masquer l'événement
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
         </script>
+
+     <script>
+        // Ajoutez un gestionnaire d'événements au clic sur l'icône de calendrier
+        document.getElementById('calendar-icon').addEventListener('click', function(event) {
+            // Empêchez le comportement par défaut du lien
+            event.preventDefault();
+            
+            // Redirigez l'utilisateur vers la page du calendrier en utilisant le chemin de la route
+            window.location.href = "{{ path('calendar') }}"; // Assurez-vous d'utiliser le nom de votre route ici
+        });
+    </script>
+  
    
 {% endblock %}
 {% endblock %}
