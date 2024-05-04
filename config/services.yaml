@@ -6,10 +6,9 @@ parameters:
     twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
 
     images_directory: '%kernel.project_dir%/public/images/'
-    forbidden_words:
-        - badword1
-        - badword2
-        - badword3
+
+    profile_images_directory: '%kernel.project_dir%/public/images/profile_pictures'
+
 services:
     App\Entity\Evenements:
     App\Form\DataTransformer\ImageToFileTransformer:
@@ -34,9 +33,16 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-
      # Define the BadWordsService as a service
     App\Services\BadWordsService:
         # Inject the path to the JSON file containing bad words
         arguments:
             $badWordsFilePath: '%kernel.project_dir%/config/bad_words.json'
+
+    App\Controller\ForgotPasswordController:
+        arguments:
+            $mailApi: '@App\Services\MailApi'
+    App\Services\MailApi:
+        arguments:
+            $client: '@http_client'
+

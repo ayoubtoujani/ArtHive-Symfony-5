@@ -1,17 +1,72 @@
-{% extends 'admin/home.html.twig' %}
-{% block title %}
-    ArtHive | Users
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/styleAdmin.css') }}">
+    <title>Dashboard</title>
+</head>
 
-{% block stylesheets %}
-    {{ parent() }}
+<body>
+    <div class="container">
+        <aside>
 
-{% endblock %}
-{% block content %}
-    {# Your content for the posts page goes here #}
+            <div class="logo" style="height:15%">
+                <img src="{{ asset('images/arthive_black.png') }}">
+            </div>
 
-    <h1>this is the page of users</h1>
-    
+            <div class="sidebar">
+                <a href={{ path('app_admin_dashboard') }}>
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+
+                <a href="#" class="active">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Utilisateurs</h3>
+                </a>
+
+                <a href={{ path('app_admin_groups') }}>
+                    <span class="material-icons-sharp">
+                        groups
+                    </span>
+                    <h3>Groupes</h3>
+                </a>
+
+                <a href={{ path('app_admin_events') }}>
+                    <span class="material-icons-sharp">
+                        event
+                    </span>
+                    <h3>Evénements</h3>
+                </a>
+
+                <a href={{ path('app_admin_products') }}>
+                    <span class="material-icons-sharp">
+                        inventory_2
+                    </span>
+                    <h3>Produits</h3>
+                </a>
+
+                <a href={{ path('app_admin_reports') }}>
+                    <span class="material-icons-sharp">
+                        report_gmailerrorred
+                    </span>
+                    <h3>Reports</h3>
+                </a>
+
+                <a href="{{ path('app_login') }}">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+        <main>
             <div class="recent-orders" style="margin-top:100px">
                 <table>
                     <thead>
@@ -25,9 +80,37 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.nomUser }} {{ user.prenomUser }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.ville }}</td>
+                            <td>{{ user.dNaissanceUser|date('Y-m-d') }}</td>
+                            <td>{{ user.numTelUser }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <a href="{{ path('app_admin_user_edit', {'id': user.getIdUser()}) }}">
+                                    <span class="material-icons-sharp">
+                                        edit
+                                    </span>
+                                </a>
+                                <a href="{{ path('app_admin_user_delete', {'id': user.getIdUser()}) }}">
+                                    <span class="material-icons-sharp">
+                                        delete
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
-       
+        </main>
 
-{% endblock %}
-        
+
+
+    </div>
+
+    <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
+</body>

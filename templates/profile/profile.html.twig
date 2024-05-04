@@ -1,0 +1,63 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}
+    Profile | ArtHive
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+      <link rel="stylesheet" href="{{ asset('css/ProfilePage.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    {% endblock %}
+
+  {% block content %}
+            <body>
+                <div class="custom-container">
+                    <div class="custom-row mb-4">
+                        <div class="custom-col-2">
+                        </div>
+                        <div class="custom-col-10 custom-d-flex custom-justify-content-end">
+                            <a href="{{ path('app_profileEdit') }}">
+                                <button class="custom-btn custom-btn-primary custom-rounded-pill">
+                                    <strong>Modifier Profile</strong>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="custom-row mb-5">
+                        <div class="custom-col-2">
+                            <img class="custom-img-fluid" src="{{ asset('/images/profile_pictures/' ~ user.photo) }}" alt="Profile photo">
+                        </div>
+                        <div class="custom-col-10">
+                            <div class="custom-row mb-2">
+                                <div class="custom-col-12">
+                                    <h1>{{ user.nomUser }} {{ user.prenomUser }}</h1>
+                                </div>
+                            </div>
+                            <div class="custom-row">
+                                <div class="custom-col-4 custom-d-flex custom-align-items-center">
+                                    <span class="material-icons-sharp">location_on</span>
+                                    <h3 class="custom-ms-2">{{ user.ville }}</h3>
+                                </div>
+                                <div class="custom-col-4 custom-d-flex custom-align-items-center">
+                                    <span class="material-icons-sharp">cake</span>
+                                    <h3 class="custom-ms-2">{{ user.dNaissanceUser|date('Y-m-d')}}</h3>
+                                </div>
+                                <div class="custom-col-4 custom-d-flex custom-align-items-center">
+                                    <span class="material-icons-sharp">email</span>
+                                    <h3 class="custom-ms-2">{{ user.email }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="custom-row" style="margin-top: 20px;">
+                        <div class="custom-col-12">
+                            <p>{{ user.bio }}</p>
+                        </div>
+                    </div>    
+                </div>
+            </body>
+            {% endblock %}

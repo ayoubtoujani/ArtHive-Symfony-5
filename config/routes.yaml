@@ -8,6 +8,28 @@ app_login:
     path: /login
     controller: App\Controller\LoginController::login
 
+
+fcb_login:
+    path: /fcb-login
+    controller: App\Controller\LoginController::loginFb
+
+fcb_callback:
+    path: /fcb-callback
+    controller: App\Controller\LoginController::callbackFb
+
+app_profile:
+    path: /profile
+    controller: App\Controller\ProfileController::index
+
+app_profileEdit:
+    path: /profile/edit
+    controller: App\Controller\ProfileController::editProfile
+
+app_forgot_password:
+    path: /forgot-password
+    controller: App\Controller\ForgotPasswordController::forgotPassword
+
+
 app_admin_dashboard:
     path: /admin/dashboard
     controller: App\Controller\AdminController::index
@@ -20,6 +42,13 @@ app_admin_users:
 app_admin_posts:
     path: /admin/posts
     controller: App\Controller\AdminController::getAllPosts
+app_admin_user_edit:
+    path: /admin/user/edit/{id}
+    controller: App\Controller\AdminController::edit
+
+app_admin_user_delete:
+    path: /admin/user/delete/{id}
+    controller: App\Controller\AdminController::delete
 
 app_admin_groups:
     path: /admin/groups
@@ -35,4 +64,6 @@ app_admin_products:
 
 app_admin_reports:
     path: /admin/reports
+
     controller: App\Controller\AdminController::getAllReports
+
