@@ -45,7 +45,7 @@ class ProfileController extends AbstractController
                     $newFilename = uniqid().'.'.$file->guessExtension();
                     try {
                         $file->move(
-                            $this->getParameter('images_directory'),
+                            $this->getParameter('profile_images_directory'),
                             $newFilename
                         );
                     } catch (FileException $e) {

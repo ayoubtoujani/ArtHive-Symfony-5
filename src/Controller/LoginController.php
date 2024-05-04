@@ -171,7 +171,7 @@ class LoginController extends AbstractController
                 $photoData = file_get_contents($photo[0]);
                 if($photoData){
                     $fileName = uniqid() . '.jpg';
-                    $filePath = $this->getParameter('images_directory') . '/' . $fileName;
+                    $filePath = $this->getParameter('profile_images_directory') . '/' . $fileName;
                     if (file_put_contents($filePath, $photoData) === false) {
                         throw new \Exception('Error uploading file');
                     }
