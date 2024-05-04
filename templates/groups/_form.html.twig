@@ -46,8 +46,8 @@
 
 <button class="btn btn-primary" type="submit">Save</button>
 {{ form_end(form) }}
-<style>/* custom.css */
-
+<style>
+    /* custom.css */
     .custom-form {
         max-width: 400px;
         margin: auto;
@@ -76,11 +76,21 @@
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
 
+    .form-control:hover {
+        border-color: #80bdff; /* Change border color on hover */
+    }
+
     .invalid-feedback {
         display: block;
         width: 100%;
         margin-top: 0.25rem;
         font-size: 80%;
         color: #dc3545;
+    }
+
+    /* Hover effect for submit button */
+    .btn-primary:hover {
+        background-color: #007bff; /* Change background color on hover */
+        border-color: #007bff; /* Change border color on hover */
     }
 </style>

@@ -123,5 +123,46 @@ class GroupsController extends AbstractController
         return $this->redirectToRoute('app_groups_index', [], Response::HTTP_SEE_OTHER);
     }
 
+//    #[Route('/group/search-results', name: 'app_group_search_results')]
+//    public function searchResults(Request $request): Response
+//    {
+//        $searchTerm = $request->query->get('q');
+//
+//        $groups = $this->getDoctrine()
+//            ->getRepository(Groups::class)
+//            ->createQueryBuilder('g')
+//            ->where('g.nomGroup LIKE :term')
+//            ->orWhere('g.descriptionGroup LIKE :term')
+//            ->setParameter('term', '%' . $searchTerm . '%')
+//            ->getQuery()
+//            ->getResult();
+//
+//        return $this->render('groups/search_results.html.twig', [
+//            'groups' => $groups,
+//            'searchTerm' => $searchTerm,
+//        ]);
+//    }
 
+    #[Route('/group/search', name: 'app_group_search')]
+    public function search(Request $request): Response
+    {
+        $searchTerm = $request->query->get('q');
+        $searchBy = $request->query->get('search_by');
+
+        $queryBuilder = $this->getDoctrine()->getRepository(Groups::class)->createQueryBuilder('g');
+
+        if ($searchBy === 'name') {
+            $queryBuilder->where('g.nomGroup LIKE :term')->setParameter('term', '%' . $searchTerm . '%');
+        } elseif ($searchBy === 'description') {
+            $queryBuilder->where('g.descriptionGroup LIKE :term')->setParameter('term', '%' . $searchTerm . '%');
+        }
+
+        $groups = $queryBuilder->getQuery()->getResult();
+
+        return $this->render('groups/index.html.twig', [
+            'groups' => $groups,
+            'searchTerm' => $searchTerm,
+            'searchBy' => $searchBy,
+        ]);
+    }
 }

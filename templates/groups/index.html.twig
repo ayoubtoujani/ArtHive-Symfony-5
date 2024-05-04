@@ -6,7 +6,18 @@
 {% endblock %}
 
 {% block search_bar %}
-
+{#    <form action="{{ path('app_group_search_results') }}" method="GET" class="search-bar">#}
+{#        <input type="search" name="q" placeholder="Search groups">#}
+{#        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>#}
+{#    </form>#}
+    <form action="{{ path('app_group_search') }}" method="GET" class="search-bar">
+        <input type="search" name="q" placeholder="Search...">
+        <select name="search_by">
+            <option value="name">Recherche par Nom</option>
+            <option value="description">Recherche par Description</option>
+        </select>
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+    </form>
 {% endblock %}
 
 
@@ -53,6 +64,7 @@
             font-weight: bold;
             color: #1877f2;
             margin-bottom: 5px;
+
         }
 
         .group-description {
@@ -82,8 +94,11 @@
                     <h2 class="group-name">{{ group.getNomGroup() }}</h2>
                     <p class="group-description">{{ group.getDescriptionGroup() }}</p>
                     <a href="{{ path('app_groups_show', {'idGroup': group.idGroup}) }}">Show</a>
+                    <br>
                     <a href="{{ path('app_groups_edit', {'idGroup': group.idGroup}) }}">Edit</a>
-                    <a href="{{ path('app_reclamationgroupe_newback', {'groupId': group.idGroup}) }}">Add Reclamation</a> {# Add this link #}
+                    <br>
+                    <a href="{{ path('app_reclamationgroupe_newback', {'groupId': group.idGroup}) }}" >Add Reclamation</a> {# Add this link #}
+                    <br>
                     <a href="{{ path('app_groups_reclamations', {'idGroup': group.idGroup}) }}" class="btn btn-info">View Reclamations</a>
 
                 </div>

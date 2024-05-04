@@ -43,10 +43,10 @@
                 </a>
                 <!.................................SIDEBAR.....................................>
                 <div class="sidebar">
-                <a class="menu-item " id="home" href="{{path('afficher_publications')}}" >
+                <a class="menu-item " id="home"  >
                         <span><i class="fa-solid fa-house"></i></span><h3>Home</h3>
                     </a>
-                    <a class="menu-item " href="{{ path('my_publications') }}" id="profile">
+                    <a class="menu-item " id="profile">
     <span><i class="fa-solid fa-user"></i></span><h3>Profile</h3>
 </a>
                     <a class="menu-item" id="groups" >
@@ -65,7 +65,7 @@
                 <!.................END OF SIDEBAR............>
                 {% block create %}
                 <label id="create-post-button" for="create-post" class="btn btn-primary"><i class="fa-solid fa-circle-plus"></i> 
-                    Créer55</label>
+                    Créer</label>
                 {% endblock %}
 
             </div>
@@ -114,5 +114,6 @@
             }    
         });
     </script>
+
 </body>
 </html>

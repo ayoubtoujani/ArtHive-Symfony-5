@@ -3,9 +3,88 @@
 {% block title %}New Reclamationgroupe{% endblock %}
 
 {% block content %}
-    <h1>Create new Reclamationgroupe</h1>
+    <div class="page-container">
+        <h1>Create new Reclamationgroupe</h1>
 
-    {{ include('reclamationgroupe/_form.html.twig') }}
+        <div class="form-container">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_widget(form) }}
+            <button class="btn">{{ button_label|default('Save') }}</button>
+            {{ form_end(form) }}
+        </div>
 
-    <a href="{{ path('app_groups_index') }}">back to list</a>
+        <a href="{{ path('app_groups_index') }}" class="back-link">back to list</a>
+    </div>
 {% endblock %}
+{% block stylesheets %}
+    <style>
+    /* Form styles */
+    .form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    }
+
+    .form-label {
+    font-weight: bold;
+    }
+
+    .form-control {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    .is-invalid {
+    border-color: #dc3545;
+    }
+
+    .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+    background-color: #0056b3;
+    }
+
+    /* Page styles */
+    .page-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    }
+
+    h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    }
+
+    .back-link {
+    display: block;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+    }
+
+    .back-link:hover {
+    text-decoration: underline;
+    }
+</style>
+{% endblock %}
+

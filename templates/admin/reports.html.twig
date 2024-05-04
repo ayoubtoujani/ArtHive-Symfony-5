@@ -5,9 +5,57 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <style>
+        /* Custom CSS styles for the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+        }
+        th, td {
+            border: none; /* Remove border */
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f8f9fa; /* Light gray background */
+            font-weight: bold;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa; /* Light gray background for even rows */
+        }
+        tr:hover {
+            background-color: #f0f0f0; /* Lighter background color on hover */
+        }
+    </style>
 {% endblock %}
-{% block content %}
-    {# Your content for the posts page goes here #}
 
-    <h1>this is the page of Reports</h1>
+{% block content %}
+    <h1>Reports</h1>
+    <a href="{{ path('generate_pdf') }}" >Generate PDF</a> {# Ajouter le bouton #}
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Group ID</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for report in reports %}
+            <tr>
+                <td>{{ report.idReclamation }}</td>
+                <td>{{ report.group.getNomGroup() }}</td>
+                <td>{{ report.descReclamation }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">No reports found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

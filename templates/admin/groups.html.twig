@@ -6,7 +6,23 @@
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
+
+
+{% block groupe_number %}
+    <div class="visits">
+        <div class="status">
+            <div class="info">
+                <h3>Groupes</h3>
+                <h1 style="color: #1844f1">{{ numberOfGroups }}</h1>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
 {% block content %}
+
+
 
     <h1>Groups index</h1>
 
@@ -42,7 +58,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">No records found</td>
+                <td colspan="5">No group found</td>
             </tr>
         {% endfor %}
         </tbody>
