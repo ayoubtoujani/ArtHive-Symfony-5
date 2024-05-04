@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Form\EditUserFormType;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,22 +51,6 @@ class AdminController extends AbstractController
 
     
            
-    }
-    #[Route('/admin/users', name: 'app_admin_users', methods:['GET'])]
-    public function getAllUsers(SessionInterface $session): Response
-    {
-        // Retrieve the user from the session
-        $user = $session->get('user');
-
-        // Check if a user is logged in
-        if ($user instanceof Users) {
-    return $this->render('admin/users.html.twig', [
-        'controller_name' => 'AdminController',
-        'user' => $user,
-    ]);
- } else {
-    return $this->redirectToRoute('app_login');
- }
     }
     
 
@@ -262,21 +248,7 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 
 
 
-    #[Route('/admin/groups', name: 'app_admin_users', methods:['GET'])]
-    public function getAllGroups()
-    {
-        return $this->render('admin/groups.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
-    return $this->render('admin/groups.html.twig', [
-        'controller_name' => 'AdminController',
-        'user' => $user,
-    ]);
-} else {
-    return $this->redirectToRoute('app_login');
-}
-}
-    }
+
 
 
     #[Route('/admin/events', name: 'app_admin_users', methods:['GET'])]
@@ -331,27 +303,5 @@ public function deletePublication($id, PublicationRepository $publicationReposit
        }
     }
 
-    public function getAllEvents()
-    {
-        return $this->render('admin/events.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
-    }
-
-    #[Route('/admin/produits', name: 'app_admin_users', methods:['GET'])]
-    public function getAllProducts()
-    {
-        return $this->render('admin/products.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
-    }
-
-    #[Route('/admin/reports', name: 'app_admin_users', methods:['GET'])]
-    public function getAllReports()
-    {
-        return $this->render('admin/reports.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
-    }
 
 }
