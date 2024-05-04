@@ -31,7 +31,10 @@ class PublicationRepository extends ServiceEntityRepository
     public function searchPublicationsByTerm($searchTerm)
     {
         return $this->createQueryBuilder('p')
+        ->leftJoin('p.user', 'u')
             ->where('p.contenuPublication LIKE :term')
+            ->orWhere('u.nomUser LIKE :term')
+            ->orWhere('u.prenomUser LIKE :term')
             ->setParameter('term', '%' . $searchTerm . '%')
             ->getQuery()
             ->getResult();

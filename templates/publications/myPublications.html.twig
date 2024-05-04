@@ -219,6 +219,24 @@ body {
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+
+        .btn{
+    display: inline-block;
+    padding: var(--btn-padding);
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 300ms ease;
+    font-size: 0.9rem;
+    text-align: center;
+}
+.btn:hover {
+    opacity: 0.8;
+}
+.btn-primary{
+    background: var(--color-primary);
+    color: white;
+}
     </style>
 {% endblock %}
 
@@ -226,7 +244,7 @@ body {
 
     <h1>My Posts</h1>
 
-    <a id="seeallfav" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('app_posts_favorites') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >see all fav</a>
+ <a id="seeallfav" class="btn btn-primary"  href="{{ path('app_posts_favorites') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >List Favorites</a>
 
     <div class="publication-container">
         {% for publication in publications %}
@@ -236,7 +254,7 @@ body {
              <div class="dropdown">
      
 <a id="updatePost" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('update_post', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Update</a>
- <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('delete_publication', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Delete</a>
+ <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px; color: red;" href="{{ path('delete_publication', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Delete</a>
   
 </div>
                 <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">

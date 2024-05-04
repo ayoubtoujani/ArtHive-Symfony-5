@@ -27,7 +27,12 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class RegisterFormType extends AbstractType
 {
-   
+    private $countryApi;
+
+    public function __construct(CountryApi $countryApi)
+    {
+        $this->countryApi = $countryApi;
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -56,6 +61,7 @@ class RegisterFormType extends AbstractType
             'constraints' => [
                 new NotBlank(['message' => 'Please enter your email.']),
                 new Email(['message' => 'The email "{{ value }}" is not a valid email.']),
+                new UniqueEmail(),
             ],
         ])
 
@@ -84,7 +90,12 @@ class RegisterFormType extends AbstractType
             ],
         ])
 
-   
+        ->add('ville', ChoiceType::class, [
+            'choices' => $this->getCountryChoices(),
+            'constraints' => [
+                new NotBlank(['message' => 'Please select your country.']),
+            ],
+        ])
 
         ->add('numTelUser', TelType::class, [
             'constraints' => [
@@ -113,5 +124,15 @@ class RegisterFormType extends AbstractType
         ]);
     }
 
-   
+    private function getCountryChoices(): array
+    {
+        $countries =  $this->countryApi->getCountries();
+
+        $choices = ['Countries' => ''];
+        foreach ($countries as $country) {
+            $choices[$country] = $country;
+        }
+        asort($choices);
+        return $choices;
+    }
 }

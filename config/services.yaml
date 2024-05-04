@@ -30,6 +30,13 @@ services:
             - '../src/Kernel.php'
     App\Services\CountryApi:
         arguments:
-            $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
+             $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+     # Define the BadWordsService as a service
+    App\Services\BadWordsService:
+        # Inject the path to the JSON file containing bad words
+        arguments:
+            $badWordsFilePath: '%kernel.project_dir%/config/bad_words.json'

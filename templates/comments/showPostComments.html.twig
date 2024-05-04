@@ -17,9 +17,8 @@
         }
 
         .post-image {
-    flex: 0 0 auto;
-    width: 60%;
-    max-width: 60%;
+    flex: 0 0 80%; /* Adjust width to 80% */
+    max-width: 80%; /* Adjust max-width to 80% */
     margin-top: 4rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow to post image */
 }
@@ -206,6 +205,10 @@
     border: none;
     border-radius: 15px;
     font-weight: 1000;
+    width: 200px;
+    max-width: 200px;
+    height: 90px;
+    
 }
 
 .save-button span {
@@ -253,6 +256,10 @@
   border-radius: 10px;
   box-shadow: rgba(46, 46, 46, 0.2) 0px 8px 24px;
   color: rgb(255, 255, 255);
+  width: 200px;
+    max-width: 200px;
+    height: 80px;
+
 }
 
 #favorite {
@@ -333,14 +340,57 @@ body {
     font-size: 14px;
 
 }
+.fb-share-button {
+    background-color: #3b5998;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    width: 200px;
+    max-width: 200px;
+    height: 60px;
+    padding-bottom: 10px;
+}
 
+.button-container {
+    display: block; /* Display the container as a block */
+    margin-top: 20px; /* Add some spacing if needed */
+    padding-left: 50px; /* Add padding to the left */
+    padding-bottom: 50px; /* Add padding to the right */
+}
 
+.button-container button,
+.button-container label,
+.button-container a {
+    display: block; /* Display buttons as blocks */
+    margin-bottom: 10px; /* Add spacing between buttons */
+}
+.cancel-button {
+   
+      display: inline-block;
+            padding: 0.6rem 2rem;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 300ms ease;
+            font-size: 0.9rem;
+            text-align: center;
+           
+ background-color: #dc3545;
+             color: white; /* Text color */
+            border: none; /* Remove border */
+            width: 100px;
+    max-width: 100px;
+        
+}
     </style>
 {% endblock %}
 
 {% block content %}
  <!-- background image for this twig page  -->
-    
+   
 <form action="{{ path('show_comments', { 'id': publication.idPublication }) }}" method="post" enctype="multipart/form-data" novalidate>
     <div class="post-container">
         <!-- User's Information -->
@@ -356,6 +406,14 @@ body {
     <div class="post-image-container">
         <!-- Post Image -->
         <img src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Post Image" class="post-image" style="background-color: white; padding: 20px; border-radius: 10px;">
+    <div class="button-container">
+     <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v19.0&appId=1848760258882344" nonce="DWEjm15c"></script>
+
+<div class="fb-share-button" data-href="" data-layout="" data-size="">
+    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A8000%2FshowComments%2F204&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Partager</a>
+</div>
+        
         <!-- Save Button -->
         <button class="save-button" type="button" id="save-post-image">
             <div class="svg-wrapper-1">
@@ -375,6 +433,7 @@ body {
   type="checkbox"
 />
 <label class="fav" for="favorite">
+  <a href="{{ path('add_to_favorites', {'id': publication.idPublication}) }}" >
   <svg
     class="feather feather-heart"
     stroke-linejoin="round"
@@ -391,15 +450,17 @@ body {
       d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
     ></path>
   </svg>
+  </a>
   <div class="action">
-    <span class="option-1">Add to Favorites</span>
-    <span class="option-2">Added to Favorites</span>
+   
+    <span class="option-2">Add to Favorites</span>
   </div>
 </label>
-      <a href="{{ path('add_to_favorites', {'id': publication.idPublication}) }}" >Add to Favorites</a>
+      
 
     </div>
-
+    </div>
+    
 </div>
     <div class="comment-section">
         <div class="comment">
@@ -505,6 +566,11 @@ body {
 </form>
 
  <script>
+ // Get the current page URL
+    var currentUrl = window.location.href;
+
+    // Set the data-href attribute of the share button to the current URL
+    document.querySelector('.fb-share-button').setAttribute('data-href', currentUrl);
  document.addEventListener("DOMContentLoaded", function () {
     const likeButtons = document.querySelectorAll('.btn-like-comment');
          const postImageUrl = "{{ asset('images/' ~ publication.getUrlFile()) }}";

@@ -15,9 +15,12 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Reactions;
-use Symfony\Component\Notifier\Notification\Notification;
-use Symfony\Component\Notifier\Recipient\Recipient;
 use Symfony\Component\Notifier\NotifierInterface;
+use Knp\Component\Pager\PaginatorInterface;
+
+
+
+
 
 
 
@@ -25,7 +28,7 @@ use Symfony\Component\Notifier\NotifierInterface;
 class PublicationsController extends AbstractController
 {
     #[Route('/publications', name: 'afficher_publications', methods: ['GET', 'POST'])]
-    public function add(Request $request, PublicationRepository $publicationRepository, SessionInterface $session): Response
+    public function add(Request $request, PublicationRepository $publicationRepository, SessionInterface $session,PaginatorInterface $paginator): Response
     {
         
         // Retrieve the user from the session
@@ -78,22 +81,39 @@ class PublicationsController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($publication);
                 $entityManager->flush();
+                $this->addFlash('success', 'Publication added successfully.');
 
                 // Redirect to the index page or any other page as needed
                 return $this->redirectToRoute('afficher_publications');
             }
 
-            // Fetch existing publications and order them by date of creation
+            // Récupérer le terme de recherche depuis la requête
+        $searchTerm = $request->query->get('q');
+
+        if($searchTerm){
+            // Récupérer les produits correspondant au terme de recherche depuis la base de données
+            $publications = $publicationRepository->searchPublicationsByTerm($searchTerm);
+        } else {
+              // Fetch existing publications and order them by date of creation
             $publications = $publicationRepository->findBy([], ['dCreationPublication' => 'DESC']);
+        }
+            // Paginate the results of the query
+            $publications = $paginator->paginate(
+                $publications, // Query results
+                $request->query->getInt('page', 1), // Page number
+                6 // Limit per page
+            );
             
             // Fetch liked publications by the user
             $likedPublicationIds = $publicationRepository->findLikedPublicationIdsByUser($user);
 
+           
             return $this->render('publications/afficherPublications.html.twig', [
                 'publications' => $publications,
                 'form' => $form->createView(),
                 'user' => $user,
                 'likedPublicationIds' => $likedPublicationIds,
+                'searchTerm' => $searchTerm,
             ]);
         } else {
             // Handle the case where the user is not logged in
@@ -173,7 +193,7 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     ]);
 }
 #[Route('/publications/search', name: 'app_posts_search')]
-     public function search(Request $request,PublicationRepository $publicationRepository,SessionInterface $sessionInterface): Response
+     public function search(Request $request,PublicationRepository $publicationRepository,SessionInterface $sessionInterface,PaginatorInterface $paginator): Response
     {
 
         //get the user from the session
@@ -188,6 +208,14 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
 
         // Récupérer les produits correspondant au terme de recherche depuis la base de données
         $publications =$publicationRepository->searchPublicationsByTerm($searchTerm);
+
+        // Paginate the results of the query
+        
+        $publications = $paginator->paginate(
+            $publications, // Query results
+            $request->query->getInt('page', 1), // Page number
+            6 // Limit per page
+        );
   
 
 
@@ -206,7 +234,7 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
     }
    
     #[Route('/add-like/{id}', name: 'add_like')]
-    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session, Request $request, NotifierInterface $notifier): RedirectResponse
+    public function addLike($id, EntityManagerInterface $entityManager, PublicationRepository $publicationRepository, SessionInterface $session, Request $request): RedirectResponse
     {
         // Get the logged-in user from the session
         $user = $session->get('user');
@@ -231,14 +259,6 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
                 // Save the reaction to the database
                 $entityManager->persist($reaction);
                 $entityManager->flush();
-              /*  // Create a notification
-                $notification = new Notification('You have liked a publication', ['browser']);
-                $recipient = new Recipient($findUser->getEmail());
-                // Send the notification
-                $notifier->send($notification, $recipient);
-                */
-
-
             }
             else {
                 // Handle the case where the user has already liked the publication remove the like
@@ -273,11 +293,8 @@ public function updatePost($id , Request $request, EntityManagerInterface $entit
             
             // Save the updated publication to the database
             $entityManager->flush();
-        } else {
-            // Handle the case where the user is not logged in
-            return $this->redirectToRoute('app_login');
+            $this->addFlash('success', 'Publication added to favorites successfully.');
         }
-        
         // stay in the same page
         $referer = $request->headers->get('referer');
         return $this->redirect($referer); 
