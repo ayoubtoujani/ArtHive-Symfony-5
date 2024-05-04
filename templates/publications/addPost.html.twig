@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publication | ArtHive</title>
+    <style>
+        /* Add your styles here */
+        .add-post-container {
+            width: 80%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            center: 0;
+        }
+
+        .add-post-content {
+            width: 100%;
+            height: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-page-text-field {
+            width: calc(100% - 40px);
+            height: 100px;
+            margin-bottom: 20px;
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .upload-button,
+        .create-post-button,
+        .cancel-button,
+        .delete-button {
+            width: 100%;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .image-preview-container {
+            margin-bottom: 20px;
+        }
+
+        .image-preview-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+        
+    </style>
+</head>
+<body>
+  
+
+    <div class="add-post-container" style="border-radius: 10px;" position: center;>
+        <div class="add-post-content" background-color: #f9f9f9; style="border-radius: 10px;">
+            <h1 style="text-align: center; font-size: 26px; font-weight: bold;">Ajouter une Nouvelle Publication</h1>
+            
+<form method="post" action="{{ path('afficher_publications') }}" enctype="multipart/form-data" novalidate>
+                {{ form_start(form) }}
+                
+                <div>
+                    {{ form_label(form.contenuPublication) }}
+                    {{ form_widget(form.contenuPublication, {'attr': {'class': 'add-page-text-field'}}) }}
+                 <div class="error">
+                    {{ form_errors(form.contenuPublication, {'attr': {'class': 'error'}}) }}
+                    </div>
+                </div>
+
+                <div>
+                    {{ form_label(form.urlFile) }}
+                    {{ form_widget(form.urlFile, {'attr': {'id': 'file'}}) }}
+                    <div class="error">
+                    {{ form_errors(form.urlFile, {'attr': {'class': 'error'}}) }}
+                    </div>
+                </div>
+
+             
+                <div class="image-preview-container"></div>
+
+
+                
+                <div>
+                    <button type="submit" class="create-post-button" style="background-color: #4848ed; color: #fff; width: 50%;">Publier</button>
+                    <button id="deleteImage" class="delete-button" style=" width: 50%;">Supprimer l'image</button>
+                    <div>
+                        <a href="{{ path('afficher_publications') }}" id="cancelButton" class="cancel-button" style="background-color: #f00; color: #fff;">Annuler</a>
+                    </div>
+                </div>
+                
+                {{ form_end(form) }}
+            </form>
+    
+            
+        </div>
+    </div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('form').addEventListener('change', function(event) {
+            if (event.target && event.target.matches('input[type="file"]')) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.querySelector('.image-preview-container');
+                    preview.innerHTML = ''; // Clear previous preview
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('preview-image');
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        document.getElementById('deleteImage').addEventListener('click', function() {
+            document.querySelector('input[type="file"]').value = ''; // Clear the file input
+            const preview = document.querySelector('.image-preview-container');
+            preview.innerHTML = ''; // Clear the preview
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function(event) {
+            const confirmed = confirm("Are you sure you want to cancel adding the post?");
+            if (!confirmed) {
+                event.preventDefault(); // Prevent the default action (canceling)
+            }
+        });
+    });
+    
+</script>
+
+
+</body>
+</html>

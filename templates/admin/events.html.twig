@@ -1,0 +1,683 @@
+{% extends 'admin/home.html.twig' %}
+{% block title %}
+    ArtHive | Events
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Styles pour la liste des événements */
+        .event-container {
+            display: flex;
+           flex-wrap: wrap;
+            justify-content: space-between; /* Répartir les événements sur la ligne */
+            margin-top: 20px;
+             padding: 20px;
+        }
+
+        .event-item {
+            flex-basis: calc(33.33% - 20px); /* Limiter chaque événement à un tiers de la largeur de la ligne */
+            margin-bottom: 20px; /* Espacement entre les événements */
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column; /* Afficher les éléments en colonne */
+        }
+
+        .event-item:hover {
+            box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
+            scale: 1.1;
+            transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .event-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1877f2;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+
+        .event-date {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+
+        .event-lieu {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        .event-image {
+            width: 100%;
+            height: 200px; /* Définir une hauteur fixe pour chaque image */
+            object-fit: cover; /* S'assurer que l'image couvre complètement sa zone */
+            border-radius: 8px 8px 0 0;
+        }
+
+      /* Styles pour la boîte modale */
+      .modal {
+    display: none; /* Masquer la boîte modale par défaut */
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); /* Centrer précisément */
+    width: 100%;
+    height: auto;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center; /* Alignement horizontal au centre */
+    align-items: center; /* Alignement vertical au centre */
+      }
+
+
+          /* Styles pour la boîte modale */
+    .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Marge automatique en haut et en bas et 15% sur les côtés */
+    padding: 20px; /* Ajouter un peu d'espace intérieur */
+    border: 1px solid #888;
+    width: 50%; /* Réduire la largeur de la modale */
+    max-width: 500px; /* Limiter la largeur maximale de la modale */
+    max-height: 70%; /* Limiter la hauteur maximale de la modale */
+    overflow-y: auto; /* Ajouter une barre de défilement vertical si nécessaire */
+    border-radius: 8px; /* Arrondir les coins */
+   }
+
+    /* Ajoutez des styles supplémentaires pour les éléments à l'intérieur de la modale si nécessaire */
+   .modal-content img {
+    max-width: 100%; /* Limiter la largeur maximale de l'image à 100% de la taille de son conteneur */
+    height: auto; /* Maintenir le rapport hauteur-largeur de l'image */
+    border-radius: 8px 8px 0 0; /* Arrondir les coins supérieurs */
+    object-fit: cover; /* S'assurer que l'image couvre complètement sa zone */
+   }
+
+
+    .modal-image {
+    width: 100%; /* Occupe toute la largeur de la modale */
+    max-height: 400px; /* Limite la hauteur maximale de l'image */
+    height: auto; /* Hauteur automatique pour conserver les proportions de l'image */
+    border-radius: 8px 8px 0 0; /* Arrondi les coins supérieurs */
+    object-fit: cover; /* S'assurer que l'image couvre complètement sa zone */
+    }
+
+    .close {
+     color: #aaa;
+     float: right;
+    font-size: 28px;
+    font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .voir-detail {
+    display: inline-block;
+    padding: 8px 8px;
+    color: #555; /* Couleur du texte */
+    text-decoration: none;
+    border-radius: 5px; /* Coins arrondis */
+    transition: color 0.3s ease, border-color 0.3s ease; /* Transition pour la couleur du texte et de la bordure */
+    }
+    .voir-detail:hover {
+    color: #0e5aa7; /* Couleur du texte au survol */
+    border-color: #0e5aa7; /* Couleur de la bordure au survol */
+    border-width: 0.5px; /* Réduire la largeur de la bordure au survol */
+    }
+    .voir-detail-container {
+    margin-top: auto; /* Place le lien à la fin de l'élément */
+    white-space: nowrap; /* Empêcher le saut de ligne */
+    }
+
+
+
+   .Categorie {
+    display: flex;
+    align-items: center; /* Alignement vertical au centre */
+   }
+
+   .Categorie a {
+    margin-left: auto; /* Déplacez le lien "Vos événements" vers la droite */
+    margin-right: 20px; /* Ajoutez une marge à droite pour l'écart entre les éléments */
+   }
+   /* Style de base pour le sélecteur */
+  .select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 200px; /* ajustez selon vos besoins */
+  }
+
+  .select-wrapper select {
+  width: 100%;
+  padding: 8px 16px;
+  font-size: 16px;
+  border: 1px solid #1a03eb;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fff;
+  cursor: pointer;
+  }
+
+/* Flèche personnalisée */
+  .select-wrapper::after {
+  content: '\25BC'; /* flèche vers le bas */
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  }
+
+/* Style lorsque survolé */
+.select-wrapper:hover select {
+  border-color: #420cf4;
+}
+
+/* Style lorsque sélectionné */
+.select-wrapper select:focus {
+  outline: none;
+  border-color: #3b09ec;
+}
+
+/* Style des options */
+.select-wrapper select option {
+  background-color: #ffffff;
+}
+
+/* Style des options survolées */
+.select-wrapper select option:hover {
+  background-color: #650de9;
+}
+.participants-count {
+            font-size: 14px;
+            color: #9eafc5;
+    vertical-align: middle; /* Alignement vertical au centre */
+    margin-right: 10px; /* Marge à droite pour séparer les éléments */
+ }
+/* Styles pour le bouton "Créer événement" */
+.openModalBtn {
+    background-color: #1877f2; /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    padding: 10px 20px; /* Espacement interne */
+    border: none; /* Suppression de la bordure */
+    border-radius: 8px; /* Coins arrondis */
+    font-size: 16px; /* Taille de la police */
+    cursor: pointer; /* Curseur au survol */
+    transition: background-color 0.3s ease; /* Animation de transition */
+    appearance: none; /* Réinitialiser les styles par défaut du bouton */
+   }
+
+.openModalBtn:hover {
+    background-color: #0e5aa7; /* Changement de couleur au survol */
+}
+
+.blur {
+    backdrop-filter: blur(10px); /* Augmentez la valeur du flou pour un effet plus intense */
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 999; /* Assurez-vous que le fond flou est en dessous du modal */
+}
+/* Styles pour la boîte modale de création d'événement */
+   .createEventModal {
+    display: none; /* Masquer la boîte modale par défaut */
+    position: fixed;
+    z-index: 999;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%); /* Centrer précisément */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center; /* Alignement horizontal au centre */
+    align-items: center; /* Alignement vertical au centre */
+   }
+
+   .createEventModal .modal-content {
+    background-color: #fefefe; /* Couleur de fond de la modal */
+    margin: 15% auto; /* Centrer la modal verticalement */
+    padding: 20px; /* Ajouter de l'espace intérieur */
+    border: 1px solid #888; /* Bordure autour de la modal */
+    width: 100%; /* Largeur de la modal */
+    max-width: 650px; /* Largeur maximale de la modal */
+    height: 100%; /* Hauteur de la modal */
+    max-height: 800px; /* Hauteur maximale de la modal */
+    overflow-y: auto; /* Ajouter une barre de défilement vertical si nécessaire */
+    border-radius: 8px; /* Arrondir les coins de la modal */
+   }
+
+    .createEventModal .modal-content h1 {
+    text-align: center; /* Centrer le texte */
+    font-size: 26px; /* Taille de la police */
+    font-weight: bold; /* Texte en gras */
+    }
+
+   .createEventModal form {
+    margin-top: 20px; /* Ajouter de l'espace en haut du formulaire */
+   }
+
+   .createEventModal form input[type="text"],
+   .createEventModal form input[type="datetime-local"],
+   .createEventModal form textarea {
+    width: 100%; /* Occupera toute la largeur disponible */
+    padding: 10px; /* Ajouter de l'espace à l'intérieur des champs de saisie */
+    margin-bottom: 10px; /* Ajouter de l'espace en bas de chaque champ */
+    border: 1px solid #ccc; /* Bordure autour des champs */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de la police */
+   }
+
+   .createEventModal form button[type="submit"] {
+    background-color: #1877f2; /* Couleur de fond du bouton */
+    color: #fff; /* Couleur du texte */
+    padding: 10px 20px; /* Ajouter de l'espace à l'intérieur du bouton */
+    border: none; /* Supprimer la bordure du bouton */
+    border-radius: 5px; /* Coins arrondis */
+    font-size: 16px; /* Taille de la police */
+    cursor: pointer; /* Curseur au survol */
+    transition: background-color 0.3s ease; /* Animation de transition pour la couleur de fond */
+    width: 100%;
+    margin-top: 10px;
+   }
+
+   .createEventModal form button[type="submit"]:hover {
+    background-color: #0e5aa7; /* Changement de couleur de fond au survol */
+    }
+
+   .createEventModal .cancelEvent {
+    background-color: #afbccd; /* Couleur de fond */
+    width: 100%;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    }
+   .cancelEvent {
+    background-color: #afbccd; /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    padding: 10px 2px; /* Ajouter de l'espace à l'intérieur du bouton */
+    border: none; /* Supprimer la bordure du bouton */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer; /* Curseur au survol */
+    transition: background-color 0.3s ease; /* Animation de transition pour la couleur de fond */
+    font-size: 16px; /* Taille de la police */
+    display: inline-block; /* Permet au bouton d'avoir la largeur nécessaire */
+    text-decoration: none; /* Supprime la décoration de texte */
+    text-align: center; /* Centre le texte horizontalement */
+   }
+
+   .cancelEvent:hover {
+    background-color: #999; /* Changement de couleur de fond au survol */
+    }
+
+   .createEventModal .addEvent {
+    background-color: #1f09ec; /* Changement de couleur de fond au survol */
+    width: 100%;
+    padding: 10px 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.createEventModal .cancelEvent:hover {
+    background-color: #999; /* Changement de couleur de fond au survol */
+}
+
+
+.createEventModal form .cancel-button:hover {
+    background-color: #999; /* Changement de couleur de fond au survol */
+}
+
+.createEventModal .close {
+    color: #aaa; /* Couleur du symbole de fermeture */
+    float: right; /* Alignement à droite */
+    font-size: 28px; /* Taille de la police */
+    font-weight: bold; /* Texte en gras */
+}
+
+.createEventModal .close:hover,
+.createEventModal .close:focus {
+    color: black; /* Changement de couleur au survol ou au focus */
+    text-decoration: none; /* Supprimer la soulignement au survol ou au focus */
+    cursor: pointer; /* Curseur au survol ou au focus */
+}
+
+/* Style pour la liste déroulante personnalisée */
+.custom-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Style pour le survol de la liste déroulante */
+.custom-select:hover {
+    border-color: #aaa;
+}
+
+/* Style pour le focus de la liste déroulante */
+.custom-select:focus {
+    border-color: #5a5a5a;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Style pour le dropdown */
+.custom-select option {
+    background-color: #fff;
+    color: #333;
+}
+
+/* Style pour le dropdown lorsque survolé */
+.custom-select option:hover {
+    background-color: #f2f2f2;
+}
+.invalid-date {
+    background-color: #ffcccc; /* Couleur de fond rouge */
+}
+
+
+ .dropdown {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+}
+
+.dropdown-toggle {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 50%;
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 5px;
+    bottom: 30px; /* Positionnez le menu déroulant juste au-dessus des trois points */
+}
+
+
+
+.dropdown-menu a {
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f2f2f2;
+}
+
+.dropdown.active .dropdown-menu {
+    display: block;
+}
+
+.delete-event-link {
+    display: inline-block;
+    padding: 16px 16px;
+    background-color: #dc3545; /* Couleur de fond rouge */
+    color: #fff; /* Couleur du texte blanc */
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    width: 130px; /* Ajustez la largeur selon vos besoins */
+
+}
+
+.delete-event-link:hover {
+    background-color: #c82333; /* Changement de couleur de fond au survol */
+}
+.button {
+  font-size: 17px;
+  font-weight: bold;
+  border: 0px;
+  color: white;
+  background-color: #1877f2;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-image: linear-gradient(90deg, #B799FF 0%, #ACBCFF 50%, #AEE2FF 75%, #E6FFFD 100%);
+  color: black;
+  animation: slide 10s linear infinite;
+}
+
+@keyframes slide {
+  100% {
+    background-position: 50rem;
+  }
+}
+
+body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        h1 {
+            color: #4848ed; /* Text color in blue */
+            text-align: center; /* Horizontal centering */
+            margin-top: 0; /* Remove default margin to align with the rest of the content */
+            margin-bottom: 20px; /* Bottom spacing to separate from the following content */
+            font-size: 50px; /* Larger font size */
+        }
+    </style>
+{% endblock %}
+{% block content %}
+<main>
+<h1  style="display: flex; justify-content: center;">Admin évènements</h1>
+<a href="#" class="openModalBtn button">Créer évènement</a>
+<div class="event-container">
+    {% for evenement in evenements %}
+        <div class="event-item "  data-categorie="{{ evenement.categorieevenement }}" >
+            <img class="event-image  " src="{{ asset('images/evenement/' ~ evenement.image) }}" alt="Image de l'événement">
+            <div class="dropdown">
+                <!-- Three dots inside a circle -->
+                <span class="dropdown-toggle" onclick="toggleDropdown(this)">&#8226;&#8226;&#8226;</span>
+                <div class="dropdown-menu">
+                    <form action="{{ path('evenements_delete_admin', {'id': evenement.idEvenement}) }}" method="post" class="delete-event-form">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="dropdown-item delete-event-link"><i class="fas fa-trash-alt"></i>    Supprimer</button>
+                    </form>
+                </div>
+            </div>
+            <h2 class="event-title">{{ evenement.titreEvenement }}</h2>
+            <p class="event-date"><span class="material-symbols-outlined"> </span>  {{ evenement.dDebutEvenement|date('Y-m-d H:i') }} - {{ evenement.dFinEvenement|date('Y-m-d H:i') }}</p>
+            <p class="event-lieu"><span><i class="fa-solid fa-location-dot"></i></span>  {{ evenement.lieuEvenement }}</p>
+            <div class="voir-detail-container  button-container">
+                <a href="#" class="voir-detail " data-evenement="{{ evenement.idEvenement }}">Voir détail</a>
+                     <div class="participants-count">
+                        {{ participantsCounts[evenement.idEvenement] ?? 0 }} participants 
+                      </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% if evenements is empty %}
+    <img src="{{ asset('images/evenement/notfound.gif') }}" alt="Event Not Found" style="border-radius: 10px; width: 98%">
+    {% endif %}
+</div>
+<!-- Boîte modale pour le formulaire de création d'événement -->
+<div id="createEventModal" class="createEventModal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="add-event-container">
+            <div class="add-event-content">
+                <h1>Ajouter un Événement</h1>
+                <form action="{{ path('app_admin_events') }}" method="post" enctype="multipart/form-data">
+                    <!-- Vos champs de formulaire -->
+                    {{ form_start(form) }}
+                    <div class="image-preview-container">
+                        <img id="imagePreview" src="#" alt="Image Preview" style="display: none; max-width: auto; max-height: auto;">
+                        {{ form_row(form.image, { 'attr': { 'onchange': 'previewImage(this)'} }) }}
+                    </div>
+                    {{ form_row(form.titreEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.titreEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Titre de l\'événement'} }) }}
+                    {{ form_label(form.dDebutEvenement, 'Date de début de l\'événement') }}
+                    {{ form_widget(form.dDebutEvenement, { 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dDebutEvenement.vars.errors|length ? ' is-invalid' : '')} }) }}
+                    {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dFinEvenement.vars.errors|length ? ' is-invalid' : '')}, 'widget': 'single_text' }) }}
+                    {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.descriptionEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Description de l\'événement'} }) }}
+                    {{ form_row(form.lieuEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.lieuEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Lieu de l\'événement'} }) }}
+                    {{ form_row(form.categorieevenement, { 'attr': {'class': 'form-control custom-select' ~ (form.categorieevenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Catégorie de l\'événement'} }) }}
+                    
+                    <div class="boutons-container" >
+                        <button type="submit" class="addEvent" id="add">Ajouter</button>
+                        <a href="{{ path('app_admin_events') }}" id="cancelEvent" class="cancelEvent">Annuler</a>
+
+                    </div>
+                    {{ form_end(form) }}
+                </form>
+
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- Ajoutez ceci à votre HTML pour la modale -->
+<div id="eventModal" class="modal">
+<div class="modal-content">
+<span class="close">&times;</span>
+<img id="modal-image" class="modal-image" src="" alt="Image de l'événement">
+<h2 id="modal-title" class="event-title"></h2>
+<p id="modal-date" class="event-date"></p>
+<p id="modal-lieu" class="event-lieu"><i class="fa-solid fa-location-dot"></i></p>
+<p id="modal-description" class="event-description">Description : </p>
+
+</div>
+</div>
+
+<script src="{{ asset('js/VoirDetail.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const openModalBtn = document.querySelector('.openModalBtn');
+        const createEventModal = document.getElementById('createEventModal');
+        const closeModalBtn = createEventModal.querySelector('.close');
+        const blurBackground = document.querySelector('.blur');
+         // Vérifier si le formulaire contient des erreurs
+         const formErrors = document.querySelectorAll('.form-control.is-invalid');         // Variable pour stocker l'URL de l'image sélectionnée
+         let imageURL = '';
+    
+    // Fonction pour prévisualiser une image sélectionnée
+    function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var imagePreview = document.getElementById('imagePreview');
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    imageURL = e.target.result; // Stocker l'URL de l'image
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    
+      // Si des erreurs sont présentes, afficher le modal
+      if (formErrors.length > 0  || !imageInput.files[0] ) {
+        event.preventDefault();
+            createEventModal.style.display = 'flex';
+            document.body.classList.add('blur');
+    
+        }
+    
+    
+        openModalBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            createEventModal.style.display = 'flex';
+            document.body.classList.add('blur');
+          
+        });
+    
+    
+        closeModalBtn.addEventListener('click', function () {
+            createEventModal.style.display = 'none';
+            document.body.classList.remove('blur');
+        });
+    
+        window.addEventListener('click', function (event) {
+            if (event.target === createEventModal) {
+                createEventModal.style.display = 'none';
+                document.body.classList.remove('blur');
+            }
+        });
+    
+     
+    
+     
+    
+        const imageInput = document.getElementById('form_image');
+        if (imageInput) {
+            // Sauvegarder l'URL de l'image lorsqu'une nouvelle image est sélectionnée
+            imageInput.addEventListener('change', function () {
+                previewImage(this);
+            });
+    
+            // Restaurer l'image précédemment sélectionnée lorsque le formulaire est affiché
+            imageURL = imageInput.value;
+            if (imageURL) {
+                document.getElementById('imagePreview').src = imageURL;
+            }
+        }
+    });
+    
+    $(document).ready(function() {
+            // Activer le date picker pour les champs de date
+            $('.datepicker').datepicker({
+                dateFormat: 'yy-mm-dd' // Format de date souhaité
+            });
+        });
+    
+    
+    
+        function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+        </script>
+<script>
+</script>
+</main>
+{% endblock %}

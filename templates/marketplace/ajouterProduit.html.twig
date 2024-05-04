@@ -1,0 +1,218 @@
+{# templates/produit/ajouterProduit.html.twig #}
+<h1 style="text-align: center; font-size: 26px; font-weight: bold;">Ajouter un produit</h1>
+<style>
+    .bouton-prod {
+        display: block;
+        width: 150px; 
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-left:100px;
+        background-color: #3642dd;
+        color: white;
+        padding: 8px 10px;
+        text-decoration: none;
+        border-radius: 20px;
+        transition: background-color 0.3s ease; 
+        border: none; 
+        cursor: pointer;
+    }
+
+    .bouton-prod:hover {
+        background-color: #1877f2; 
+    }
+
+   
+
+
+    .Categorie select {
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 8px 12px;
+        color: #1877f2;
+        font-size: 15px;
+    }
+
+    .Categorie select::-ms-expand {
+        display: block;
+        color: #333; /* Couleur de la flèche */
+        font-size: 16px; /* Taille de la flèche */
+        line-height: 1; /* Hauteur de ligne pour centrer la flèche */
+        padding-right: 5px; /* Espacement entre la flèche et le texte */
+    }
+
+    /* Style au survol */
+    .Categorie select:hover {
+        border-color: #1877f2; /* Changement de couleur de bordure au survol */
+    }
+
+    /* Style au focus */
+    .Categorie select:focus {
+        outline: none; /* Supprime la bordure de focus par défaut */
+        box-shadow: 0 0 0 2px rgba(4, 8, 236, 0.2); /* Ajoute une bordure de focus */
+    }
+
+    .cadre-image {
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        width:500px;
+        height: auto;
+
+        margin-bottom: 10px;
+    }
+    .cadre-image img {
+    max-width: calc(90% - 20px); 
+    max-height: calc(100% - 20px);
+    display: block;
+    margin: auto;
+   }
+
+    .text-field {
+        border: 1px solid #ccc;
+        padding: 4px;
+        border-radius: 8px;
+        height: 30px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+    }
+
+   
+
+       .text-area {
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-top: 10px;
+        margin-left: 20px;
+        width: 550px;
+        height: 50px; /* Ajustez la hauteur selon vos besoins */
+        resize: vertical; /* Permet le redimensionnement vertical uniquement */
+    }
+
+
+    .error-field .text-field{
+        border-color: red;
+    }
+    
+    .error-field .text-area{
+        border-color: red;
+    }
+
+      .error-field .cadre-image {
+        border-color: red;
+    }
+
+
+
+    .error-message {
+        color: red;
+        font-size:14px;
+    }
+
+
+
+</style> 
+{{ form_start(form, {'attr': {'enctype': 'multipart/form-data', 'id': 'produit_form', 'novalidate': 'novalidate'}}) }}
+
+    {# Affichage des champs du formulaire #}
+    
+ <div class="formulaire" style="margin-left: 70px">
+
+<div class="cadre-image {% if form_errors(form.imageProduit) %}error-field{% endif %}">
+        {% if form_errors(form.imageProduit) %}
+            <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.imageProduit) }}</div>
+        {% endif %}
+        {{ form_row(form.imageProduit, {'label': false, 'attr': {'onchange': 'previewImage(event)'}}) }}
+        <img id="image-preview">
+    
+</div>
+
+
+ <div class="nomProduit {% if form_errors(form.nomProduit) %}error-field{% endif %}">
+    {% if form_errors(form.nomProduit) %}
+        <div class="error-message" style ="margin-bottom: 10px;" >{{ form_errors(form.nomProduit) }}</div>
+    {% endif %}
+    <label for="{{ form.nomProduit.vars.id }}">{{ form.nomProduit.vars.label }}</label>
+    {{ form_widget(form.nomProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px;  width: 300px; height: 40px;'}}) }}
+    
+</div>
+
+
+
+   <div class="prix">
+      {% if form_errors(form.prixProduit) %}
+           <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.prixProduit) }}</div>
+         {% endif %}
+        {{ form_label(form.prixProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
+        {{ form_widget(form.prixProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px;'}}) }}
+    </div>
+
+
+    <div class="dispo" id="disponibilite-checkbox">
+        {{ form_label(form.disponibilite, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
+        {{ form_widget(form.disponibilite, {'attr': {'style': 'margin-left: 15px; border: 1px solid #ccc; padding: 5px;  width: 20px; height: 20px;  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  border: 1px solid #ccc;'}}) }}
+    </div>
+    
+    <div class="stock" id="stock-field">
+        {% if form_errors(form.stockProduit) %}
+           <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.stockProduit) }}</div>
+         {% endif %}
+        {{ form_label(form.stockProduit, null, {'label_attr': {'style': 'margin-bottom: 10px;'}}) }}
+        {{ form_widget(form.stockProduit, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; margin-top: 20px;', 'id': 'stock-field'}}) }}
+    </div>
+
+
+
+    <div class="Categorie {% if form_errors(form.categProduit) %}error-field{% endif %}">
+         {% if form_errors(form.categProduit) %}
+           <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.categProduit) }}</div>
+         {% endif %}
+        {{ form_label(form.categProduit, null, {'label_attr': {'style': 'margin-bottom: 10px; margin-right: 10px; margin-bottom: 20px;'}}) }}
+        {{ form_widget(form.categProduit, {'attr': {'style': 'border: 1px solid #ccc; padding: 5px; margin-bottom: 20px;'}}) }}
+     </div>
+
+
+<div class="descriptionProduit {% if form_errors(form.descriptionProduit) %}error-field{% endif %}">
+    {% if form_errors(form.descriptionProduit) %}
+        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.descriptionProduit) }}</div>
+    {% endif %}
+    <label for="{{ form.descriptionProduit.vars.id }}">{{ form.descriptionProduit.vars.label }}</label>
+    <div style="display: flex; flex-direction: column;">
+        {{ form_widget(form.descriptionProduit, {'attr': {'class': 'text-area', 'style': 'margin-bottom: 10px; border: 1px solid #ccc; padding: 5px;'}}) }}
+    </div>
+</div>
+
+        
+      
+        
+
+    {# Bouton de soumission du formulaire #}
+    <div class="boutons-container" style="display: flex; margin-top: 20px;">
+        <button type="submit" class="bouton-prod" >Ajouter</button>
+        <button id="btnAnnuler" class="bouton-prod" style="margin-left: 100px; type="button">Annuler</button>
+    </div>
+   
+</div>
+{# Utilisation de la fonction form_end pour terminer le formulaire #}
+{{ form_end(form) }}
+
+<script src="chemin/vers/jquery.js"></script>
+<script src="chemin/vers/jquery-ui.js"></script>
+
+<script>
+    var imageFileName = document.getElementById('image-file').value;
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function() {
+            var img = document.getElementById('image-preview');
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+
+
+</script>
