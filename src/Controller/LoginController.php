@@ -56,6 +56,7 @@ class LoginController extends AbstractController
             if ($foundUser && $foundUser->getMdpUser() === $password) {
                 $success = 'Login successful';
                 $session->set('user', $foundUser);
+<<<<<<< HEAD
                 if($foundUser->getRole() == 'ROLE_ADMIN'){
                     return $this->redirectToRoute('app_admin');
                 }
@@ -63,6 +64,14 @@ class LoginController extends AbstractController
                     return $this->redirectToRoute('app_test');
                 }
                 return $this->redirectToRoute('app_test');
+=======
+                 // Check if user has admin role
+                 if ($foundUser->getRole() === 'ROLE_ADMIN') {
+                    return $this->redirectToRoute('app_admin'); // Redirect to admin dashboard
+                } else {
+                    return $this->redirectToRoute('afficher_publications'); // Redirect to regular user dashboard
+                }
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
             } else {
                 $error = 'Invalid email or password';
             }
@@ -72,8 +81,15 @@ class LoginController extends AbstractController
             $user = $registerForm->getData();
                 
             $user->setPhoto('images/user.png');
+<<<<<<< HEAD
             $user->setRole('ROLE_USER');
             $user->setBio('');
+=======
+            $user->setPhoto('images/user.png');
+            $user->setRole('ROLE_USER');
+            $user->setBio('');
+            $user->setBio('');
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
 
             // Additional validation or processing if needed before persisting
             $entityManager = $this->getDoctrine()->getManager();
@@ -83,7 +99,8 @@ class LoginController extends AbstractController
             $success = 'Registration successful';
             $session->set('user', $user);
 
-            return $this->redirectToRoute('app_test');
+            return $this->redirectToRoute('afficher_publications');
+            return $this->redirectToRoute('afficher_publications');
         }
         
         return $this->render('login/login.html.twig', [
@@ -92,6 +109,8 @@ class LoginController extends AbstractController
             'state' => $state,
             'error' => $error,
             'success' => $success,
+            
+            
         ]);
     }
 
@@ -123,6 +142,7 @@ class LoginController extends AbstractController
         ]);
     }
 
+<<<<<<< HEAD
     #[Route('/fcb-login', name: 'fcb_login')]
     public function loginFb():Response
     {
@@ -201,3 +221,6 @@ class LoginController extends AbstractController
 
 
 
+=======
+}
+>>>>>>> bbd40a682e5d38029871394709901e359069be89

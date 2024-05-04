@@ -7,6 +7,10 @@ security:
                 class: 'App\Entity\Users'
                 property: 'email'
                 
+<<<<<<< HEAD
+=======
+
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
     firewalls:
         main:
             # Utilisation de la stratégie de connexion basée sur un formulaire

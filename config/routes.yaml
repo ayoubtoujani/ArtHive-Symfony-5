@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
 app_blog:
     path: /blog
     controller: App\Controller\BlogController::index
@@ -9,6 +12,7 @@ app_login:
     path: /login
     controller: App\Controller\LoginController::login
 
+<<<<<<< HEAD
 
 fcb_login:
     path: /fcb-login
@@ -31,6 +35,8 @@ app_forgot_password:
     controller: App\Controller\ForgotPasswordController::forgotPassword
 
 
+=======
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
 app_admin_dashboard:
     path: /admin/dashboard
     controller: App\Controller\AdminController::index
@@ -40,11 +46,15 @@ app_admin_users:
     path: /admin/users
     controller: App\Controller\AdminController::getAllUsers
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
 app_admin_posts:
     path: /admin/posts
     controller: App\Controller\AdminController::getAllPosts
 
+<<<<<<< HEAD
 app_admin_user_edit:
     path: /admin/user/edit/{id}
     controller: App\Controller\AdminController::edit
@@ -54,6 +64,8 @@ app_admin_user_delete:
     controller: App\Controller\AdminController::delete
 
 
+=======
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
 app_admin_groups:
     path: /admin/groups
     controller: App\Controller\AdminController::getAllGroups
@@ -68,4 +80,8 @@ app_admin_products:
 
 app_admin_reports:
     path: /admin/reports
+<<<<<<< HEAD
     controller: App\Controller\AdminController::getAllReports
+=======
+    controller: App\Controller\AdminController::getAllReports
+>>>>>>> bbd40a682e5d38029871394709901e359069be89

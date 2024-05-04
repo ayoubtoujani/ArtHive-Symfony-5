@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,6 +68,22 @@
         </aside>
 
         <main>
+=======
+{% extends 'admin/home.html.twig' %}
+{% block title %}
+    ArtHive | Users
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+{% endblock %}
+{% block content %}
+    {# Your content for the posts page goes here #}
+
+    <h1>this is the page of users</h1>
+    
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
             <div class="recent-orders" style="margin-top:100px">
                 <table>
                     <thead>
@@ -80,6 +97,7 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
+<<<<<<< HEAD
                     <tbody>
                         {% for user in users %}
                         <tr>
@@ -114,3 +132,11 @@
 
     <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
 </body>
+=======
+                </table>
+            </div>
+       
+
+{% endblock %}
+        
+>>>>>>> bbd40a682e5d38029871394709901e359069be89

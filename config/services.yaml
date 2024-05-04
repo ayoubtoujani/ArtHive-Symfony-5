@@ -4,7 +4,10 @@ parameters:
     twilio_account_sid: '%env(TWILIO_ACCOUNT_SID)%'
     twilio_auth_token: '%env(TWILIO_AUTH_TOKEN)%'
     twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
+<<<<<<< HEAD
     profile_images_directory: '%kernel.project_dir%/public/images/profile_pictures'
+=======
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
 
     images_directory: '%kernel.project_dir%/public/images/'
     forbidden_words:
@@ -37,6 +40,7 @@ services:
     App\Services\BadWordsService:
         # Inject the path to the JSON file containing bad words
         arguments:
+<<<<<<< HEAD
             $badWordsFilePath: '%kernel.project_dir%/config/bad_words.json'
             $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
     # add more service definitions when explicit configuration is needed
@@ -47,3 +51,15 @@ services:
     App\Services\MailApi:
         arguments:
             $client: '@http_client'
+=======
+             $apiUrl: 'https://restcountries.com/v3.1/all?fields=name'
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+
+     # Define the BadWordsService as a service
+    App\Services\BadWordsService:
+        # Inject the path to the JSON file containing bad words
+        arguments:
+            $badWordsFilePath: '%kernel.project_dir%/config/bad_words.json'
+>>>>>>> bbd40a682e5d38029871394709901e359069be89
