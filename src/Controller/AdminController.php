@@ -200,7 +200,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 
         // Check if a user is logged in
         if ($user instanceof Users) {
-<<<<<<< HEAD
             return $this->render('admin/groups.html.twig', [
                 'controller_name' => 'AdminController',
                 'user' => $user,
@@ -269,7 +268,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
         return $this->render('admin/groups.html.twig', [
             'controller_name' => 'AdminController',
         ]);
-=======
     return $this->render('admin/groups.html.twig', [
         'controller_name' => 'AdminController',
         'user' => $user,
@@ -277,7 +275,7 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 } else {
     return $this->redirectToRoute('app_login');
 }
->>>>>>> bbd40a682e5d38029871394709901e359069be89
+}
     }
 
 
@@ -289,7 +287,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 
        // Check if a user is logged in
        if ($user instanceof Users) {
-<<<<<<< HEAD
         return $this->render('admin/events.html.twig', [
             'controller_name' => 'AdminController',
             'user' => $user,
@@ -297,15 +294,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
         } else {
         return $this->redirectToRoute('app_login');
         }
-=======
-   return $this->render('admin/events.html.twig', [
-       'controller_name' => 'AdminController',
-       'user' => $user,
-   ]);
-} else {
-   return $this->redirectToRoute('app_login');
-}
->>>>>>> bbd40a682e5d38029871394709901e359069be89
     }
 
     #[Route('/admin/produits', name: 'app_admin_users', methods:['GET'])]
@@ -317,7 +305,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 
        // Check if a user is logged in
        if ($user instanceof Users) {
-<<<<<<< HEAD
             return $this->render('admin/products.html.twig', [
                 'controller_name' => 'AdminController',
                 'user' => $user,
@@ -325,15 +312,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
         } else {
         return $this->redirectToRoute('app_login');
         }
-=======
-   return $this->render('admin/products.html.twig', [
-       'controller_name' => 'AdminController',
-       'user' => $user,
-   ]);
-} else {
-   return $this->redirectToRoute('app_login');
-}
->>>>>>> bbd40a682e5d38029871394709901e359069be89
     }
 
     #[Route('/admin/reports', name: 'app_admin_users', methods:['GET'])]
@@ -344,7 +322,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 
        // Check if a user is logged in
        if ($user instanceof Users) {
-<<<<<<< HEAD
             return $this->render('admin/reports.html.twig', [
                 'controller_name' => 'AdminController',
                 'user' => $user,
@@ -375,15 +352,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
         return $this->render('admin/reports.html.twig', [
             'controller_name' => 'AdminController',
         ]);
-=======
-   return $this->render('admin/reports.html.twig', [
-       'controller_name' => 'AdminController',
-       'user' => $user,
-   ]);
-} else {
-   return $this->redirectToRoute('app_login');
-}
->>>>>>> bbd40a682e5d38029871394709901e359069be89
     }
 
 }
