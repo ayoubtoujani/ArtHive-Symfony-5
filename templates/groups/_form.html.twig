@@ -1,0 +1,94 @@
+{# templates/groups/form.html.twig #}
+
+{{ form_start(form, {'attr': {'class': 'custom-form'}}) }}
+
+<div class="form-group">
+    {{ form_label(form.nomGroup, 'Nom du groupe', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.nomGroup, {'attr': {'class': 'form-control' ~ (form_errors(form.nomGroup)|length ? ' is-invalid' : '')}}) }}
+    {% if form_errors(form.nomGroup)|length %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.nomGroup) }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.image, 'Image', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.image, {'attr': {'class': 'form-control' ~ (form_errors(form.image)|length ? ' is-invalid' : '')}}) }}
+    {% if form_errors(form.image)|length %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.image) }}
+        </div>
+    {% endif %}
+</div>
+
+<div class="form-group">
+    {{ form_label(form.descriptionGroup, 'Description du groupe', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.descriptionGroup, {'attr': {'class': 'form-control' ~ (form_errors(form.descriptionGroup)|length ? ' is-invalid' : '')}}) }}
+    {% if form_errors(form.descriptionGroup)|length %}
+        <div class="invalid-feedback">
+            {{ form_errors(form.descriptionGroup) }}
+        </div>
+    {% endif %}
+</div>
+
+
+
+{# Add other form fields as needed #}
+
+<button class="btn btn-primary" type="submit">Ajouter</button>
+{{ form_end(form) }}
+<style>
+    /* custom.css */
+    .custom-form {
+        max-width: 400px;
+        margin: auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        margin-bottom: 0.5rem;
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:hover {
+        border-color: #80bdff; /* Change border color on hover */
+    }
+
+    .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 80%;
+        color: #dc3545;
+    }
+
+    /* Hover effect for submit button */
+    .btn-primary:hover {
+        background-color: #007bff; /* Change background color on hover */
+        border-color: #007bff; /* Change border color on hover */
+    }
+    body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+</style>

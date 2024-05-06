@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Groups;
 use App\Form\EditUserFormType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,9 +14,14 @@ use App\Entity\Users;
 use App\Repository\PublicationRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Publications;
+use App\Entity\Reclamationgroupe;
 use App\Form\AddPostType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use App\Repository\ReclamationgroupeRepository;
+use App\Services\PdfGenerator;
+
+
 
 
 class AdminController extends AbstractController
@@ -35,10 +41,14 @@ class AdminController extends AbstractController
                     $publicationRepository = $this->getDoctrine()->getRepository(Publications::class);
                     $publications = $publicationRepository->findAll();
                     $countPosts = count($publications);
+                    $groupRepository = $this->getDoctrine()->getRepository(Groups::class);
+                    $groups = $groupRepository->findAll();
+                    $countGroups = count($groups);
                     return $this->render('admin/home.html.twig', [
                         'controller_name' => 'AdminController',
                         'user' => $user,
                         'countPosts' => $countPosts,
+                        'countGroups' => $countGroups,
                     ]);
 
                 }else{
@@ -46,34 +56,9 @@ class AdminController extends AbstractController
                 }
             } else {
                 return $this->redirectToRoute('app_login');
-            }
-
-
-    
-           
+            }      
     }
     
-
-   /* #[Route('/admin/posts', name: 'app_admin_users', methods:['GET'])]
-    public function getAllPosts(PublicationRepository $publicationRepository,SessionInterface $session): Response
-    {
-        // Retrieve the user from the session
-        $user = $session->get('user');
-
-        // Check if a user is logged in
-        if ($user instanceof Users) {
-            // Fetch publications by their owner
-            $publications = $publicationRepository->findAll();
-    return $this->render('admin/posts.html.twig', [
-        'controller_name' => 'AdminController',
-        'user' => $user,
-        'publications' => $publications,
-    ]);
-} else {
-    return $this->redirectToRoute('app_login');
-}
-    }
-    */
     #[Route('/admin/posts', name: 'app_admin_users', methods: ['GET', 'POST'])]
     public function getAllPosts(PublicationRepository $publicationRepository,SessionInterface $session, Request $request): Response
     {
@@ -160,16 +145,20 @@ class AdminController extends AbstractController
     
     #[Route('/admin/groups', name: 'app_admin_groups', methods:['GET'])]
     public function getAllGroups(SessionInterface $session): Response
-    {
-       
+    {  
         // Retrieve the user from the session
         $user = $session->get('user');
-
         // Check if a user is logged in
         if ($user instanceof Users) {
+
+            $groups = $this->getDoctrine()->getRepository(Groups::class)->findAll();
+            $nbr = count($groups);
+
     return $this->render('admin/groups.html.twig', [
         'controller_name' => 'AdminController',
         'user' => $user,
+        'nbr' => $nbr,
+        'groups' => $groups,
     ]);
 } else {
     return $this->redirectToRoute('app_login');
@@ -291,17 +280,38 @@ public function deletePublication($id, PublicationRepository $publicationReposit
     {
        // Retrieve the user from the session
        $user = $session->get('user');
-
+        $reports = $this->getDoctrine()->getRepository(Reclamationgroupe::class)->findAll();
+        $nbr = count($reports);
        // Check if a user is logged in
        if ($user instanceof Users) {
             return $this->render('admin/reports.html.twig', [
                 'controller_name' => 'AdminController',
                 'user' => $user,
+                'nbr' => $nbr,
+                'reports' => $reports,
             ]);
        }else {
         return $this->redirectToRoute('app_login');
        }
     }
 
+    #[Route('/admin/reports/generate-pdf', name: 'generate_pdf')]
+    public function generatePdf(ReclamationgroupeRepository $reclamationRepository, PdfGenerator $pdfGenerator): Response
+    {
+        
+        // Récupérer toutes les réclamations
+        $reports = $reclamationRepository->findAll();
+
+        // Générer le HTML à partir Twig
+        $html = $this->renderView('admin/reports_pdf.html.twig', [
+            'reports' => $reports,
+
+        ]);
+
+        // Générer le PDF à partir du html
+        $response = $pdfGenerator->generatePdfResponse($html);
+
+        return $response;
+    }
 
 }

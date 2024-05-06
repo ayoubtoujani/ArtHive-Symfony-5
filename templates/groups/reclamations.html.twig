@@ -1,0 +1,88 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}Reclamations for Group{% endblock %}
+
+{% block content %}
+    <h1>Reclamations for Group</h1>
+
+    {% if reclamations is empty %}
+        <p>No reclamations found for this group.</p>
+    {% else %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Reclamation ID</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for reclamation in reclamations %}
+                <tr>
+                    <td>{{ reclamation.idReclamation }}</td>
+                    <td>{{ reclamation.descReclamation }}</td>
+                    <td>
+                        <a href="{{ path('app_reclamationgroupe_show', {'idReclamation': reclamation.idReclamation}) }}">Show</a>
+                        <br>
+                        <a href="{{ path('app_reclamationgroupe_edit', {'idReclamation': reclamation.idReclamation}) }}">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+{% block stylesheets %}
+    <style>
+    /* Table styles */
+    .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    }
+
+    .table th,
+    .table td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    }
+
+    .table th {
+    background-color: #f2f2f2;
+    }
+
+    /* Button styles */
+    .btn {
+    display: inline-block;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    }
+
+    .btn:hover {
+    background-color: #0056b3;
+    }
+
+    /* Additional styles */
+    .content {
+    margin-top: 20px;
+    }
+
+    h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    }
+    body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+{% endblock %}
+
+

@@ -423,7 +423,7 @@ body {
                     </svg>
                 </div>
             </div>
-            <span>Save</span>
+            <span>Télécharger</span>
         </button>
         <input
   value="favorite-button"
@@ -453,7 +453,7 @@ body {
   </a>
   <div class="action">
    
-    <span class="option-2">Add to Favorites</span>
+    <span class="option-2">Favoris</span>
   </div>
 </label>
       
@@ -486,15 +486,15 @@ body {
         {{ form_widget(commentForm.contenuCommentaire, {'attr': {'id': 'contenuCommentaire', 'class': 'add-page-text-field'}}) }}
         <div class="error"> {{ form_errors(commentForm.contenuCommentaire) }} </div>
     </div>
-    <button type="submit" class="comment-submit-button">Add</button>
-    <a href="{{ path('show_comments', { 'id': publication.idPublication }) }}" class="cancel-button">Cancel</a>
+    <button type="submit" class="comment-submit-button">Ajouter</button>
+    <a href="{{ path('show_comments', { 'id': publication.idPublication }) }}" class="cancel-button">Annuler</a>
     {{ form_end(commentForm) }}
 {% endif %}
                 
             </div>
         </div>
     </div>
-        <h3>List of Comments ({{ comments|length }})</h3>
+        <h3>Liste des Commentaires ({{ comments|length }})</h3>
     <!-- Additional comments can be dynamically added here -->
         <div class="comment-list">
            {% for comment in comments|slice(0, 5) %}

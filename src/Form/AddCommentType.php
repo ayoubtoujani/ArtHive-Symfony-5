@@ -28,10 +28,10 @@ class AddCommentType extends AbstractType
     {
         $builder
             ->add('contenuCommentaire', TextareaType::class, [
-                'label' => 'Write a Comment Here:',
+                'label' => 'Ecrivez un commentaire ici:',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'The comment cannot be empty.',
+                        'message' => 'Le commentaire ne peut pas être vide.',
                     ]),
                     new Callback([$this, 'validateContent']),
                 ],
@@ -48,7 +48,7 @@ class AddCommentType extends AbstractType
     public function validateContent($value, ExecutionContextInterface $context)
     {
         if ($this->badWordsService->containsBadWord($value)) {
-            $context->buildViolation('Your comment contains inappropriate language.')->addViolation();
+            $context->buildViolation('Votre commentaire contient de mauvais mots.')->addViolation();
         }
     }
 }

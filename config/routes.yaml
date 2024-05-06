@@ -8,7 +8,10 @@ app_login:
     path: /login
     controller: App\Controller\LoginController::login
 
-
+home:
+    path: /
+    controller: App\Controller\BlogController::start
+    
 fcb_login:
     path: /fcb-login
     controller: App\Controller\LoginController::loginFb
@@ -64,6 +67,15 @@ app_admin_products:
 
 app_admin_reports:
     path: /admin/reports
-
     controller: App\Controller\AdminController::getAllReports
+
+app_groups:
+    path: /groups
+    controller: App\Controller\GroupsController::index
+
+groups_create:
+    path: '/groups/new'
+    controller: App\Controller\GroupsController::new    
+
+
 

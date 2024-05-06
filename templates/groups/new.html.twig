@@ -1,0 +1,25 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}New Groups{% endblock %}
+
+{% block content %}
+    <style>
+        /* CSS for the heading */
+        .page-heading {
+            font-size: 24px; /* Adjust the font size as needed */
+            color: #1844f1; /* Text color */
+            margin-bottom: 20px; /* Add some bottom margin for spacing */
+            transition: color 0.3s; /* Smooth transition for color change */
+            text-align: center;
+        }
+
+        .page-heading:hover {
+            color: #333; /* Change text color on hover */
+        }
+    </style>
+    <h1 class="page-heading">Créer Un Groupe</h1>
+
+    {{ include('groups/_form.html.twig') }}
+            <a id="seeallfav" class="btn btn-primary"  href="{{ path('app_groups_index') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Retour a la list des groupes </a>
+{% endblock %}
+

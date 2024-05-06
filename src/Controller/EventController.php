@@ -160,8 +160,9 @@ class EventController extends AbstractController
     }
 
     #[Route('/evenement/modifier/{id}', name: 'modifier_evenement')]
-    public function modifierEvenement(int $id, Request $request): Response
+    public function modifierEvenement(int $id, Request $request,SessionInterface $session): Response
     {
+
         // Récupérer le produit à modifier depuis la base de données
         $entityManager = $this->getDoctrine()->getManager();
         $evenement = $entityManager->getRepository(Evenements::class)->find($id);
@@ -196,6 +197,7 @@ class EventController extends AbstractController
         return $this->render('evenements/editEvenement.html.twig', [
             'form' => $form->createView(),
             'evenement' => $evenement,
+            'user' => $session->get('user'),
         ]);
     }
 

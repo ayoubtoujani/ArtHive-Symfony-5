@@ -6,6 +6,8 @@ parameters:
     twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
 
     images_directory: '%kernel.project_dir%/public/images/'
+    image_directoryy: '%kernel.project_dir%/public/uploads/images'
+
 
     profile_images_directory: '%kernel.project_dir%/public/images/profile_pictures'
 

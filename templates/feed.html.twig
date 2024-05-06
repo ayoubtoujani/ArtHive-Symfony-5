@@ -297,7 +297,7 @@ main .container .left .profile {
                 <button class="btn btn-primary" for="panier" style="padding:10px; width: 90px;"><i class="fa-solid fa-shopping-cart"></i><span id="cartCount">  </span></button>
             {% endblock %} 
             <div class="create">
-                <label class="btn btn-primary"   for="créer post">Créer</label>
+                
                 
                 <div class="profile-photo">
                       <img src="{{ asset('images/' ~ user.getPhoto() ) }}" style="width: 50px; height: 50px; " alt="">
@@ -330,22 +330,22 @@ main .container .left .profile {
                 <!.................................SIDEBAR.....................................>
                 <div class="sidebar">
                 <a class="menu-item " id="home" href="{{path('afficher_publications')}}" >
-                        <span><i class="fa-solid fa-house"></i></span><h3>Home</h3>
+                        <span><i class="fa-solid fa-house"></i></span><h3>Accueil</h3>
                     </a>
-                    <a class="menu-item " href="{{ path('my_publications') }}" id="profile">
-    <span><i class="fa-solid fa-user"></i></span><h3>Profile</h3>
+                    <a class="menu-item " href="{{ path('app_profile') }}" id="profile">
+    <span><i class="fa-solid fa-user"></i></span><h3>Profil</h3>
 </a>
-                    <a class="menu-item" id="groups" >
+                    <a class="menu-item" id="groups" href="{{ path('app_groups_index') }}">
                         <span><i class="fa-solid fa-people-group"></i></span><h3>Groupes</h3>
                     </a>
                     <a class="menu-item"id = "marketplace" href="{{ path('app_marketplace') }}">
                         <span><i class="fa-solid fa-shop"></i></span><h3>Marketplace</h3>
                     </a>
                     <a class="menu-item" id= "events" href="{{ path('app_event') }}">
-                        <span><i class="fa-solid fa-calendar-days"></i></span><h3>Events</h3>
+                        <span><i class="fa-solid fa-calendar-days"></i></span><h3>Evénements</h3>
                     </a>
                     <a class="menu-item " id ="themes">
-                        <span><i class="fa-solid fa-palette"></i></span><h3>Themes</h3>
+                        <span><i class="fa-solid fa-palette"></i></span><h3>Thémes</h3>
                     </a>
                 </div>
                 <!.................END OF SIDEBAR............>

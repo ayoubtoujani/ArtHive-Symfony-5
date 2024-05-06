@@ -14,7 +14,7 @@
     {% endblock %}
 
   {% block content %}
-            <body>
+            
                 <div class="custom-container">
                     <div class="custom-row mb-4">
                         <div class="custom-col-2">
@@ -22,7 +22,7 @@
                         <div class="custom-col-10 custom-d-flex custom-justify-content-end">
                             <a href="{{ path('app_profileEdit') }}">
                                 <button class="custom-btn custom-btn-primary custom-rounded-pill">
-                                    <strong>Modifier Profile</strong>
+                                    <strong>Modifier Profil</strong>
                                 </button>
                             </a>
                         </div>
@@ -57,7 +57,12 @@
                         <div class="custom-col-12">
                             <p>{{ user.bio }}</p>
                         </div>
-                    </div>    
+                    </div> 
+                     <a id="seeallfav" class="btn btn-primary"  href="{{ path('app_posts_favorites') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Mon liste des favoris</a>
+
+            <a id="seeallfav" class="btn btn-primary"  href="{{ path('my_publications') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Mes Publications </a>
+            </div>   
                 </div>
-            </body>
+                <div>
+           
             {% endblock %}

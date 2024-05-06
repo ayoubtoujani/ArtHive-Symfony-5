@@ -1,0 +1,12 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}Modifier Votre Groupe{% endblock %}
+
+{% block content %}
+    <h1>Edit Groups</h1>
+
+    {{ include('groups/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+    {{ include('groups/_delete_form.html.twig') }}
+{% endblock %}

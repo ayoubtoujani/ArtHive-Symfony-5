@@ -244,7 +244,8 @@ body {
 
     <h1>My Posts</h1>
 
- <a id="seeallfav" class="btn btn-primary"  href="{{ path('app_posts_favorites') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >List Favorites</a>
+ <a id="seeallfav" class="btn btn-primary"  href="{{ path('app_posts_favorites') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Favoris</a>
+
 
     <div class="publication-container">
         {% for publication in publications %}
@@ -253,8 +254,8 @@ body {
             <div style="position: relative;">
              <div class="dropdown">
      
-<a id="updatePost" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('update_post', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Update</a>
- <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px; color: red;" href="{{ path('delete_publication', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Delete</a>
+<a id="updatePost" class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('update_post', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Modifier</a>
+ <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px; color: red;" href="{{ path('delete_publication', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Supprimer</a>
   
 </div>
                 <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
