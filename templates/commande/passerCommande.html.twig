@@ -77,6 +77,23 @@
         margin-left: -1rem; /* Ajustez la valeur selon vos besoins */
 
     }
+
+
+
+      #card-element {
+        width: 400px;
+        height: auto; 
+        border: 1px solid #ccc; 
+        padding: 10px;
+        border-radius: 10px; 
+
+        
+    }
+
+    #card-element {
+        width: 100%;
+        height: 150%;
+    }
     </style>
 {% endblock %}
 
@@ -84,59 +101,72 @@
 <div class="formulaire" style="margin-left: 20px; font-size: 20px; background:#ffffffee; padding:60px; border-radius:20px; width: 120%;">
     <h1 style="color: #3642dd; margin-bottom: 20px; margin-left: 150px;">Validation de Commande</h1>
     <p style="color: #969090; margin-bottom: 10px; margin-left: 150px;">Veuillez remplir le formulaire pour valider votre commande</p>
-<div style="margin-left: 100px;">
-{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
- <div style="margin-bottom: 40px;"></div>
- <div class="nomClient {% if form_errors(form.nomClient) %}error-field{% endif %}">
-    {% if form_errors(form.nomClient) %}
-        <div class="error-message" style ="margin-bottom: 10px;" >{{ form_errors(form.nomClient) }}</div>
-    {% endif %}
-    <label for="{{form.nomClient.vars.id }}">{{ form.nomClient.vars.label }}</label>
-    {{ form_widget(form.nomClient, {'attr': {'class': 'text-field', 'style': 'margin-left: 42px;  width: 400px; height: 40px;'}}) }}
-    
-</div>
- <div style="margin-bottom: 20px;"></div>
-<div class="prenomClient  {% if form_errors(form.prenomClient) %}error-field{% endif %}">
-    {% if form_errors(form.prenomClient) %}
-        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.prenomClient) }}</div>
-    {% endif %}
-    <label for="{{ form.prenomClient.vars.id }}">{{ form.prenomClient.vars.label }}</label>
-    {{ form_widget(form.prenomClient, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 400px; height: 40px;'}}) }}
-</div>
- <div style="margin-bottom: 20px;"></div>
+    <div style="margin-left: 110px;">
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'payment-form'}}) }}
 
-<div class="telephone {% if form_errors(form.telephone) %}error-field{% endif %}">
-    {% if form_errors(form.telephone) %}
-        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.telephone) }}</div>
-    {% endif %}
-    <label for="{{ form.telephone.vars.id }}">{{ form.telephone.vars.label }}</label>
-    {{ form_widget(form.telephone, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 380px; height: 40px;'}}) }}
-</div>
- <div style="margin-bottom: 20px;"></div>
-<div class="eMail {% if form_errors(form.eMail) %}error-field{% endif %}">
-    {% if form_errors(form.eMail) %}
-        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.eMail) }}</div>
-    {% endif %}
-    <label for="{{ form.eMail.vars.id }}">{{ form.eMail.vars.label }}</label>
-    {{ form_widget(form.eMail, {'attr': {'class': 'text-field', 'style': 'margin-left: 38px; width: 400px; height: 40px;'}}) }}
-</div>
- <div style="margin-bottom: 20px;"></div>
-<div class="adresseLivraison {% if form_errors(form.adresseLivraison) %}error-field{% endif %}">
-    {% if form_errors(form.adresseLivraison) %}
-        <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.adresseLivraison) }}</div>
-    {% endif %}
-    <label for="{{ form.adresseLivraison.vars.id }}">{{ form.adresseLivraison.vars.label }}</label>
-    {{ form_widget(form.adresseLivraison, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 300px; height: 40px;'}}) }}
-</div>
+        <div style="margin-bottom: 40px;"></div>
+        <div class="nomClient {% if form_errors(form.nomClient) %}error-field{% endif %}">
+            {% if form_errors(form.nomClient) %}
+                <div class="error-message" style ="margin-bottom: 10px;" >{{ form_errors(form.nomClient) }}</div>
+            {% endif %}
+            <label for="{{form.nomClient.vars.id }}">{{ form.nomClient.vars.label }}</label>
+            {{ form_widget(form.nomClient, {'attr': {'class': 'text-field', 'style': 'margin-left: 42px;  width: 400px; height: 40px;'}}) }}
+            
+        </div>
+        <div style="margin-bottom: 20px;"></div>
+        <div class="prenomClient  {% if form_errors(form.prenomClient) %}error-field{% endif %}">
+            {% if form_errors(form.prenomClient) %}
+                <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.prenomClient) }}</div>
+            {% endif %}
+            <label for="{{ form.prenomClient.vars.id }}">{{ form.prenomClient.vars.label }}</label>
+            {{ form_widget(form.prenomClient, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 400px; height: 40px;'}}) }}
+        </div>
+        <div style="margin-bottom: 20px;"></div>
 
- <div style="margin-bottom: 20px;"></div>
-    <div class="boutons-container" style="display: flex; margin-top: 20px; margin-left: 80px;">
-         <button type="submit" id="validerCommande" class="bouton-prod">Valider la commande</button>
-        <button id="btnAnnuler" class="bouton-prod" style="margin-left: 100px;" type="button">Annuler</button>
+        <div class="telephone {% if form_errors(form.telephone) %}error-field{% endif %}">
+            {% if form_errors(form.telephone) %}
+                <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.telephone) }}</div>
+            {% endif %}
+            <label for="{{ form.telephone.vars.id }}">{{ form.telephone.vars.label }}</label>
+            {{ form_widget(form.telephone, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 380px; height: 40px;'}}) }}
+        </div>
+        <div style="margin-bottom: 20px;"></div>
+        <div class="eMail {% if form_errors(form.eMail) %}error-field{% endif %}">
+            {% if form_errors(form.eMail) %}
+                <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.eMail) }}</div>
+            {% endif %}
+            <label for="{{ form.eMail.vars.id }}">{{ form.eMail.vars.label }}</label>
+            {{ form_widget(form.eMail, {'attr': {'class': 'text-field', 'style': 'margin-left: 38px; width: 400px; height: 40px;'}}) }}
+        </div>
+        <div style="margin-bottom: 20px;"></div>
+        <div class="adresseLivraison {% if form_errors(form.adresseLivraison) %}error-field{% endif %}">
+            {% if form_errors(form.adresseLivraison) %}
+                <div class="error-message" style="margin-bottom: 10px;">{{ form_errors(form.adresseLivraison) }}</div>
+            {% endif %}
+            <label for="{{ form.adresseLivraison.vars.id }}">{{ form.adresseLivraison.vars.label }}</label>
+            {{ form_widget(form.adresseLivraison, {'attr': {'class': 'text-field', 'style': 'margin-left: 15px; width: 300px; height: 40px;'}}) }}
+        </div>
+        <div style="margin-bottom: 20px;"></div>
+        
+         <div id="card-element" style="width: 500px; height: 40px;">
+                <!-- Stripe.js injectera les éléments de formulaire ici -->
+          </div>
+          <input type="hidden" name="stripeToken" id="stripeToken">
+            
+
+
+
+        <div style="margin-bottom: 20px;"></div>
+        <div class="boutons-container" style="display: flex; margin-top: 20px; margin-left: 40px;">
+            <button type="submit" id="validerCommande" class="bouton-prod">Valider la commande</button>
+            <button id="btnAnnuler" class="bouton-prod" style="margin-left: 100px;" type="button">Annuler</button>
+        </div>
+        {{ form_end(form) }}
     </div>
-{{ form_end(form) }}
-</div>
 </div>    
+
+
+<script src="https://js.stripe.com/v3/"></script>
 
 <script>
    // Récupérer le bouton "Annuler"
@@ -162,6 +192,53 @@
             event.preventDefault();
         }
     });
+
+
+
+    // Initialiser Stripe.js avec votre clé publique
+    var stripe = Stripe('pk_test_51P9BRURobhmtORDyVYlczNZwttdZbJqHvynDkOUItGlpgBgrTFjElmh3Qmm87s5jqFZyhemYu1HSMNwKhphMmbig001hcHvkAL');
+
+    // Créer un élément de formulaire de carte
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+
+    // Ajouter l'élément de formulaire à votre page
+    cardElement.mount('#card-element');
+
+    // Gérer les erreurs éventuelles lors de la saisie de la carte
+    cardElement.on('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+
+    // Gérer la soumission du formulaire
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Créer un token Stripe avec les détails de la carte
+        stripe.createToken(cardElement).then(function(result) {
+            if (result.error) {
+                // Informer l'utilisateur s'il y a une erreur
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Ajouter le token Stripe au champ du formulaire
+                var tokenInput = document.getElementById('stripeToken');
+                tokenInput.value = result.token.id;
+
+                // Soumettre le formulaire
+                form.submit();
+            }
+        });
+    });
+    
+
 </script>
 
 {% endblock %}

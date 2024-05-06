@@ -19,6 +19,7 @@ use App\Entity\Produits;
 use App\Form\ProduitType;
 use App\Entity\Users;
 use App\Entity\Panier;
+use App\Entity\Productrating;
 use App\Form\ModifierProduitType;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -40,28 +41,32 @@ class MarketplaceController extends AbstractController
     #[Route('/marketplace', name: 'app_marketplace', methods: ['GET', 'POST'])]
     public function add(Request $request, SessionInterface $session, PaginatorInterface $paginator): Response
     {
-          // Récupérer les produits depuis la base de données
-          $produits = $this->getDoctrine()->getRepository(Produits::class)->findAll();
-      
+          // Récupérer les produits depuis la base de données trier
+          $queryBuilder = $this->getDoctrine()->getRepository(Produits::class)->createQueryBuilder('p')
+          ->orderBy('p.dPublicationProduit', 'DESC');
     
           // Récupérer la catégorie sélectionnée depuis la requête
           $categorie = $request->query->get('categorie');
-      
+
+         
+  
           // Filtrer les produits par catégorie si une catégorie est sélectionnée
           if ($categorie !== null) {
-              $produits = array_filter($produits, function ($produit) use ($categorie) {
-                  return $produit->getCategProduit() === $categorie;
-              });
-          }
+            $queryBuilder->andWhere('p.categProduit = :categorie')
+                ->setParameter('categorie', $categorie);
+        }
+          
+          $query = $queryBuilder->getQuery();
+            $produits = $query->getResult();
 
                // Paginer les résultats
                $produits = $paginator->paginate(
                 $produits, // Requête à paginer
                 $request->query->getInt('page', 1), // Numéro de page
                 9 // Nombre d'éléments par page
-            );
-    
-
+               );
+            
+            
           // Calculer le prix maximal parmi tous les produits
           $maxPrix = $this->getDoctrine()->getRepository(Produits::class)->createQueryBuilder('p')
                   ->select('MAX(p.prixProduit)')
@@ -199,7 +204,6 @@ class MarketplaceController extends AbstractController
             ->getResult();
 
             // Paginer les résultats de recherche
-          // Paginer les résultats
           $produits = $paginator->paginate(
             $produits, // Requête à paginer
             $request->query->getInt('page', 1), // Numéro de page
@@ -262,6 +266,7 @@ class MarketplaceController extends AbstractController
         // Remove the product from the database
         $entityManager->remove($produit);
         $entityManager->flush();
+        
 
         // Redirect to the appropriate route after deletion
         return $this->redirectToRoute('vos_produits');
@@ -347,7 +352,6 @@ class MarketplaceController extends AbstractController
 
         return new Response('Produit ajouté au panier', Response::HTTP_OK);
     }
-
 
     #[Route('/supprimer-panier', name: 'supprimer_panier')]
     public function supprimerPanier(EntityManagerInterface $entityManager, SessionInterface $session): Response
@@ -439,7 +443,6 @@ class MarketplaceController extends AbstractController
     }
         
 
-
     private function calculerTotalPanier($user, EntityManagerInterface $entityManager)
     {
         // Récupérer les éléments du panier pour l'utilisateur connecté
@@ -460,9 +463,19 @@ class MarketplaceController extends AbstractController
         return $totalPrix;
   
    }
+   
+   
 
 
-    
+   
+
+  
+
+   
+
+
+ 
+
 
 
 
