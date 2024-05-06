@@ -536,6 +536,15 @@ main{
                     </div>
                 </div>
            </div>
+
+
+
+        <div style="margin-top: 80px; margin-bottom: 40px;">
+            <canvas id="myChart" width="250" height="100"></canvas>
+        </div>
+
+        <h2 style="margin-left: 20px;">Tout les produits de ArtHive : </h2>
+
     <div class="produit-container"style="width: 100%;">
         {% for produit in produits %}
             <div class="produit-item">
@@ -562,7 +571,7 @@ main{
                                 </div>
                             </div>
                         </div>
-                        <!-- Votre code existant -->
+                        
                     </div>
 
                <div class="user">
@@ -612,6 +621,8 @@ main{
     </div>
 
 
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
      <!----------------------------------------- zoom image ----------------------------------------------->
@@ -791,9 +802,33 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+<!------------------------------------- Graphe ----------------------------------------------->
+ // Récupérer les données des catégories et des nombres de produits
+    const categories = Object.keys({{ nombreProduitsParCategorie | json_encode | raw }});
+    const counts = Object.values({{ nombreProduitsParCategorie | json_encode | raw }});
 
-
-
+    // Créer un graphique en barres
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: categories,
+            datasets: [{
+                label: 'Nombre de produits par catégorie',
+                data: counts,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)', // Couleur de fond des barres
+                borderColor: 'rgba(54, 162, 235, 1)', // Couleur de la bordure des barres
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true // Commencer l'axe des Y à zéro
+                }
+            }
+        }
+    });
 
    </script>
 
