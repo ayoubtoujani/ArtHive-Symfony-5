@@ -1,72 +1,26 @@
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+{% extends 'admin/home.html.twig' %}
+
+{% block title %}
+    ArtHive | Products
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/styleAdmin.css') }}">
-    <title>Dashboard</title>
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<body>
-    <div class="container">
-        <aside>
-
-            <div class="logo" style="height:15%">
-                <img src="{{ asset('images/arthive_black.png') }}">
-            </div>
-
-            <div class="sidebar">
-                <a href={{ path('app_admin_dashboard') }}>
-                    <span class="material-icons-sharp">
-                        dashboard
-                    </span>
-                    <h3>Dashboard</h3>
-                </a>
-
-                <a href="#" class="active">
-                    <span class="material-icons-sharp">
-                        person_outline
-                    </span>
-                    <h3>Utilisateurs</h3>
-                </a>
-
-                <a href={{ path('app_admin_groups') }}>
-                    <span class="material-icons-sharp">
-                        groups
-                    </span>
-                    <h3>Groupes</h3>
-                </a>
-
-                <a href={{ path('app_admin_events') }}>
-                    <span class="material-icons-sharp">
-                        event
-                    </span>
-                    <h3>Evénements</h3>
-                </a>
-
-                <a href={{ path('app_admin_products') }}>
-                    <span class="material-icons-sharp">
-                        inventory_2
-                    </span>
-                    <h3>Produits</h3>
-                </a>
-
-                <a href={{ path('app_admin_reports') }}>
-                    <span class="material-icons-sharp">
-                        report_gmailerrorred
-                    </span>
-                    <h3>Reports</h3>
-                </a>
-
-                <a href="{{ path('app_login') }}">
-                    <span class="material-icons-sharp">
-                        logout
-                    </span>
-                    <h3>Logout</h3>
-                </a>
-            </div>
-        </aside>
-
-        <main>
+    <style>
+body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+    {% endblock %}
+{% block content %}
+    {# Your content for the posts page goes here #}
+<main>
             <div class="recent-orders" style="margin-top:100px">
                 <table>
                     <thead>
@@ -113,4 +67,5 @@
     </div>
 
     <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
-</body>
+
+{% endblock %}

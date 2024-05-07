@@ -9,8 +9,8 @@
     {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.css">
-  
-
+    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+    
 
     <style>
         /* Styles pour la liste des événements */
@@ -189,7 +189,6 @@
 /* Styles pour la boîte modale de création d'événement */
 .createEventModal {
     
-    display: none; /* Masquer la boîte modale par défaut */
     position: fixed;
     z-index: 999;
     left: 50%;
@@ -201,7 +200,7 @@
     background-color: rgba(0, 0, 0, 0.4);
     justify-content: center; /* Alignement horizontal au centre */
     align-items: center; /* Alignement vertical au centre */
-
+    display: none; /* Utilisez flexbox pour centrer verticalement et horizontalement */
    
 }
 
@@ -216,6 +215,7 @@
     max-height: 800px; /* Hauteur maximale de la modal */
     overflow-y: auto; /* Ajouter une barre de défilement vertical si nécessaire */
     border-radius: 8px; /* Arrondir les coins de la modal */
+
 }
 
 .createEventModal .modal-content h1 {
@@ -455,15 +455,134 @@
             color: #dc3545;
         }
 
+        .flashy {
+    font-family: Arial, sans-serif;
+    padding: 11px 30px;
+    border-radius: 4px;
+    font-weight: 400;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 16px;
+    color: #fff;
+}
+
+.flashy--success {
+    background-color: #99c93d;
+    color: #fff;
+}
+
+.flashy--warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.flashy--muted {
+    background: #eee;
+    color: #3a3a3a;
+    border: 1px solid #e2e2e2;
+}
+
+.flashy--muted-dark {
+    background: #133259;
+    color: #e2e1e7;
+}
+
+.flashy--info a,
+.flashy--primary-dark a {
+    color: #fff;
+}
+
+.flashy--error {
+    background: #d14130;
+    color: #fff;
+}
+
+.flashy--primary {
+    background: #573e81;
+}
+
+.flashy--primary-dark {
+    background: linear-gradient(to right, #133259 30%, #0d233e);
+}
+
+.flashy--info {
+    background: #00baf3;
+}
+
+.flashy > ul {
+    padding-left: 15px;
+}
+
+.flashy > p:only-of-type {
+    margin-bottom: 0;
+}
+
+.flashy i {
+    margin-right: 8px;
+    position: relative;
+    top: 6px;
+}
+
+.flashy .flashy__body {
+    color: inherit;
+}
+
+@media only screen and (max-width: 1050px) {
+    .flashy {
+        text-align: center;
+        right: 0;
+        left: 50%;
+        width: 300px;
+        margin-left: -150px;
+    }
+}
+
+.alert {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}    
+body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
     </style>
+   
 {% endblock %}
 
 
 {% block content %}
  <h1 style="display: flex; justify-content: center;">Vos Évènements</h1>
  <!-- Bouton pour afficher le formulaire de création d'événement -->
-<a href="#" class="openModalBtn">Créer événement</a>
+<a href="#" class="openModalBtn">Créer évènement</a>
 
+
+{% for message in app.session.flashbag.get('success') %}
+    <div class="alert alert-success">{{ message }}</div>
+{% endfor %}
  <div class="event-container">
         {% for evenement in evenements %}
             <div class="event-item">
@@ -496,7 +615,7 @@
         <div class="add-event-container">
             <div class="add-event-content">
                 <h1>Ajouter un Événement</h1>
-                <form action="{{ path('vos_evenements') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ path('vos_evenements') }}" method="post" enctype="multipart/form-data" novalidate>
                     <!-- Vos champs de formulaire -->
                     {{ form_start(form) }}
                     <div class="image-preview-container">
@@ -505,7 +624,7 @@
                     </div>
                     {{ form_row(form.titreEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.titreEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Titre de l\'événement'} }) }}
                     {{ form_label(form.dDebutEvenement, 'Date de début de l\'événement') }}
-                    {{ form_widget(form.dDebutEvenement, { 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dDebutEvenement.vars.errors|length ? ' is-invalid' : '')} }) }}
+                    {{ form_widget(form.dDebutEvenement, {'required': true, 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dDebutEvenement.vars.errors|length ? ' is-invalid' : '')} }) }}
                     {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dFinEvenement.vars.errors|length ? ' is-invalid' : '')}, 'widget': 'single_text' }) }}
                     {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.descriptionEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Description de l\'événement'} }) }}
                     {{ form_row(form.lieuEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.lieuEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Lieu de l\'événement'} }) }}
@@ -537,12 +656,14 @@
     
         </div>
       </div>
-      
-          
+
+     
+     
  {% block javascripts %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
-
+<script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+<script src="//code.jquery.com/jquery.js"></script>
 
 <!-- jQuery UI Datepicker -->
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -556,7 +677,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const blurBackground = document.querySelector('.blur');
      // Vérifier si le formulaire contient des erreurs
      const formErrors = document.querySelectorAll('.form-control.is-invalid');         // Variable pour stocker l'URL de l'image sélectionnée
-     let imageURL = '';
 
 // Fonction pour prévisualiser une image sélectionnée
 function previewImage(input) {
@@ -566,18 +686,17 @@ function previewImage(input) {
                 var imagePreview = document.getElementById('imagePreview');
                 imagePreview.src = e.target.result;
                 imagePreview.style.display = 'block';
-                imageURL = e.target.result; // Stocker l'URL de l'image
+                let imageURL = e.target.result;
             };
             reader.readAsDataURL(input.files[0]);
         }
     }
 
   // Si des erreurs sont présentes, afficher le modal
-  if (formErrors.length > 0  || !imageInput.files[0] ) {
+  if (formErrors.length > 0   ) {
     event.preventDefault();
         createEventModal.style.display = 'flex';
         document.body.classList.add('blur');
-
     }
 
 
@@ -620,12 +739,12 @@ function previewImage(input) {
     }
 });
 
-$(document).ready(function() {
+  // $(document).ready(function() {
         // Activer le date picker pour les champs de date
-        $('.datepicker').datepicker({
-            dateFormat: 'yy-mm-dd' // Format de date souhaité
-        });
-    });
+      //  $('.datepicker').datepicker({
+           // dateFormat: 'yy-mm-dd' // Format de date souhaité
+     //   });
+   // });
 
 
 
@@ -641,9 +760,24 @@ $(document).ready(function() {
     }
 }
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Fonction pour masquer les messages de succès après une minute
+    setTimeout(function() {
+        var successMessages = document.querySelectorAll('.alert-success');
+        successMessages.forEach(function(message) {
+            message.style.display = 'none';
+        });
+    }, 2000); // 60000 millisecondes équivalent à une minute
+});
+
     </script>
-    
-   
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        flashy("Votre message de notification ici !");
+    });
+</script>
+
     
 {% endblock %}
 

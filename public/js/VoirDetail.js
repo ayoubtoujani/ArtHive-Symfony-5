@@ -154,6 +154,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (formErrors.length > 0) {
         createEventModal.style.display = 'flex';
         document.body.classList.add('blur');
+        // Show the image preview if there are errors
+        const imageInput = document.querySelector('input[type="file"]');
+        const imageFile = imageInput.files[0];
+        if (imageFile) {
+            previewImage(imageInput);
+        }
     }
 
     const addEventButton = document.getElementById('add'); // Get the submit button
@@ -288,6 +294,8 @@ document.querySelectorAll('.delete-event').forEach(link => {
             .then(data => {
                 alert(data.message); // Affiche un message de confirmation
                 // Rechargez la page ou mettez à jour la liste des événements si nécessaire
+                flashy('L\'événement a été supprimé avec succès !', '/evenements');
+
             })
             .catch(error => {
                 console.error('Erreur:', error);
@@ -298,6 +306,7 @@ document.querySelectorAll('.delete-event').forEach(link => {
 });
 
 ///////////////////////////////////////////////////////// Recherche /////////////////////////////////////////////////
+//AJAX, envoyer et récupérer des données du serveur sans avoir à recharger toute la page web.
  $(document).ready(function() {
     $('#search-bar').on('submit', function(event) {
         event.preventDefault(); // Empêche le formulaire de se soumettre normalement

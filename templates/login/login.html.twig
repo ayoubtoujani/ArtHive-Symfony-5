@@ -14,7 +14,6 @@
             background-attachment: fixed;
         }
     </style>
-        
 </head>
 
 <body>
@@ -23,7 +22,7 @@
         <div class="form-container sign-up">
             <form method="post" novalidate>
                 {{ form_start(registerForm) }}
-                <h2>Sign Up</h2>
+                <h2>Créer un compte</h2>
                 <div class="social-icons">
 
                     <a href="{{ path('fcb_login') }}" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
@@ -48,7 +47,10 @@
                         <span class="text-danger" style="font-size:12px;">{{ form_errors(registerForm.dNaissanceUser) }}</span>
                     </div>
 
-                    
+                    <div class ="col-6">
+                        {{ form_widget(registerForm.ville, { 'attr': {'class': 'form-control mt-2', 'id': 'country-select'} }) }}
+                        <span class="text-danger" style="font-size:12px;">{{ form_errors(registerForm.ville) }}</span>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -85,7 +87,7 @@
         <div class="form-container sign-in">
             <form method="post" novalidate>
                 {{ form_start(loginForm) }}
-                <h2>Sign In</h2>
+                <h2>Se connecter</h2>
                 <div class="social-icons">
 
                     <a href="{{ path('fcb_login') }}" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
@@ -106,9 +108,9 @@
                     {{ form_widget(loginForm.mdpUser, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
                     {{ form_errors(loginForm.mdpUser) }}
                 <input type="hidden" name="state" value="login">        
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="submit" class="btn btn-primary">Se Connecter</button>
                 <div class="text-center mt-3">
-                    <a href="{{ path('app_forgot_password') }}" class="text-primary">Forgot your password?</a>
+                    <a href="{{ path('app_forgot_password') }}" class="text-primary">Mot de pass oublié?</a>
                 </div>
                 {{ form_end(loginForm) }}
             </form>
@@ -116,14 +118,14 @@
         <div class="toggle-container">
             <div class="toggle">
                 <div class="toggle-panel toggle-left">
-                    <img src="{{ asset('images/logoArthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
-                    <p>Enter your personal details to use all of site features</p>
-                    <button class="hidden" id="login">Sign In</button>
+                    <img src="{{ asset('images/arthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
+                    <p>Saisissez vos données personnelles pour utiliser toutes les fonctionnalités du site</p>
+                    <button class="hidden" id="login">Se connecter</button>
                 </div>
                 <div class="toggle-panel toggle-right">
-                    <img src="{{ asset('images/logoArthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
-                    <p>Register with your personal details to use all of site features</p>
-                    <button class="hidden" id="register">Sign Up</button>
+                    <img src="{{ asset('images/arthive.png') }}" class="logo" alt="logo" width="70%" height="50%">
+                    <p>Enregistrez-vous avec vos données personnelles pour utiliser toutes les fonctionnalités du site</p>
+                    <button class="hidden" id="register">Créer un compte</button>
                 </div>
             </div>
         </div>

@@ -136,7 +136,7 @@ class CommandeController extends AbstractController
            $this->addFlash('success', 'Votre commande a été enregistrée avec succès !');
    
            // Rediriger l'utilisateur vers une autre page, par exemple la page d'accueil
-           return $this->redirectToRoute('app_feed');
+           return $this->redirectToRoute('my_publications');
        }
    
        return $this->render('commande/passerCommande.html.twig', [

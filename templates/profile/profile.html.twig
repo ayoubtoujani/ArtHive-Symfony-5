@@ -7,10 +7,20 @@
 
 {% block stylesheets %}
     {{ parent() }}
-      <link rel="stylesheet" href="{{ asset('css/ProfilePage.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('css/ProfilePage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+    <style>
+       body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
     {% endblock %}
 
   {% block content %}
@@ -29,7 +39,7 @@
                     </div>
                     <div class="custom-row mb-5">
                         <div class="custom-col-2">
-                            <img class="custom-img-fluid" src="{{ asset('/images/profile_pictures/' ~ user.photo) }}" alt="Profile photo">
+                            <img class="custom-img-fluid" src="{{ asset('/images/' ~ user.photo) }}" alt="Profile photo">
                         </div>
                         <div class="custom-col-10">
                             <div class="custom-row mb-2">
