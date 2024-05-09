@@ -15,7 +15,7 @@ class MailApi
 
     public function sendPasswordEmail($email)
     {
-        $response = $this->client->request('POST', 'http://localhost:3000/api/forgot-password', [
+        $response = $this->client->request('POST', 'http://192.168.1.20:3000/api/forgot-password', [
             'json' => ['email' => $email],
         ]);
 
