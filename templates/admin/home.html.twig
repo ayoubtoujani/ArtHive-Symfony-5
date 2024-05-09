@@ -75,13 +75,13 @@
                     <span class="material-icons-sharp">
                         post_add
                     </span>
-                    <h3>Posts</h3>
+                    <h3>Publications</h3>
                 </a>
                  <a href={{ path('app_admin_groups') }}>
                     <span class="material-icons-sharp">
                         groups
                     </span>
-                    <h3>Groups</h3>
+                    <h3>Groupes</h3>
                 </a>
                 
 
@@ -98,7 +98,7 @@
                     <span class="material-icons-sharp">
                         report_gmailerrorred
                     </span>
-                    <h3>Reports</h3>
+                    <h3>Réclamations</h3>
                 </a>
 
                 <a href="{{ path('app_login') }}" id="logout">
@@ -130,7 +130,7 @@
                 <div class="visits" onclick="window.location.href='{{ path('app_admin_posts') }}'">
                     <div class="status">
                         <div class="info">
-                            <h3>Posts</h3>
+                            <h3>Publications</h3>
                             <h1>{{countPosts}}</h1>
                         </div>
                     </div>
@@ -157,7 +157,7 @@
             <div class="">
                     <div class="status">
                         <div class="groups">
-                            <h3>Group</h3>
+                            <h3>Groupes</h3>
                             <h1>{{countGroups}}</h1>
                         </div>
                     </div>
@@ -229,5 +229,6 @@
 
     </div>
 
-    <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
+  
+   
 </body>

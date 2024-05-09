@@ -1,4 +1,5 @@
 {% extends 'admin/home.html.twig' %}
+
 {% block title %}
     ArtHive | Posts
 {% endblock %}
@@ -325,6 +326,8 @@ body {
 {% endblock %}
 {% block content %}
 <main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
      <h1>Publications</h1>
     <div>
         <button type="button" class="button"id="create-post-button" >
@@ -332,6 +335,7 @@ body {
   <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
 </button>
      </div>
+         <canvas id="myChart" width="400" height="400"></canvas>
     <div class="publication-container" >
         {% for publication in publications %}
         
@@ -380,7 +384,7 @@ body {
   </svg>
 </button>
 
- <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px;" href="{{ path('delete_publication_by_admin', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Delete</a>
+ <a id="deleteButton"class="btn btn-secondary dropdown-toggle" style="width: 45px; height: 45px; color:red;" href="{{ path('delete_publication_by_admin', {'id': publication.getIdPublication()}) }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Delete</a>
   
 
                 <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
@@ -432,12 +436,41 @@ body {
     </div>
       <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Chart.js library
+    // Get the canvas element
+    const ctx = document.getElementById('myChart').getContext('2d');
+
+    // Data for the chart (you need to define your own data)
+    const chartData = {
+        labels: ['Semaine 1 03/2024', 'Semaine 2 03/2024', 'Semaine 3 03/2024', 'Semaine 4 03/2024'],
+        datasets: [{
+            label: 'Nombres des Publications par semaine', // Name of the dataset
+            // Data for the x-axis make real data 
+            data: [12, 19, 3, 5, 2, 3, 10],
+          backgroundColor: 'rgba(54, 162, 235, 0.2)', // Blue color
+            borderColor: 'rgba(54, 162, 235, 1)', // Blue color
+            borderWidth: 1
+        }]
+    };
+
+    // Configuration options
+    const chartOptions = {
+        scales: {
+            y: {
+                beginAtZero: true // Start y-axis at 0
+            }
+        }
+    };
+
+    // Create the chart
+    const myChart = new Chart(ctx, {
+        type: 'bar', // Specify the chart type (e.g., bar, line, pie, etc.)
+        data: chartData,
+        options: chartOptions
+    });
    const createPostButton = document.getElementById("create-post-button"); // Select the create post button
     const addPostModal = document.getElementById("addPostModal"); // Select the add post modal
  const commentIcons = document.querySelectorAll('.bookmarkBtn');
-
-
-
     function openCreatePostModal() {
         const addPostModal = document.getElementById('addPostModal');
         addPostModal.style.display = "block";
@@ -472,10 +505,8 @@ const addPostCloseBtn = addPostModal.querySelector('.close');
             document.getElementById('addPostModal').style.display = 'block';
         };
     {% endif %}
+
 });
-
-
-
   </script>
 </main>
 {% endblock %}
