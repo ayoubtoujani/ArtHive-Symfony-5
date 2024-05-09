@@ -8,10 +8,6 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>IdGroup</th>
-                <td>{{ group.idGroup }}</td>
-            </tr>
-            <tr>
                 <th>NomGroup</th>
                 <td>{{ group.nomGroup }}</td>
             </tr>
@@ -26,17 +22,24 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_groups_index') }}" class="button-link">Back to List</a>
+    <a href="{{ path('app_groups_index') }}" class="button-link">Retour a la liste des groupes</a>
     <br>
-    <a href="{{ path('app_groups_edit', {'idGroup': group.idGroup}) }}" class="button-link">Edit</a>
-
-
+    <br>
+    <a href="{{ path('app_groups_edit', {'idGroup': group.idGroup}) }}" class="button-link">Modifier</a>
     {{ include('groups/_delete_form.html.twig') }}
 {% endblock %}
 {% block stylesheets %}
-
-<style> /* Table styles */
+{{ parent() }}
+<style>
+ /* Table styles */
     /* Button styles */
+     h1 {
+            color: #4848ed; /* Text color in blue */
+            text-align: center; /* Horizontal centering */
+            margin-top: 0; /* Remove default margin to align with the rest of the content */
+            margin-bottom: 20px; /* Bottom spacing to separate from the following content */
+            font-size: 50px; /* Larger font size */
+        }
     .button-link {
         display: inline-block;
         padding: 8px 16px;

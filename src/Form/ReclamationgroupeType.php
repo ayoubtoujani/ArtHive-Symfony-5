@@ -12,7 +12,7 @@ class ReclamationgroupeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('descReclamation')
+            ->add('descReclamation') 
             ->add('group')
         ;
     }

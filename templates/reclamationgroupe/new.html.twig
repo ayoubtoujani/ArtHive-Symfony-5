@@ -1,22 +1,6 @@
 {% extends 'feed.html.twig' %}
-
-{% block title %}New Reclamationgroupe{% endblock %}
-
-{% block content %}
-    <div class="page-container">
-        <h1>Create new Reclamationgroupe</h1>
-
-        <div class="form-container">
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-            {{ form_widget(form) }}
-            <button class="btn">{{ button_label|default('Save') }}</button>
-            {{ form_end(form) }}
-        </div>
-
-        <a href="{{ path('app_groups_index') }}" class="back-link">back to list</a>
-    </div>
-{% endblock %}
 {% block stylesheets %}
+{{ parent() }}
     <style>
     /* Form styles */
     .form-container {
@@ -87,4 +71,19 @@
     }
 </style>
 {% endblock %}
+{% block title %}Réclamation Groupe{% endblock %}
+
+{% block content %}
+    <div class="page-container">
+        <h1>Créer une nouvelle réclamation</h1>
+        <div class="form-container">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            {{ form_widget(form) }}
+            <button class="btn">{{ button_label|default('Enregistrer') }}</button>
+            {{ form_end(form) }}
+        </div>
+        <a href="{{ path('app_groups_index') }}" class="back-link">Retour</a>
+    </div>
+{% endblock %}
+
 
