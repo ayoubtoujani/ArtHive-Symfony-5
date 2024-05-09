@@ -4,6 +4,11 @@
     ArtHive | Groups
 
 {% endblock %}
+{% block create  %}  
+              <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center; display:none;">
+                    <i class="fa-solid fa-circle-plus"></i> 
+                    Créer</label> 
+{% endblock %}
 {% block stylesheets %}
 
     <style>
@@ -71,7 +76,11 @@ body {
 {% block content %}
 
     <h1>Groups</h1>
+    <div style="display: flex; justify-content: space-between;">
     <a class="btn btn-primary" href="{{ path('app_groups_new') }}">Create new</a>
+        <a class="btn btn-primary"  href="{{ path('app_reclamationgroupe_newback') }}" aria-haspopup="true" aria-expanded="false" style="background-color: red; color: white;padding-top: 5px; margin-top: 5px;">Ajouter Une Réclamation</a> 
+
+    </div>
     <div class="group-container">
         {% for group in groups %}
             <div class="group-item">
@@ -79,13 +88,8 @@ body {
                 <div class="group-details">
                     <h2 class="group-name">{{ group.getNomGroup() }}</h2>
                     <p class="group-description">{{ group.getDescriptionGroup() }}</p>
-
+                    <a href="{{ path('app_groups_show', {'idGroup': group.idGroup}) }}">Show</a>
                     <br>
-                    <a class="btn btn-primary"  href="{{ path('app_reclamationgroupe_newback', {'groupId': group.idGroup}) }}" aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;padding-top: 5px; margin-top: 5px;">Ajouter Une Réclamation</a> 
-                    <br>
-                    <a class="btn btn-primary" href="{{ path('app_groups_reclamations', {'idGroup': group.idGroup}) }}" aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;padding-top: 5px; margin-top: 5px;">Afficher Réclamations</a>
-
-
                 </div>
             </div>
         {% endfor %}

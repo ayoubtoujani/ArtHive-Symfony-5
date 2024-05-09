@@ -327,7 +327,7 @@ if (!$user instanceof Users) {
 
 
     #[Route('/evenement/search', name: 'app_evenement_search')]
-     public function search (Request $request,EvenementsRepository $evenementsRepository, PaginatorInterface $paginator): Response
+     public function search (Request $request,EvenementsRepository $evenementsRepository, PaginatorInterface $paginator , SessionInterface $session): Response
     {
         $searchTerm = $request->query->get('q'); //paramètres de requête dans l'URL
         $eventsThisWeek = $evenementsRepository->findEventsThisWeek();         // Récupérer le nombre de participants pour chaque événement
@@ -355,6 +355,7 @@ if (!$user instanceof Users) {
             'pagination' => $pagination,
             'searchTerm' => $searchTerm,
             'eventsThisWeek' => $eventsThisWeek,
+            'user' => $session->get('user'),
         ]);
     }
     #[Route("/eventsThisWeek", name:"events_this_week")]

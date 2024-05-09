@@ -9,6 +9,14 @@
         <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
     </form>
 {% endblock %}
+
+ {% block create  %}  
+              <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center; display:none;">
+                    <i class="fa-solid fa-circle-plus"></i> 
+                    Créer</label> 
+{% endblock %}
+
+
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -509,6 +517,84 @@ body {
                 });
             });
         });
+        </script>
+<script>
+////////////////////////////////////////////////BOUTON PARTICIPER////////////////////////////////////////////////////
+document.addEventListener('DOMContentLoaded', function() {
+    const participerButtons = document.querySelectorAll('.participer-btn');
+
+    participerButtons.forEach(button => {
+        // Récupérer l'ID de l'événement associé à ce bouton
+        const eventId = button.getAttribute('data-evenement');
+        
+        // Vérifier s'il existe une valeur enregistrée pour cet événement dans le stockage local
+        const participationStatus = localStorage.getItem(`participation_${eventId}`);
+        if (participationStatus === 'participated') {
+            // Si l'utilisateur a déjà participé à cet événement, mettre à jour le bouton
+            button.innerHTML = '<i class="fas fa-star"></i> Participé(e)';
+        }
+
+        // Récupérer le compteur de participants pour cet événement
+        const participantsCountElement = button.parentElement.querySelector('.participants-count');
+        let participantsCount = parseInt(participantsCountElement.textContent.trim());
+
+        button.addEventListener('click', () => {
+            console.log("Button clicked");
+
+            const icon = button.querySelector('i');
+            console.log("Icon:", icon);
+
+            // Accéder au texte du bouton via la propriété textContent
+            const buttonText = button.textContent.trim(); // Obtenir le texte sans les espaces blancs avant et après
+            console.log("ButtonText:", buttonText);
+
+            // Mettre à jour le statut de participation dans le stockage local
+            if (buttonText === 'Participer') {
+                fetch(`/evenement/participate/${eventId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'add' }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la gestion de la participation');
+                    }
+                    // Mettre à jour le compteur de participants et le bouton après une réponse réussie
+                    localStorage.setItem(`participation_${eventId}`, 'participated');
+                    participantsCount++;
+                    participantsCountElement.textContent = participantsCount + " participants";
+                    button.innerHTML = '<i class="fas fa-star"></i> Participé(e)';
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la gestion de la participation:', error);
+                });
+            } else {
+                fetch(`/evenement/participate/${eventId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'remove' }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la gestion de la participation');
+                    }
+                    // Mettre à jour le compteur de participants et le bouton après une réponse réussie
+                    localStorage.removeItem(`participation_${eventId}`);
+                    participantsCount--;
+                    participantsCountElement.textContent = participantsCount + " participant(s)";
+                    button.innerHTML = '<i class="far fa-star"></i> Participer';
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la gestion de la participation:', error);
+                });
+            }
+        });
+    });
+});
 
         </script>
 

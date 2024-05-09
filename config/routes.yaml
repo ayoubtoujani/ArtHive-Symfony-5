@@ -33,11 +33,6 @@ app_forgot_password:
     controller: App\Controller\ForgotPasswordController::forgotPassword
 
 
-app_admin_dashboard:
-    path: /admin/dashboard
-    controller: App\Controller\AdminController::index
-
-
 app_admin_users:
     path: /admin/users
     controller: App\Controller\AdminController::getAllUsers

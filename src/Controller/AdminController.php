@@ -41,7 +41,7 @@ class AdminController extends AbstractController
 {
 
     /////////////////////////////////////////**HOME */
-    #[Route('/admin', name: 'app_admin')]
+  /*  #[Route('/admin', name: 'app_admin')]
     public function index(SessionInterface $session): Response
     {
         $evenements = $this->getDoctrine()->getRepository(Evenements::class)->findAll();
@@ -81,7 +81,7 @@ class AdminController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }      
     }
-    
+    */
     /////////////////////////////////////////**POSTS */
     #[Route('/admin/posts', name: 'app_admin_users', methods: ['GET', 'POST'])]
     public function getAllPosts(PublicationRepository $publicationRepository,SessionInterface $session, Request $request): Response

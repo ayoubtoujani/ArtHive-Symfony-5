@@ -7,9 +7,10 @@ parameters:
 
     images_directory: '%kernel.project_dir%/public/images/'
     image_directoryy: '%kernel.project_dir%/public/uploads/images'
+    images_directory_shams: '%kernel.project_dir%/public/images/produit'
 
 
-    profile_images_directory: '%kernel.project_dir%/public/images/profile_pictures'
+    profile_images_directory: '%kernel.project_dir%/public/images/'
 
 services:
     App\Entity\Evenements:

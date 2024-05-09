@@ -25,19 +25,15 @@ class ReclamationgroupeController extends AbstractController
         ]);
     }
 
-    #[Route('/new/{groupId}', name: 'app_reclamationgroupe_newback', methods: ['GET', 'POST'])]
-    public function newback(Request $request, EntityManagerInterface $entityManager, int $groupId, SessionInterface $session): Response
+    #[Route('/new/', name: 'app_reclamationgroupe_newback', methods: ['GET', 'POST'])]
+    public function newback(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
 
         $groupsRepository = $this->getDoctrine()->getRepository(Groups::class);
-        $group = $groupsRepository->find($groupId);
-
-        if (!$group) {
-            throw $this->createNotFoundException('Group with id ' . $groupId . ' does not exist');
-        }
+    
 
         $reclamationgroupe = new Reclamationgroupe();
-        $reclamationgroupe->setGroup($group); // Use setGroup() instead of setGroupId()
+        // Use setGroup() instead of setGroupId()
 
         $form = $this->createForm(ReclamationgroupeType::class, $reclamationgroupe);
         $form->handleRequest($request);

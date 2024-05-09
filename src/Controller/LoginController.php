@@ -57,7 +57,7 @@ class LoginController extends AbstractController
                 $success = 'Login successful';
                 $session->set('user', $foundUser);
                 if($foundUser->getRole() == 'ROLE_ADMIN'){
-                    return $this->redirectToRoute('app_admin');
+                    return $this->redirectToRoute('app_admin_products');
                 }
                 else{
                     return $this->redirectToRoute('afficher_publications');

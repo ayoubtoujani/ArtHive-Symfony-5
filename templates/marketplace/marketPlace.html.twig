@@ -3,7 +3,11 @@
 {% block title %}
      ArtHive | Marketplace
 {% endblock %}
-
+{% block create  %}  
+              <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center; display:none;">
+                    <i class="fa-solid fa-circle-plus"></i> 
+                    Créer</label> 
+{% endblock %}
 {% block search_bar %}
         <form action="{{ path('app_marketplace_search') }}" method="GET" class="search-bar">
             <input type="search" name="q" placeholder="Rechercher des artistes, des inspirations.">
@@ -451,7 +455,7 @@
                 </div>
                  <img class="produit-image" src="{{ asset('images/produit/' ~ produit.getImageProduit()) }}" alt="Image de produit">
                <div class="user">
-                    <img class="image-user" src="{{ asset('images/users/' ~ produit.getUser().getPhoto()) }}" alt="Image de user">
+                    <img class="image-user" src="{{ asset('images/' ~ produit.getUser().getPhoto()) }}" alt="Image de user">
                     <p class="nom-user">{{ produit.getUser().getNomUser() }} {{ produit.getUser().getPrenomUser() }}</p>
                 </div>
  

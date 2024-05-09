@@ -29,7 +29,7 @@ class CommentsController extends AbstractController
 {
    
     #[Route('/showComments/{id}', name: 'show_comments')]
-    public function addComment($id, Request $request, SessionInterface $session, PublicationRepository $publicationRepository,BadWordsService $badWordsService,FlashBagInterface $flashBag): Response
+    public function addComment($id, Request $request, SessionInterface $session, PublicationRepository $publicationRepository,BadWordsService $badWordsService): Response
     {
         // Get the publication entity by ID
         $publication = $publicationRepository->find($id);
@@ -52,15 +52,6 @@ class CommentsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if the comment contains bad words
             if ($badWordsService->containsBadWord($comment->getContenuCommentaire())) {
-                // Add a flash message
-                $flashBag->add('error', 'Your comment contains inappropriate language.');
-
-                // Send an email to the user
-
-
-
-              
-
                 return $this->redirectToRoute('show_comments', ['id' => $id]);
             }
            // Fetch the user from the database

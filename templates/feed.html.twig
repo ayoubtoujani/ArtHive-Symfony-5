@@ -349,9 +349,11 @@ main .container .left .profile {
                     </a>
                 </div>
                 <!.................END OF SIDEBAR............>
-                <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center;">
+             {% block create  %}  
+              <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center;">
                     <i class="fa-solid fa-circle-plus"></i> 
-                    Créer</label>
+                    Créer</label> 
+            {% endblock %}
             </div>
     <!............................MIDDLE...............................>
         <div class="content" style="width: 130%; height: auto;">

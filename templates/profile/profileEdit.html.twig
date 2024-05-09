@@ -16,23 +16,39 @@ body {
             background-attachment: fixed;
         }
 
+ .custom-container {
+        margin-top: 50px;
+        margin-bottom: 100px;
+        background-color: white;
+        width: auto;
+        padding: 20px;
+
+    }h1 {
+            color: #4848ed; /* Text color in blue */
+            text-align: center; /* Horizontal centering */
+            margin-top: 0; /* Remove default margin to align with the rest of the content */
+            margin-bottom: 20px; /* Bottom spacing to separate from the following content */
+            font-size: 50px; /* Larger font size */
+        }
+    
         </style>
    
   {% endblock %}
 
 {% block content %}
+
     <div class="row mt-4 mb-5">
         <div class="col-12 text-center">
             <h1><strong>Modifier Votre Profile</strong></h1>
         </div>
     </div>
-    <div class="mt-5 container rounded" style="background-color:lightgray;">
+    <div class="custom-container" >
         <form method="post" enctype="multipart/form-data">
         {{ form_start(editProfileForm) }}
     
         
         <div class="row mb-5" >
-            <div class="col-12 d-flex justify-content-center">
+            <div class="col-1 justify-content-center">
                 <img class="img-fluid h-50 rounded" src="{{ asset('/images/' ~ user.photo)  }}" alt="Profile photo" >
             </div>
         </div>

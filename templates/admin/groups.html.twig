@@ -5,18 +5,55 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <style>
+       
+        h1 {
+                color: #4848ed; /* Couleur du texte en bleu */
+                margin-left: 0px;
+                margin-top: 0; /* Supprimez la marge par défaut pour s'aligner avec le reste du contenu */
+                margin-bottom: 20px; /* Espacement en bas pour séparer du contenu suivant */
+                font-size: 50px; /* Taille de police plus grande */
+        }
+        .bouton-prod {
+            display: block;
+            width: 150px; 
+            margin-top: 10px;
+            margin-bottom: 10px;
+            background-color: #3642dd;
+            color: white;
+            padding: 8px 10px;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: background-color 0.3s ease; 
+            border: none; 
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .bouton-prod:hover {
+            background-color: #1877f2; 
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
+<main>
+
+
     <h1>Groups index</h1>
-    <table class="table">
+    <div>
+    <a href="{{ path('app_groups_new') }}" class="bouton-prod">Create new</a>
+
+    </div>
+    <table class="table" width="100%">
         <thead>
         <tr>
-            <th>IdGroup</th>
-            <th>NomGroup</th>
-            <th>Image</th>
-            <th>DescriptionGroup</th>
-            <th>Actions</th>
+
+            <th style=" color: #3642dd;">IdGroup</th>
+            <th style=" color: #3642dd;" >NomGroup</th>
+            <th style=" color: #3642dd;" >Image</th>
+            <th style=" color: #3642dd;">DescriptionGroup</th>
+           
         </tr>
         </thead>
         <tbody>
@@ -32,11 +69,7 @@
                     {% endif %}
                 </td>
                 <td>{{ group.descriptionGroup }}</td>
-                <td>
-                    <a href="{{ path('app_groups_edit', {'idGroup': group.idGroup}) }}">Edit</a>
-                    <a href="{{ path('app_reclamationgroupe_newback', {'groupId': group.idGroup}) }}">Add Reclamation</a> {# Add this link #}
-
-                </td>
+           
             </tr>
         {% else %}
             <tr>
@@ -46,4 +79,6 @@
         </tbody>
     </table>
 
-<a href="{{ path('app_groups_new') }}">Create new</a>   {% endblock %}
+
+</main>
+{% endblock %}

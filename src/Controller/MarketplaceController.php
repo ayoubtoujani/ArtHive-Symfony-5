@@ -95,7 +95,7 @@ class MarketplaceController extends AbstractController
                 // Move the file to the directory where images are stored
                 try {
                     $imageFile->move(
-                        $this->getParameter('images_directory'),
+                        $this->getParameter('images_directory_shams'),
                         $newFilename
                     );
                 } catch (FileException $e) {

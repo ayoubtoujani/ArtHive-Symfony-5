@@ -30,17 +30,40 @@
         tr:hover {
             background-color: #f0f0f0; /* Lighter background color on hover */
         }
+        h1 {
+                color: #4848ed; /* Couleur du texte en bleu */
+                margin-left: 0px;
+                margin-top: 0; /* Supprimez la marge par défaut pour s'aligner avec le reste du contenu */
+                margin-bottom: 20px; /* Espacement en bas pour séparer du contenu suivant */
+                font-size: 50px; /* Taille de police plus grande */
+        }
+        .openModalBtn {
+    background-color: #1877f2; /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    padding: 10px 20px; /* Espacement interne */
+    border: none; /* Suppression de la bordure */
+    border-radius: 8px; /* Coins arrondis */
+    font-size: 16px; /* Taille de la police */
+    cursor: pointer; /* Curseur au survol */
+    transition: background-color 0.3s ease; /* Animation de transition */
+    appearance: none; /* Réinitialiser les styles par défaut du bouton */
+   }
+
+.openModalBtn:hover {
+    background-color: #0e5aa7; /* Changement de couleur au survol */
+}
     </style>
 {% endblock %}
 
 {% block content %}
-    <h1>Reports</h1>
-    <a href="{{ path('generate_pdf') }}" >Generate PDF</a> {# Ajouter le bouton #}
+<main>
+    <h1>La Liste des Réclamations</h1>
+   
     <table class="table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Group ID</th>
+            <th>ID Réclamation</th>
+            <th>ID Groupe</th>
             <th>Description</th>
         </tr>
         </thead>
@@ -58,4 +81,7 @@
         {% endfor %}
         </tbody>
     </table>
+     <a href="{{ path('generate_pdf') }}" class="openModalBtn" style="margin-left: 400px;"
+    >Generate PDF</a>
+</main>
 {% endblock %}

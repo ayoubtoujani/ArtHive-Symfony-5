@@ -104,6 +104,16 @@ class GroupsController extends AbstractController
     return $this->redirectToRoute('app_login');
     }
      
+    #[Route('/{idGroup}', name: 'app_groups_show', methods: ['GET'])]
+public function show($idGroup, SessionInterface $session): Response
+{
+    $group = $this->getDoctrine()->getRepository(Groups::class)->find($idGroup);
+    return $this->render('groups/show.html.twig', [
+        'group' => $group,
+        'user' => $session->get('user'),
+    ]);
+}
+
     #[Route('/{idGroup}/edit', name: 'app_groups_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, $idGroup, EntityManagerInterface $entityManager , SessionInterface $session , GroupsRepository $groupsRepository):Response
     {

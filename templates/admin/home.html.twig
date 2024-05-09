@@ -42,6 +42,12 @@
             margin-top: 1.4rem;
             margin-left: 3rem;
         }
+
+        .container .sidebar
+        {
+            width: 220px;
+        }
+        
 </style>
     <div class="container">
         <!-- Sidebar Section -->
@@ -51,11 +57,11 @@
             </div>
 
             <div class="sidebar">
-                <a href="{{ path('app_admin') }} "class="active">
+               <a href={{ path('app_admin_products') }}>
                     <span class="material-icons-sharp">
-                        dashboard
+                        inventory_2
                     </span>
-                    <h3>Dashboard</h3>
+                    <h3>Produits</h3>
                 </a>
 
                 <a href="{{ path('app_admin_users') }}">
@@ -86,12 +92,7 @@
                     <h3>Evénements</h3>
                 </a>
 
-                <a href={{ path('app_admin_products') }}>
-                    <span class="material-icons-sharp">
-                        inventory_2
-                    </span>
-                    <h3>Produits</h3>
-                </a>
+               
 
                 <a href={{ path('app_admin_reports') }}>
                     <span class="material-icons-sharp">
