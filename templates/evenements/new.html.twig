@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvel Événement | ArtHive</title>
+    <style>
+        /* Ajoutez vos styles ici */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9; /* Ajoutez une couleur de fond */
+        }
+
+        .add-event-container {
+            width: 60%;
+            max-width: 500px;
+            margin: 0 auto; /* Centrez l'élément horizontalement */
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 50px; /* Ajoutez un espace en haut pour éviter que le contenu ne soit collé en haut de la fenêtre */
+        }
+
+        .add-event-content {
+            width: 100%;
+            height: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .add-event-text-field {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .create-event-button,
+        .cancel-button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .cancel-button {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="createEventModal" class="createEventModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="add-event-container">
+                <div class="add-event-content">
+                    <h1>Ajouter un Événement</h1>
+                    <form action="{{ path('evenements_new') }}" method="post">
+                        <!-- Vos champs de formulaire -->
+                        {{ form_start(form) }}
+                        <label for="form_image">Image de l'événement</label>
+                        <img id="image-preview" src="#" alt="Image Preview" style="display: none; max-width: auto; max-height: auto;">
+                        <input type="file" id="form_image" name="form[image]" class="add-event-image-field">
+                        {{ form_row(form.titreEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Titre de l\'événement'} }) }}
+                        {{ form_row(form.dDebutEvenement, { 'label': 'Date de début de l\'événement', 'attr': {'class': 'add-event-text-field datepicker'}, 'widget': 'single_text' }) }}
+                        {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'add-event-text-field datepicker'}, 'widget': 'single_text' }) }}
+    
+                        {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Description de l\'événement'} }) }}
+                        {{ form_row(form.lieuEvenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Lieu de l\'événement'} }) }}
+                        
+                        {{ form_row(form.categorieevenement, { 'attr': {'class': 'add-event-text-field', 'placeholder': 'Catégorie de l\'événement'} }) }}
+                        <button type="submit" class="create-event-button">Créer</button>
+                    </form>
+                    <button id="cancelEvent" class="cancelEvent">Annuler</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

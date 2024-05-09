@@ -1,0 +1,80 @@
+{% extends 'admin/home.html.twig' %}
+
+{% block title %}
+    ArtHive | Products
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/styleAdmin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        h1 {
+                color: #4848ed; /* Couleur du texte en bleu */
+                margin-left: 0px;
+                margin-top: 0; /* Supprimez la marge par défaut pour s'aligner avec le reste du contenu */
+                margin-bottom: 20px; /* Espacement en bas pour séparer du contenu suivant */
+                font-size: 50px; /* Taille de police plus grande */
+        }
+    </style>
+    {% endblock %}
+{% block content %}
+
+    {# Your content for the posts page goes here #}
+<main>
+<h1>Liste des Utilisateurs</h1>
+            <div class="recent-orders" style="margin-top:30px">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="margin-right:20px">Nom</th>
+                            <th>Email</th>
+                            <th>Ville</th>
+                            <th>Date Naissance</th>
+                            <th>Num Tel</th>
+                            <th>Role</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.nomUser }} {{ user.prenomUser }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.ville }}</td>
+                            <td>{{ user.dNaissanceUser|date('Y-m-d') }}</td>
+                            <td>{{ user.numTelUser }}</td>
+                            <td>{{ user.role }}</td>
+                            <td>
+                                <a href="{{ path('app_admin_user_edit', {'id': user.getIdUser()}) }}">
+                                    <span class="material-icons-sharp">
+                                        edit
+                                    </span>
+                                </a>
+                                <a href="{{ path('app_admin_user_delete', {'id': user.getIdUser()}) }}">
+                                    <span class="material-icons-sharp">
+                                        delete
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+
+
+    </div>
+
+    <script src="{{ asset('scripts/indexAdmin.js') }}"></script>
+
+{% endblock %}

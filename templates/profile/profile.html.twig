@@ -1,0 +1,93 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}
+    Profile | ArtHive
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('css/ProfilePage.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+    <style>
+        body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .custom-container {
+            margin-top: 50px;
+            margin-bottom: 100px;
+            background-color: white;
+        }
+
+        
+
+        /* Resize user photo */
+        .custom-col-2 img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover; /* Maintain aspect ratio */
+            border-radius: 50%; /* Make it circular */
+        }
+    </style>
+{% endblock %}
+
+{% block create  %}  
+              <label id="create-post-button" for="create-post" class="btn btn-primary" style="padding: 0.6rem 2rem; margin-top: 1rem; position:center; display:none;">
+                    <i class="fa-solid fa-circle-plus"></i> 
+                    Créer</label> 
+            {% endblock %}
+{% block content %}
+    
+    <div class="custom-container">
+        <div class="custom-row mb-4">
+            <div class="custom-col-2"></div>
+            <div class="custom-col-10 custom-d-flex custom-justify-content-end">
+                <a href="{{ path('app_profileEdit') }}">
+                    <button class="btn btn-primary" style="background-color: #4848ed; color: white;">
+                        <strong>Modifier Profil</strong>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="custom-row mb-5">
+            <div class="custom-col-2">
+                <img class="custom-img-fluid" src="{{ asset('/images/' ~ user.photo) }}" alt="Profile photo" width="100" height="100">
+            </div>
+            <div class="custom-col-10">
+                <div class="custom-row mb-2">
+                    <div class="custom-col-12">
+                        <h1>{{ user.nomUser }} {{ user.prenomUser }}</h1>
+                    </div>
+                </div>
+                <div class="custom-row">
+                    <div class="custom-col-4 custom-d-flex custom-align-items-center">
+                        <span class="material-icons-sharp">location_on</span>
+                        <h3 class="custom-ms-2">{{ user.ville }}</h3>
+                    </div>
+                    <div class="custom-col-4 custom-d-flex custom-align-items-center">
+                        <span class="material-icons-sharp">cake</span>
+                        <h3 class="custom-ms-2">{{ user.dNaissanceUser|date('Y-m-d')}}</h3>
+                    </div>
+                    <div class="custom-col-4 custom-d-flex custom-align-items-center">
+                        <span class="material-icons-sharp">email</span>
+                        <h3 class="custom-ms-2">{{ user.email }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-row" style="margin-top: 20px;">
+            <div class="custom-col-12">
+                <p>{{ user.bio }}</p>
+            </div>
+        </div> 
+        <a id="seeallfav" class="btn btn-primary"  href="{{ path('app_posts_favorites') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Mon liste des favoris</a>
+        <a id="seeallfav" class="btn btn-primary"  href="{{ path('my_publications') }}"aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;" >Mes Publications </a>
+    </div>
+{% endblock %}

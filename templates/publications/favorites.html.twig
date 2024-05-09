@@ -1,0 +1,336 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}
+     ArtHive | My Publications
+        
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+          /* Styles for the publication list */
+ .publication-container {
+          display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between; /* Ajustez l'espacement entre les produits */
+                margin-top: 20px;
+                padding: 20px;
+                width: 110%; 
+        }
+
+        .publication-item {
+           flex-basis: calc(33.33% - 25px); 
+            margin-bottom: 40px; 
+            margin-right: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            position: relative; 
+        }
+
+        .publication-item:hover {
+    box-shadow: 0 4px 8px rgba(4, 8, 236, 0.2);
+    transform: translateY(1px); /* Move the publication item down by 2px */
+    scale: 1.04; /* Slightly increase the size of the publication item */
+    transition: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+        
+.publication-title {
+    font-size: 10px;
+    font-weight: bold;
+    color: #1877f2;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+        .publication-date {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+ .publication-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        h1 {
+            color: #4848ed; /* Text color in blue */
+            text-align: center; /* Horizontal centering */
+            margin-top: 0; /* Remove default margin to align with the rest of the content */
+            margin-bottom: 20px; /* Bottom spacing to separate from the following content */
+            font-size: 50px; /* Larger font size */
+        }
+           .content {
+                width:190%;
+                float: right;
+            }
+            /* Affiche la description du produit lorsque survolée */
+            .produit-item:hover .produit-description {
+                display: block;
+            }
+
+            .icon-container {
+            display: flex; /* Utilisation de Flexbox */
+            align-items: center; /* Alignement vertical centré */
+            justify-content: center; /* Alignement horizontal centré */
+        }
+
+         .icon-container i {
+           margin-right: 10px; /* Espacement entre les icônes */
+             }
+
+          
+
+    
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 9999; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 80%; /* Max width */
+            max-height: 80%; /* Max height */
+        }
+        .modal-content-comment {
+            position: relative;
+            margin: auto;
+            width: 80%;
+            max-width: 600px;
+            background-color: #fefefe;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .modal-image {
+            max-width: 50%; /* Set maximum width */
+            max-height: 80vh; /* Set maximum height as 80% of viewport height */
+            display: block;
+            margin: 0 auto; /* Center the image horizontally */
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .publication-title {
+                display: none;
+                position: absolute;
+                top: 88%; /* Positionne le rectangle de description au milieu verticalement */
+                left: 50%; /* Positionne le rectangle de description au milieu horizontalement */
+                transform: translate(-50%, -50%); /* Centre le rectangle de description */
+                width: 100%; /* Largeur ajustée pour le rectangle de description */
+                background-color: rgba(255, 255, 255, 0.8); /* Fond blanc avec opacité */
+                padding: 10px; /* Espacement autour du texte de description */
+                box-sizing: border-box; /* Inclut le padding dans la largeur et la hauteur */
+                text-align: center; /* Centrer le texte horizontalement */
+        }
+        .publication-item:hover .publication-title {
+                display: block;
+        }
+                .icon-container {
+            display: flex; /* Utilisation de Flexbox */
+            align-items: center; /* Alignement vertical centré */
+            justify-content: center; /* Alignement horizontal centré */
+        }
+        .bookmarkBtn {
+  width: 130px;
+  height: 40px;
+  border-radius: 40px;
+  border: none;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: .3s;
+  overflow: hidden;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.062);
+}
+
+.IconContainer {
+  width: 30px;
+  height: 30px;
+  background-color: rgb(103, 74, 228);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+  transition-duration: .3s;
+}
+
+.icon {
+  border-radius: 1px;
+}
+
+.text {
+  height: 100%;
+  width: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(26, 26, 26);
+  z-index: 1;
+  transition-duration: .3s;
+  font-size: 1.04em;
+  font-weight: 600;
+}
+
+.bookmarkBtn:hover .IconContainer {
+  width: 120px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.bookmarkBtn:hover .text {
+  transform: translate(10px);
+  width: 0;
+  font-size: 0;
+  transition-duration: .3s;
+}
+
+.bookmarkBtn:active {
+  transform: scale(0.95);
+  transition-duration: .3s;
+}
+body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <h1>Favoris</h1>
+    <div class="publication-container">
+        {% for publication in publications %}
+           <div class="publication-item" >
+            <!-- Publication Image and Title -->
+            <div style="position: relative;">
+             <div class="dropdown">
+     
+<a id="removefromfavorites" class="btn btn-secondary dropdown-toggle" style="color:red;" href="{{ path('remove_from_favorites', {'idU': user.getIdUser(), 'idP': publication.getIdPublication()}) }}" aria-haspopup="true" aria-expanded="false" style="background-color: #4848ed; color: white;">Remove from favorites</a>
+  
+</div>
+                <img class="publication-image" src="{{ asset('images/' ~ publication.getUrlFile()) }}" alt="Image de la publication">
+                <div>
+                    <p class="publication-title"style = "font-size:13px;">{{ publication.getContenuPublication() }}</p>
+                                        <div class="icon-container">
+                        <i class="fa-solid fa-search-plus zoom-icon" style="color: #3642dd;"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- User Information -->
+            <div style="display: flex; align-items: center; ">
+                 <img class="profile-image" src="{{ asset('images/' ~ publication.getUser().getPhoto()) }}" style="width: 55px; height: 55px; margin-left: 10px; border-radius: 50%;">
+                 <div style="margin-left: 10px;">
+                  <p class="username-label">
+                   <a href="#" style="font-weight: bold; text-decoration: none; color: inherit;">{{ publication.getUser().getNomUser() }} {{ publication.getUser().getPrenomUser() }}</a>
+                     </p>
+                     <p class="publication-date">{{ publication.getDCreationPublication()|time_ago }}</p>
+                </div>
+            </div>
+           <!-- Like and Comment Buttons -->
+<div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px;">
+    <!-- Like Button -->
+   <a href="{{ path('add_like', {'id': publication.getIdPublication()}) }}" class="btn btn-primary" data-publication-id="{{ publication.getIdPublication() }}" style="margin-right: 10px; width: 110px; height: 35px; display: flex; align-items: center; justify-content: center;display:none;">
+    <img src="https://cdn-icons-png.flaticon.com/512/10027/10027265.png" alt="Like Icon" style="width: 25px; height: 25px; display: none;">
+</a>
+    <!-- Comment Button -->
+    <button class="bookmarkBtn like-btn" data-publication-id="{{ publication.getIdPublication() }}" style="margin-left: 10px; width: 130px; height: 40px;">
+        <span class="IconContainer">
+            <svg fill="white" viewBox="0 0 512 512" height="1em">
+                <!-- Comment SVG path -->
+                <path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c-4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"></path>
+            </svg>
+        </span>
+        <p class="text">Comments</p>
+    </button>
+</div>
+
+
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Modal popup -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <img id="modal-img" class="modal-image">
+        </div>
+    </div>
+    
+</div>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const zoomIcons = document.querySelectorAll('.zoom-icon');
+    const modal = document.getElementById('myModal');
+    const modalImg = document.getElementById("modal-img");
+    const closeModal = document.getElementsByClassName("close")[0];
+ const commentIcons = document.querySelectorAll('.bookmarkBtn');
+       
+commentIcons.forEach(icon => {
+    icon.addEventListener('click', function() {
+        const publicationId = icon.dataset.publicationId;
+        window.location.href = "/showComments/" + publicationId;
+    });
+});
+    zoomIcons.forEach(icon => {
+        icon.addEventListener('click', function() {
+            const publicationItem = this.closest('.publication-item');
+            const publicationImage = publicationItem.querySelector('.publication-image').src;
+
+            modal.style.display = "block";
+            modalImg.src = publicationImage;
+        });
+    });
+
+    // Close the modal when clicked outside the image or on the close button
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    closeModal.onclick = function() {
+        modal.style.display = "none";
+    } 
+//add an alert when click an the href with the id = deleteButton
+    const deleteButton = document.getElementById("deleteButton");
+    deleteButton.addEventListener('click', function(event) {
+        const confirmDelete = confirm("Are you sure you want to delete this publication?");
+        if (!confirmDelete) {
+            event.preventDefault();
+        }
+    });
+   
+});
+
+
+
+  </script>
+    
+{% endblock %}

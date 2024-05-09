@@ -1,0 +1,76 @@
+app_blog:
+    path: /blog
+    controller: App\Controller\BlogController::index
+app_feed:
+    path: /feed
+    controller: App\Controller\BlogController::feed
+app_login:
+    path: /login
+    controller: App\Controller\LoginController::login
+
+home:
+    path: /
+    controller: App\Controller\BlogController::start
+    
+fcb_login:
+    path: /fcb-login
+    controller: App\Controller\LoginController::loginFb
+
+fcb_callback:
+    path: /fcb-callback
+    controller: App\Controller\LoginController::callbackFb
+
+app_profile:
+    path: /profile
+    controller: App\Controller\ProfileController::index
+
+app_profileEdit:
+    path: /profile/edit
+    controller: App\Controller\ProfileController::editProfile
+
+app_forgot_password:
+    path: /forgot-password
+    controller: App\Controller\ForgotPasswordController::forgotPassword
+
+
+app_admin_users:
+    path: /admin/users
+    controller: App\Controller\AdminController::getAllUsers
+
+app_admin_posts:
+    path: /admin/posts
+    controller: App\Controller\AdminController::getAllPosts
+app_admin_user_edit:
+    path: /admin/user/edit/{id}
+    controller: App\Controller\AdminController::edit
+
+app_admin_user_delete:
+    path: /admin/user/delete/{id}
+    controller: App\Controller\AdminController::delete
+
+app_admin_groups:
+    path: /admin/groups
+    controller: App\Controller\AdminController::getAllGroups
+
+app_admin_events:
+    path: /admin/events
+    controller: App\Controller\AdminController::getAllEvents
+
+app_admin_products:
+    path: /admin/produits
+    controller: App\Controller\AdminController::getAllProducts
+
+app_admin_reports:
+    path: /admin/reports
+    controller: App\Controller\AdminController::getAllReports
+
+app_groups:
+    path: /groups
+    controller: App\Controller\GroupsController::index
+
+groups_create:
+    path: '/groups/new'
+    controller: App\Controller\GroupsController::new    
+
+
+

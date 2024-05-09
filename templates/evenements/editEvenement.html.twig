@@ -1,0 +1,207 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}
+    ArtHive | Modifier
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('/styleFeed.css') }}">
+    <style>
+
+
+/* Style pour le conteneur extérieur du formulaire */
+
+/* Style pour le titre du formulaire */
+.formulaire h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #4848ed;
+}
+
+
+
+.add-event-text-field {
+    width: 100%; /* Largeur à 100% pour remplir le conteneur */
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    margin-left: -27px; /* Ajustement de la marge gauche */
+}
+
+/* Style pour les champs de date du formulaire */
+.datepicker {
+    width: calc(100% - 22px); /* Largeur ajustée pour tenir compte des bordures */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+/* Style pour le conteneur de l'aperçu de l'image */
+.image-preview-container {
+    margin-bottom: 10px;
+}
+
+/* Style pour l'image d'aperçu */
+.imagePreview {
+    display: none;
+    max-width: auto;
+    max-height: auto;
+}
+
+/* Style pour le dropdown personnalisé */
+.custom-select {
+    width: calc(100% - 22px); /* Largeur ajustée pour tenir compte des bordures */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin-left: -27px; /* Ajustement de la marge gauche */
+
+}
+
+.custom-select:hover {
+    border-color: #aaa;
+}
+
+.custom-select:focus {
+    border-color: #5a5a5a;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.custom-select option {
+    background-color: #fff;
+    color: #333;
+}
+
+.custom-select option:hover {
+    background-color: #f2f2f2;
+}
+
+/* Style pour les boutons du formulaire */
+.bouton-prod {
+    display: block;
+    width: 150px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: calc(50% - 75px); /* Centrage horizontal */
+    background-color: #3642dd;
+    color: white;
+    padding: 8px 10px;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.bouton-prod:hover {
+    background-color: #1877f2;
+}
+.form-control.is-invalid {
+            border-color: #dc3545;
+            padding-right: calc(1.5em + .75rem);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23dc3545'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right calc(.375em + .1875rem) center;
+            background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+        }
+        .invalid-feedback {
+            display: block;
+            width: 100%;
+            margin-top: .25rem;
+            font-size: 80%;
+            color: #dc3545;
+        }
+
+        body {
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSivdg9sGuIwUPz6n3Cx2W0FYXTOqRkUO4HEkoqd6oAFESCcTrQxGoK_7kN9JXI8SZkbs&usqp=CAU');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+       
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+
+
+        <div class="formulaire" style="margin-left: 40px; font-size: 20px; background:#ffffffee; padding:60px; border-radius:20px; width: 90%;">
+         <h1 style="text-align: center; margin-bottom: 20px; font-size: 40px; font-weight: bold; color: #4848ed;">Modifier évènement</h1>
+         <div class="formulaire" style="margin-left: 70px">
+            <form  method="POST" enctype="multipart/form-data" novalidate>
+                  {{ form_start(form) }}
+
+            <div class="image-preview-container">
+                <img id="imagePreview" src="{{ asset('images/evenement/' ~ evenement.getImage()) }}" alt="Image Preview" style="max-width: auto; max-height: auto;">
+            </div>
+
+            {{ form_row(form.titreEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.titreEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Titre de l\'événement'} }) }}
+                    {{ form_label(form.dDebutEvenement, 'Date de début de l\'événement') }}
+                    {{ form_widget(form.dDebutEvenement, { 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dDebutEvenement.vars.errors|length ? ' is-invalid' : '')} }) }}
+                    {{ form_row(form.dFinEvenement, { 'label': 'Date de fin de l\'événement', 'attr': {'class': 'form-control add-event-text-field datepicker' ~ (form.dFinEvenement.vars.errors|length ? ' is-invalid' : '')}, 'widget': 'single_text' }) }}
+                    {{ form_row(form.descriptionEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.descriptionEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Description de l\'événement'} }) }}
+                    {{ form_row(form.lieuEvenement, { 'attr': {'class': 'form-control add-event-text-field' ~ (form.lieuEvenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Lieu de l\'événement'} }) }}
+                    {{ form_row(form.categorieevenement, { 'attr': {'class': 'form-control custom-select' ~ (form.categorieevenement.vars.errors|length ? ' is-invalid' : ''), 'placeholder': 'Catégorie de l\'événement'} }) }}
+                    
+            <div class="boutons-container" style="display: flex; margin-top: 20px;">
+                <button type="submit" class="bouton-prod">Modifier</button>
+                <a href="{{ path('vos_evenements') }}" class="bouton-prod" style="margin-left: 100px;  text-align: center;">Annuler</a>
+            </div>      {{ form_end(form) }}
+
+            </form>
+        </div>
+      </div>  
+
+ <script>
+    openModalBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        createEventModal.style.display = 'flex';
+        document.body.classList.add('blur');
+        const inputFile = document.getElementById('form_image');
+    const imagePreview = document.getElementById('image-preview');
+
+    inputFile.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+    });
+
+ function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function() {
+            var img = document.getElementById('image-preview');
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+
+</script>
+
+    
+{% endblock %}

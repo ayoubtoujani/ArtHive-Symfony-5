@@ -1,0 +1,9 @@
+{# templates/evenements/show.html.twig #}
+
+<h1>Détails de l'événement</h1>
+
+<h2>{{ evenement.titreEvenement }}</h2>
+<p>Date de début : {{ evenement.dDebutEvenement|date('Y-m-d H:i') }}</p>
+<p>Date de fin : {{ evenement.dFinEvenement|date('Y-m-d H:i') }}</p>
+<p>Lieu : {{ evenement.lieuEvenement }}</p>
+<p>Description : {{ evenement.descriptionEvenement }}</p>

@@ -1,0 +1,24 @@
+{% extends 'feed.html.twig' %}
+
+{% block title %}Modifier Votre Groupe{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    <style>
+      h1 {
+            color: #4848ed; /* Text color in blue */
+            text-align: center; /* Horizontal centering */
+            margin-top: 0; /* Remove default margin to align with the rest of the content */
+            margin-bottom: 20px; /* Bottom spacing to separate from the following content */
+            font-size: 50px; /* Larger font size */
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Modifier Votre Groupe </h1>
+
+    {{ include('groups/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+    {{ include('groups/_delete_form.html.twig') }}
+{% endblock %}

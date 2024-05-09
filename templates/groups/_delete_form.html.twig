@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('app_groups_delete', {'idGroup': group.idGroup}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group.idGroup) }}">
+
+    <button class="btn btn-danger" type="submit" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe');" style="margin-top: 10px;">Supprimer</button>
+</form>
