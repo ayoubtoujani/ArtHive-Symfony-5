@@ -335,7 +335,7 @@ body {
   <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
 </button>
      </div>
-         <canvas id="myChart" width="400" height="400"></canvas>
+         <canvas id="myChart" width="800" height="300"></canvas>
     <div class="publication-container" >
         {% for publication in publications %}
         
@@ -435,6 +435,8 @@ body {
         </div>
     </div>
       <script>
+      src="https://cdn.jsdelivr.net/npm/chartjs-plugin-chartjs-3d"
+
 document.addEventListener("DOMContentLoaded", function() {
     // Chart.js library
     // Get the canvas element
@@ -447,24 +449,37 @@ document.addEventListener("DOMContentLoaded", function() {
             label: 'Nombres des Publications par semaine', // Name of the dataset
             // Data for the x-axis make real data 
             data: [12, 19, 3, 5, 2, 3, 10],
-          backgroundColor: 'rgba(54, 162, 235, 0.2)', // Blue color
+             backgroundColor: 'rgba(54, 162, 235, 0.2)', // Blue color
             borderColor: 'rgba(54, 162, 235, 1)', // Blue color
-            borderWidth: 1
+            borderWidth: 2
+            
+            
+
+         
         }]
     };
 
-    // Configuration options
+      // Configuration options
     const chartOptions = {
         scales: {
             y: {
-                beginAtZero: true // Start y-axis at 0
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            chartjs3d: {
+                enabled: true,
+                alpha: 45,
+                beta: 0
             }
         }
     };
 
-    // Create the chart
+    
+
+    // Create the chart with the plugin enabled
     const myChart = new Chart(ctx, {
-        type: 'bar', // Specify the chart type (e.g., bar, line, pie, etc.)
+        type: 'bar',
         data: chartData,
         options: chartOptions
     });

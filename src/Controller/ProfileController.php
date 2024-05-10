@@ -10,19 +10,24 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 use App\Form\EditProfileFormType;
+use App\Repository\PublicationRepository;
+
 
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    public function index(SessionInterface $session): Response
+    public function index(SessionInterface $session,Request $request,PublicationRepository $publicationRepository): Response
     {
         $user = $session->get('user');
-        
+        $publications = $publicationRepository->findBy(['user' => $user], ['dCreationPublication' => 'DESC']);
         return $this->render('profile/profile.html.twig', [
             'controller_name' => 'ProfileController',
             'user' => $user,
+            'publications' => $publications,
         ]);
     }
+   
+
 
     #[Route('/profile/edit', name: 'app_profileEdit')]
     public function editProfile(Request $request, SessionInterface $session): Response
