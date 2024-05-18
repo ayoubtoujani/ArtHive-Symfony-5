@@ -557,7 +557,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
                 // Store the file name in the entity
                 $produit->setImageProduit($newFilename);
             }
-
             // Fetch the user from the database
             $userRepository = $this->getDoctrine()->getRepository(Users::class);
             $userFromDb = $userRepository->find($user->getIdUser());

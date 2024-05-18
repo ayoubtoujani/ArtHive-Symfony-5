@@ -655,7 +655,7 @@ body {
 <div class="event-container">
     {% for evenement in evenements %}
         <div class="event-item "  data-categorie="{{ evenement.categorieevenement }}" >
-            <img class="event-image  " src="{{ asset('images/evenement/' ~ evenement.image) }}" alt="Image de l'événement">
+            <img class="event-image  " src="{{ asset('images/' ~ evenement.image) }}" alt="Image de l'événement">
             <div class="dropdown">
                 <!-- Three dots inside a circle -->
                 <span class="dropdown-toggle" onclick="toggleDropdown(this)">&#8226;&#8226;&#8226;</span>
@@ -678,7 +678,7 @@ body {
         </div>
     {% endfor %}
     {% if evenements is empty %}
-    <img src="{{ asset('images/evenement/notfound.gif') }}" alt="Event Not Found" style="border-radius: 10px; width: 98%">
+    <img src="{{ asset('images/notfound.gif') }}" alt="Event Not Found" style="border-radius: 10px; width: 98%">
     {% endif %}
 </div>
 <!-- Boîte modale pour le formulaire de création d'événement -->

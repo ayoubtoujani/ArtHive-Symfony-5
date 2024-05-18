@@ -1,14 +1,13 @@
 # config/services.yaml
 parameters:
-    images_director: '%kernel.project_dir%/public/images/evenement'
+    images_director: '%kernel.project_dir%/public/images/'
     twilio_account_sid: '%env(TWILIO_ACCOUNT_SID)%'
     twilio_auth_token: '%env(TWILIO_AUTH_TOKEN)%'
     twilio_phone_number: '%env(TWILIO_PHONE_NUMBER)%'
 
     images_directory: '%kernel.project_dir%/public/images/'
-    image_directoryy: '%kernel.project_dir%/public/uploads/images'
-    images_directory_shams: '%kernel.project_dir%/public/images/produit'
-
+    image_directoryy: '%kernel.project_dir%/public/images'
+    images_directory_shams: '%kernel.project_dir%/public/images'
 
     profile_images_directory: '%kernel.project_dir%/public/images/'
 

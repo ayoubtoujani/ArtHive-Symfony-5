@@ -264,7 +264,7 @@
     <div class="container">
         <div class="left">
             <div class="product-details-container">
-                <img class="product-image" src="{{ asset('images/produit/' ~ produit.getImageProduit()) }}" alt="Image de produit">
+                <img class="product-image" src="{{ asset('images/' ~ produit.getImageProduit()) }}" alt="Image de produit">
                 <div class="product-details">
                     <h2>{{ produit.getNomProduit() }}</h2>
                     <h3>Categorie: {{ produit.getCategProduit()}}</h3>
@@ -302,7 +302,7 @@
             <div class="product-list">
                 {% for product in products %}
                 <div class="product-in-cart">
-                    <img class="product-image-cart" src="{{ asset('images/produit/' ~ product.getImageProduit()) }}" alt="Image de produit">
+                    <img class="product-image-cart" src="{{ asset('images/' ~ product.getImageProduit()) }}" alt="Image de produit">
                     <div class="product-details-cart">
                         <h3>{{ product.getNomProduit() }}</h3>
                         <p class="prix"><span><i class="fas fa-coins" style="color: #3642dd;"></i></span>  {{ product.getPrixProduit() }} $</p>

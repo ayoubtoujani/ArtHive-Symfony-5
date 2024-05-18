@@ -403,7 +403,7 @@ body {
     <div class="event-container">
         {% for event in eventsThisWeek %}
             <div class="event-item {% if event.isDatePassed %}event-passed{% endif %}" data-categorie="{{ event.categorieEvenement }}">
-                <img class="event-image {% if event.isDatePassed %}disabled{% endif %}" src="{{ asset('images/evenement/' ~ event.image) }}" alt="Image de l'événement">
+                <img class="event-image {% if event.isDatePassed %}disabled{% endif %}" src="{{ asset('images/' ~ event.image) }}" alt="Image de l'événement">
                 <h2 class="event-title">{{ event.titreEvenement }}</h2>
                 <p class="event-date">
                     <span><i class="fa-regular fa-clock" style="color: #3642dd;"></i></span>
@@ -434,7 +434,7 @@ body {
             <div class="event-container">
                 {% for evenement in pagination %}
                     <div class="event-item {% if evenement.isDatePassed %}event-passed{% endif %}"  data-categorie="{{ evenement.categorieevenement }}" >
-                        <img class="event-image  {% if evenement.isDatePassed %}disabled{% endif %}" src="{{ asset('images/evenement/' ~ evenement.image) }}" alt="Image de l'événement">
+                        <img class="event-image  {% if evenement.isDatePassed %}disabled{% endif %}" src="{{ asset('images/' ~ evenement.image) }}" alt="Image de l'événement">
                         <h2 class="event-title">{{ evenement.titreEvenement }}</h2>
                         <p class="event-date"><span><i class="fa-regular fa-clock" style="color: #3642dd;"></i></span>  {{ evenement.dDebutEvenement|date('Y-m-d H:i') }} - {{ evenement.dFinEvenement|date('Y-m-d H:i') }}</p>
                         <p class="event-lieu"><span><i class="fa-solid fa-location-dot" style="color: #3642dd;"></i></span>  {{ evenement.lieuEvenement }}</p>
@@ -452,7 +452,7 @@ body {
                 {% endfor %}
                 {% if evenements is empty %}      
                 <p>Aucune évènements trouvées</p>
-                <img src="{{ asset('images/evenement/ay.png') }}" alt="Event Not Found" style="border-radius: 10px; width: 20%">
+                <img src="{{ asset('images/ay.png') }}" alt="Event Not Found" style="border-radius: 10px; width: 20%">
                 {% endif %}
             </div>
 
@@ -473,52 +473,10 @@ body {
 </div>
   
   {% block javascripts %}
-    <script src="{{ asset('js/VoirDetail.js') }}"></script>
-    <script>// Récupérer tous les éléments avec la classe .event-item
-        const eventItems = document.querySelectorAll('.event-item');
-        // Parcourir chaque élément et vérifier si la date de l'événement est passée
-        eventItems.forEach(item => {
-            const eventDate = new Date(item.dataset.eventDate); // Assurez-vous que la date est stockée dans un attribut data-event-date sur chaque élément
-            const currentDate = new Date();
-        
-            // Si la date de l'événement est passée, ajouter la classe "disabled" à l'élément
-            if (eventDate < currentDate) {
-                item.classList.add('disabled');
-            }
-        });
 
-        <!----------------------------------------- Filtrage Categorie ----------------------------------------------->
-        // Attendre que le contenu de la page soit chargé
-        document.addEventListener("DOMContentLoaded", function() {
-            // Récupérer le sélecteur de catégorie
-            const categorieSelect = document.getElementById('categorie');
 
-            // Ajouter un gestionnaire d'événements pour l'événement "change" du sélecteur de catégorie
-            categorieSelect.addEventListener('change', function() {
-                // Récupérer la valeur de la catégorie sélectionnée
-                const selectedCategory = this.value;
 
-                // Récupérer tous les éléments d'événement
-                const eventItems = document.querySelectorAll('.event-item');
-
-                // Parcourir tous les éléments d'événement
-                eventItems.forEach(item => {
-                    // Récupérer la catégorie de l'événement
-                    const eventCategory = item.getAttribute('data-categorie');
-
-                    // Vérifier si l'événement correspond à la catégorie sélectionnée ou si aucune catégorie n'est sélectionnée
-                    if (selectedCategory === '' || eventCategory === selectedCategory) {
-                        // Afficher l'événement
-                        item.style.display = 'block';
-                    } else {
-                        // Masquer l'événement
-                        item.style.display = 'none';
-                    }
-                });
-            });
-        });
-        </script>
-<script>
+  <script>
 ////////////////////////////////////////////////BOUTON PARTICIPER////////////////////////////////////////////////////
 document.addEventListener('DOMContentLoaded', function() {
     const participerButtons = document.querySelectorAll('.participer-btn');
@@ -596,11 +554,54 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+</script>
+    <script src="{{ asset('js/VoirDetail.js') }}"></script>
+    <script>// Récupérer tous les éléments avec la classe .event-item
+        const eventItems = document.querySelectorAll('.event-item');
+        // Parcourir chaque élément et vérifier si la date de l'événement est passée
+        eventItems.forEach(item => {
+            const eventDate = new Date(item.dataset.eventDate); // Assurez-vous que la date est stockée dans un attribut data-event-date sur chaque élément
+            const currentDate = new Date();
+        
+            // Si la date de l'événement est passée, ajouter la classe "disabled" à l'élément
+            if (eventDate < currentDate) {
+                item.classList.add('disabled');
+            }
+        });
+
+        <!----------------------------------------- Filtrage Categorie ----------------------------------------------->
+        // Attendre que le contenu de la page soit chargé
+        document.addEventListener("DOMContentLoaded", function() {
+            // Récupérer le sélecteur de catégorie
+            const categorieSelect = document.getElementById('categorie');
+
+            // Ajouter un gestionnaire d'événements pour l'événement "change" du sélecteur de catégorie
+            categorieSelect.addEventListener('change', function() {
+                // Récupérer la valeur de la catégorie sélectionnée
+                const selectedCategory = this.value;
+
+                // Récupérer tous les éléments d'événement
+                const eventItems = document.querySelectorAll('.event-item');
+
+                // Parcourir tous les éléments d'événement
+                eventItems.forEach(item => {
+                    // Récupérer la catégorie de l'événement
+                    const eventCategory = item.getAttribute('data-categorie');
+
+                    // Vérifier si l'événement correspond à la catégorie sélectionnée ou si aucune catégorie n'est sélectionnée
+                    if (selectedCategory === '' || eventCategory === selectedCategory) {
+                        // Afficher l'événement
+                        item.style.display = 'block';
+                    } else {
+                        // Masquer l'événement
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+  
         </script>
 
-    
-  
-   
 {% endblock %}
 {% endblock %}
 

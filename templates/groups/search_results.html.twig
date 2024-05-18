@@ -11,7 +11,7 @@
         <div class="group-container">
             {% for group in groups %}
                 <div class="group-item">
-                    <img src="{{ asset('uploads/images/' ~ group.image) }}" alt="{{ group.image }}" style="max-width: 100%; max-height: 100%;">
+                    <img src="{{ asset('images/' ~ group.image) }}" alt="{{ group.image }}" style="max-width: 100%; max-height: 100%;">
                     <div class="group-details">
                         <h2 class="group-name">{{ group.getNomGroup() }}</h2>
                         <p class="group-description">{{ group.getDescriptionGroup() }}</p>
