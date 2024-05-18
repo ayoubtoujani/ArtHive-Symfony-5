@@ -558,7 +558,7 @@ main{
                 <div class="prod-item">
                          <div class="image-container">
                             <!-- Image du produit -->
-                            <img class="produit-image" src="{{ asset('images/produit/' ~ produit.getImageProduit()) }}" alt="Image de produit">
+                            <img class="produit-image" src="{{ asset('images/' ~ produit.getImageProduit()) }}" alt="Image de produit">
                             <!-- Icône des trois points -->
                             <div class="icon">
                                 <i class="fa-solid fa-ellipsis" style="font-size: 24px; color: #e4dada;" ></i>
@@ -600,7 +600,7 @@ main{
         {% endfor %}
 
         {% if produits is empty %}
-                <img src="{{ asset('images/produit/notFound.jpg') }}" alt="Product Not Found" style="border-radius: 10px; width: 98%">
+                <img src="{{ asset('images/notFound.jpg') }}" alt="Product Not Found" style="border-radius: 10px; width: 98%">
         {% endif %}
     </div> 
 

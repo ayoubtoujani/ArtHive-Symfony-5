@@ -586,7 +586,7 @@ body {
  <div class="event-container">
         {% for evenement in evenements %}
             <div class="event-item">
-                     <img class="event-image" src="{{ asset('images/evenement/' ~ evenement.image) }}" alt="Image de l'événement">   
+                     <img class="event-image" src="{{ asset('images/' ~ evenement.image) }}" alt="Image de l'événement">   
                 <div class="dropdown">
                     <!-- Three dots inside a circle -->
                     <span class="dropdown-toggle" onclick="toggleDropdown(this)">&#8226;&#8226;&#8226;</span>

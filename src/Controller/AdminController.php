@@ -91,6 +91,7 @@ class AdminController extends AbstractController
         
         // Check if a user is logged in
         if ($user instanceof Users) {
+            if($user->getRole() ===  'ROLE_ADMIN'){
             $publication = new Publications();
             
             $form = $this->createForm(AddPostType::class, $publication, ['validation_groups' => ['addPost']]);
@@ -154,6 +155,9 @@ class AdminController extends AbstractController
                 'form' => $form->createView(),
                 'user' => $user,
             ]);
+            }else{
+                return $this->redirectToRoute('afficher_publications');
+            }
         } else {
             // Handle the case where the user is not logged in
                 return $this->redirectToRoute('app_login');
@@ -174,19 +178,26 @@ class AdminController extends AbstractController
         $user = $session->get('user');
         // Check if a user is logged in
         if ($user instanceof Users) {
+            if($user->getRole() ===  'ROLE_ADMIN'){
+            
 
             $groups = $this->getDoctrine()->getRepository(Groups::class)->findAll();
             $nbr = count($groups);
+            
+        
 
-    return $this->render('admin/groups.html.twig', [
-        'controller_name' => 'AdminController',
-        'user' => $user,
-        'nbr' => $nbr,
-        'groups' => $groups,
-    ]);
-} else {
-    return $this->redirectToRoute('app_login');
+                    return $this->render('admin/groups.html.twig', [
+                        'controller_name' => 'AdminController',
+                        'user' => $user,
+                        'nbr' => $nbr,
+                        'groups' => $groups,
+        ]);
+    }else{
+        return $this->redirectToRoute('app_login');
+       
+    }
 }
+
     }
     
 #[Route('/delete-publication-admin/{id}', name: 'delete_publication_by_admin', methods: ['GET', 'POST'])]
@@ -214,14 +225,25 @@ public function deletePublication($id, PublicationRepository $publicationReposit
     #[Route('/admin/users', name: 'app_admin_users', methods:['GET'])]
     public function getAllUsers(SessionInterface $session): Response
     {
+
+        // Retrieve the user from the session
+        $user = $session->get('user');
+        // Check if a user is logged in
+        if ($user instanceof Users) {
+            if($user->getRole() ===  'ROLE_ADMIN'){
         $userRepository = $this->getDoctrine()->getRepository(Users::class);
         $users= $userRepository->findAll();
 
         return $this->render('admin/users.html.twig', [
             'users' => $users,
             'controller_name' => 'AdminController',
-            'user' => $session->get('user'),
+            'user' => $user,
         ]);
+    }
+    else{
+        return $this->redirectToRoute('app_login');
+    }
+    } 
     }
 
     #[Route('/admin/user/edit/{id}', name: 'app_admin_user_edit', methods:['POST'])]
@@ -270,6 +292,12 @@ public function deletePublication($id, PublicationRepository $publicationReposit
    #[Route('/admin/events', name: 'app_admin_events', methods:['GET', 'POST'])]
    public function getAllEvents(EvenementsRepository $evenementsRepository,SessionInterface $session, Request $request, ParticipationsRepository $participationRepository): Response
    {
+
+    // Retrieve the user from the session
+    $user = $session->get('user');
+    // Check if a user is logged in
+    if ($user instanceof Users) {
+        if($user->getRole() ===  'ROLE_ADMIN'){
        $evenements = $this->getDoctrine()->getRepository(Evenements::class)->findAll();
        $nombreTotalEvenements = count($evenements);
        // Initialiser le tableau pour stocker le nombre de produits dans chaque catégorie
@@ -309,11 +337,7 @@ public function deletePublication($id, PublicationRepository $publicationReposit
             $participantsCounts[$evenement->getIdEvenement()] = $participationRepository->countByEvenement($evenement->getIdEvenement());
         }
         
-       // Retrieve the user from the session
-       $user = $session->get('user');
        
-       // Check if a user is logged in
-       if ($user instanceof Users) {
            $evenements = new Evenements();
            
            $form = $this->createForm(EvenementsType::class, $evenements);
@@ -375,12 +399,12 @@ public function deletePublication($id, PublicationRepository $publicationReposit
 
 
            ]);
-       } else {
-           // Handle the case where the user is not logged in
-               return $this->redirectToRoute('app_login');
-       }
-   }
-
+        }else{
+            return $this->redirectToRoute('app_login');
+        }
+    }
+    }
+        
    #[Route('/evenements-admin/{id}', name: 'evenements_delete_admin', methods: ['POST'])]
    public function deleteEventAdmin(Request $request, $id, EvenementsRepository $evenementsRepository, EntityManagerInterface $entityManager): Response
    {
@@ -406,10 +430,12 @@ public function deletePublication($id, PublicationRepository $publicationReposit
     {
        // Retrieve the user from the session
        $user = $session->get('user');
+         // Check if a user is logged in
+    if ($user instanceof Users) {
+        if($user->getRole() ===  'ROLE_ADMIN'){
         $reports = $this->getDoctrine()->getRepository(Reclamationgroupe::class)->findAll();
         $nbr = count($reports);
-       // Check if a user is logged in
-       if ($user instanceof Users) {
+       
             return $this->render('admin/reports.html.twig', [
                 'controller_name' => 'AdminController',
                 'user' => $user,
@@ -419,6 +445,7 @@ public function deletePublication($id, PublicationRepository $publicationReposit
        }else {
         return $this->redirectToRoute('app_login');
        }
+    }
     }
 
     #[Route('/admin/reports/generate-pdf', name: 'generate_pdf')]
@@ -530,7 +557,6 @@ public function deletePublication($id, PublicationRepository $publicationReposit
                 // Store the file name in the entity
                 $produit->setImageProduit($newFilename);
             }
-
             // Fetch the user from the database
             $userRepository = $this->getDoctrine()->getRepository(Users::class);
             $userFromDb = $userRepository->find($user->getIdUser());

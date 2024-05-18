@@ -112,7 +112,7 @@
 
    <script>
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('form').addEventListener('change', function(event) {
+       /* document.querySelector('form').addEventListener('change', function(event) {
             if (event.target && event.target.matches('input[type="file"]')) {
                 const file = event.target.files[0];
                 const reader = new FileReader();
@@ -127,6 +127,7 @@
                 reader.readAsDataURL(file);
             }
         });
+        */
         document.getElementById('deleteImage').addEventListener('click', function() {
             document.querySelector('input[type="file"]').value = ''; // Clear the file input
             const preview = document.querySelector('.image-preview-container');

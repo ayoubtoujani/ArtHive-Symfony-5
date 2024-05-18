@@ -153,7 +153,7 @@
         {% for produit in produits %}
             <div class="product-container" style="width: 100%; margin-left:40px">
                 <div class="product-image">
-                    <img src="{{ asset('images/produit/' ~ produit.imageProduit) }}" alt="{{ produit.nomProduit }}">
+                    <img src="{{ asset('images/' ~ produit.imageProduit) }}" alt="{{ produit.nomProduit }}">
                 </div>
               <div class="product-info">
                     <div class="product-name">{{ produit.nomProduit }}</div>
