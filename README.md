@@ -1,5 +1,4 @@
-Art Enthusiasts Platform
-Overview
+
 Welcome to the Art Enthusiasts Platform, a comprehensive application designed for those who admire and engage with art. This project allows users to explore various artworks, purchase art pieces, interact with other art enthusiasts through likes and comments, and participate in art-related events. The platform boasts an attractive and user-friendly design, making the art browsing experience enjoyable and engaging.
  
 Project Features
